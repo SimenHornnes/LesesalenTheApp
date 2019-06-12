@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button } from 'react-native';
 
 const fetchLocation = (props) => {
     return (
-        <Button title = "Get Location" onPress = {props.onGetLocation} />
+        <Button title={props.title} onPress = {props.onGetLocation} />
     );
 };
 
