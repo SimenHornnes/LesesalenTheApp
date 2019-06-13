@@ -119,6 +119,8 @@ class Profile extends React.Component {
 
 const sizeOfIcons = 30;
 
+const highScoreList = ['Kristina', 'Simen', 'Torjus']
+
 const TabNavigator = createBottomTabNavigator(
   {
     Homescreen: { 
@@ -135,9 +137,9 @@ const TabNavigator = createBottomTabNavigator(
     },*/
     Leaderboard: { 
       screen: createMaterialTopTabNavigator({
-        Alltime: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="All time high"/>,
-        Semester: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="Semester"/>,
-        Weekly: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="Weekly"/>
+        Alltime: () => <LeaderboardUpdate highscoreList={highScoreList} title="All time high"/>,
+        Semester: () => <LeaderboardUpdate highscoreList={highScoreList} title="Semester"/>,
+        Weekly: () => <LeaderboardUpdate highscoreList={highScoreList} title="Weekly"/>
       }),
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},

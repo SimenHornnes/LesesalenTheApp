@@ -6,15 +6,22 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 class LeaderboardUpdate extends React.Component {
+  constructor (props) {
+    super(props);
+  }
   render() {
     return (
-      <Text style={{fontWeight: 'bold', ...styles.fontsize}}>
-        {this.props.title}
-      </Text>
+      <View>
+        <Text style={{fontWeight: 'bold', ...styles.fontsize}}>
+          {this.props.title}
+        </Text>
+        {this.props.highscoreList.map(name => <Text key = {name} style = {{textAlign: 'center'}}>{name}</Text>)}
+      </View>
     );
   }
 
 }
+
 const TopTabNavigator = createMaterialTopTabNavigator(
   {
     Alltime: { 
@@ -65,7 +72,7 @@ const styles = StyleSheet.create({
     //backgroundColor: '#F5FCFF',
   },
   fontsize: {
-    fontSize: 100
+    fontSize: 50
   },
   welcome: {
     fontSize: 50,
