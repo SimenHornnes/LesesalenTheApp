@@ -7,6 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-firebase/database": "^0.3.10",
+    "firebase": "^6.1.1",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-boundary": "^1.1.0",

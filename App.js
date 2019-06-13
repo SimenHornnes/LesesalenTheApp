@@ -1,18 +1,24 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
+ * App - Hovedfil, rammeverk
+ * TopTabsLeaderBoard - definerer komponent(er) for øverste bar i leaderboard screen
+ * 1. Få til innloggings screen
+ * 2. Få til scrolling i leaderboard i toptabs.
  */
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
-import { createBottomTabNavigator, createAppContainer, TabBarBottom } from 'react-navigation';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-//import console = require('console');
+import { createBottomTabNavigator, createAppContainer, createMaterialTopTabNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
+import LeaderboardUpdate from './components/TopTabsLeaderboard';
+import TopTabNavigator from './components/TopTabsLeaderboard';
+import List from './components/List';
+import firebase from 'firebase/app';
+import { FirebaseDatabaseProvider, FirebaseDatabaseNode } from "@react-firebase/database";
+import "firebase/database";
+import { firebaseConfig } from './components/src/Config';
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -73,7 +79,7 @@ class App extends React.Component{
   //<FetchLocation title={"Find location"} onGetLocation = {this.getUserLocationHandler} />
   render() {
     return (
-      <View style={styles.container}> 
+      <View style={{...styles.HomescreenStyle, ...styles.container}}> 
         <ShowUserLocation title={"User location "} position = {this.getUserCoord} />
         { this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null }
         { this.isInside(115.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
@@ -83,44 +89,101 @@ class App extends React.Component{
   }
 }
 
-class LeaderBoard extends React.Component {
+/*class LeaderBoard extends React.Component {
+  
   render() {
     return (
-      <View>
-
-      </View>
+      <View></View>
     );
   }
 
 }
+*/
+class Profile extends React.Component {
+  render() {
+    return (
+      <FirebaseDatabaseProvider firebase={firebase} {...firebaseConfig}>
+        <FirebaseDatabaseNode path={"lesesalentheapp"}>
+          { d => { console.log(d); return (
+            <View>
+              
+              <List data={d}/>
+            </View>)
+          }}
+        </FirebaseDatabaseNode>
+       </FirebaseDatabaseProvider>
+    );
+  }
+}
+
+
+const sizeOfIcons = 30;
 
 const TabNavigator = createBottomTabNavigator(
   {
-    Homescreen: { screen: App },
-    Leaderboard: { screen: LeaderBoard },
+    Homescreen: { 
+      screen: App,
+      navigationOptions: {
+          tabBarIcon: () => { return (<Icon name="md-home" size = {sizeOfIcons} color = '#0097A7' />)},
+      } 
+    },
+    /*Leaderboard: { 
+      screen: TopTabNavigator,
+      navigationOptions: {
+        tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},
+      } 
+    },*/
+    Leaderboard: { 
+      screen: createMaterialTopTabNavigator({
+        Alltime: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="All time high"/>,
+        Semester: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="Semester"/>,
+        Weekly: () => <LeaderboardUpdate highscoreList={['Kristian', 'Simen']} title="Weekly"/>
+      }),
+      navigationOptions: {
+        tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},
+      } 
+    },
+    Profile: {
+      screen: Profile,
+      navigationOptions: {
+        //change md-more
+        tabBarIcon: () => { return (<Icon name = "md-more" size = {sizeOfIcons} color = '#0097A7' />) }
+
+      }
+    },
   },
   {
-    navigationOptions: ({ navigation } ) => ({
-      tabBarIcon: ({ focused, red}) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        if(routeName === 'Homescreen'){
-          iconName = `ios-information-circle${focused ? '' : '-outline' }`;
-        } else if(routeName === 'Leaderboard') {
-          iconName = `ios-options${focused ? '' : '-outline'}`;
-        }
-        return <Ionicons name = {iconName} size = {25} color = {red} />;
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: 'blue',
-      inactiveTintColor: 'orange',
+    navigationOptions: ({ navigation, screenProps }) => ({
+    header: null,
+    headerMode: 'none',
+    tabBarVisible: true,
+    tabBarLabel: () => {
+      const { routeName } = navigation.state;
+      switch (routeName) {
+        //
+      }
+      return <Text>{routeName}</Text>;
     },
-    tabBarComponent: TabBarBottom,
-    tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
-  }
+  }),
+  animationEnabled: false,
+  swipeEnabled: true,
+  tabBarOptions: {
+    activeTintColor: 'rgb(12,157,197)',
+    inactiveTintColor: 'black',
+    indicatorStyle: {
+      backgroundColor: 'rgb(102,134,205)',
+    },
+    tabStyle: {
+      height: 48,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    style: {
+      backgroundColor: 'white',
+    },
+    statusBarStyle: 'light-content',
+  },
+}
 );
 
 export default createAppContainer(TabNavigator);
@@ -130,7 +193,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    //backgroundColor: '#F5FCFF',
+  },
+  fontsize: {
+    fontSize: 100
   },
   welcome: {
     fontSize: 50,
@@ -142,4 +208,7 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  HomescreenStyle: {
+    backgroundColor: '#D0D0D0'
+  }
 });
