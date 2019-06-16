@@ -35,6 +35,7 @@ export default class Scroll extends React.Component {
     );
   }
 }
+
 const TopTabNavigator = createMaterialTopTabNavigator(
   {
     Alltime: { 
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     //backgroundColor: '#F5FCFF',
   },
   fontsize: {
-    fontSize: 100
+    fontSize: 50
   },
   welcome: {
     fontSize: 50,
