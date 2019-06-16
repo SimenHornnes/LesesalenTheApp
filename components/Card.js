@@ -9,8 +9,9 @@ export default class Card extends React.Component {
       highScoreList: []
     }
   }
+  
 
-  componentWillMount(){
+  componentDidMount(){
     fetch("https://lesesalentheapp.firebaseio.com/places.json")
     .then(res => res.json())
     .then(parsedRes => {
