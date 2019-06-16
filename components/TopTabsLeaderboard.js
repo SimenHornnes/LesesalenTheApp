@@ -8,14 +8,34 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class LeaderboardUpdate extends React.Component {
   constructor (props) {
     super(props);
+    this.state = {
+      highScoreList: [] 
+    }
   }
+  getHighscoreList = () => {
+    fetch("https://lesesalentheapp.firebaseio.com/places.json")
+      .then(res => res.json())
+      .then(parsedRes => {
+        const hList = ['hei'];
+        for (const key in parsedRes) {
+          hList.push({
+            navn: parsedRes[key].lat
+          });
+        }
+        this.setState({
+          highScoreList: hList
+        })
+      })
+      .catch(err => Console.log(err));
+  };
+
   render() {
     return (
       <View>
         <Text style={{fontWeight: 'bold', ...styles.fontsize}}>
           {this.props.title}
         </Text>
-        {this.props.highscoreList.map(name => <Text key = {name} style = {{textAlign: 'center'}}>{name}</Text>)}
+        {this.state.highScoreList.map(name => <Text key = {name} style = {{textAlign: 'center', marginBottom: 10}}>{name}</Text>)}
       </View>
     );
   }

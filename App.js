@@ -31,14 +31,29 @@ class App extends React.Component{
 
   constructor(props) {
     super(props);
-    this.state = { position: undefined }
+    this.state = { 
+      position: undefined,
+      highScoreList: [] }
   }
-
+  
   getUserCoord = () => {
     navigator.geolocation.getCurrentPosition(position => {
-      this.setState({ position: { lng: position.coords.longitude, lat: position.coords.latitude }},console.log(position)
-      ), err => console.log(err)
-    });
+      this.setState({ 
+        position: { 
+          lng: position.coords.longitude, 
+          lat: position.coords.latitude 
+        }
+      });
+      fetch('https://lesesalentheapp.firebaseio.com/places.json', {
+        method: 'POST',
+        body: JSON.stringify({
+          lng: position.coords.longitude, 
+          lat: position.coords.latitude 
+        })
+      })
+      .then(res => Console.log(res))
+      .catch(err => Console.log(err));
+    }, err => console.log(err));
   }
 
   isInside = radius => {
@@ -119,7 +134,24 @@ class Profile extends React.Component {
 
 const sizeOfIcons = 30;
 
-const highScoreList = ['Kristina', 'Simen', 'Torjus']
+let highScoreList2 = []
+let highScoreList = ['Simen']
+
+
+getHighscoreList = () => {
+  fetch('https://lesesalentheapp.firebaseio.com/places.json')
+    .then(res => res.json())
+    .then(parsedRes => {
+      const hList = [];
+      for (const key in parsedRes) {
+        hList.push({
+          navn: parsedRes[key].lat
+        });
+      }
+      return hList
+    })
+    .catch(err => Console.log(err));
+};
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -135,6 +167,7 @@ const TabNavigator = createBottomTabNavigator(
         tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},
       } 
     },*/
+
     Leaderboard: { 
       screen: createMaterialTopTabNavigator({
         Alltime: () => <LeaderboardUpdate highscoreList={highScoreList} title="All time high"/>,
