@@ -29,14 +29,31 @@ class App extends React.Component{
 
   constructor(props) {
     super(props);
-    this.state = { position: undefined }
+    this.state = { 
+      position: undefined,
+      inside: false
+    }
   }
 
   getUserCoord = () => {
     navigator.geolocation.getCurrentPosition(position => {
-      this.setState({ position: { lng: position.coords.longitude, lat: position.coords.latitude }},console.log(position)
-      ), err => console.log(err)
-    });
+      this.setState({ 
+        position: { 
+          lng: position.coords.longitude,
+          lat: position.coords.latitude
+        }
+      });
+      fetch('https://lesesalentheapp.firebaseio.com/places.json', {
+        method: 'POST',
+        body: JSON.stringify({
+          lng: position.coords.longitude, 
+          lat: position.coords.latitude,
+          inside: this.isInside(9999999999999.0)
+        })
+      })
+      .then(res => Console.log(res))
+      .catch(err => Console.log(err));
+    }, err => console.log(err));
   }
 
   isInside = radius => {
@@ -80,7 +97,7 @@ class App extends React.Component{
       <View style={{...styles.HomescreenStyle, ...styles.container}}> 
         <ShowUserLocation title={"Send user location"} position = {this.getUserCoord} />
         { this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null }
-        { this.isInside(115.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
+        { this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
         <UsersMap />
       </View>
     );
@@ -196,7 +213,8 @@ export const SignedIn = createBottomTabNavigator(
     indicatorStyle: {
       backgroundColor: 'rgb(102,134,205)',
     },
-    tabStyle: {
+    tabStyle: {  isInside = radius => {
+
       height: 48,
       alignItems: 'center',
       justifyContent: 'center',
