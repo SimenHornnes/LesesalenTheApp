@@ -45,9 +45,9 @@ class App extends React.Component{
       console.log("No position!")
       return false;
     }
-    //const { lat, lng } = this.state.position;
-    const lat = 60.382186;
-    const lng = 5.332215;
+    const { lat, lng } = this.state.position;
+    //const lat = 60.382186;
+    //const lng = 5.332215;
     const lesesalenLat = 60.381192;
     const lesesalenLng = 5.331556;
     const radians = Math.PI / 180.0;
@@ -240,6 +240,7 @@ export const createRootNavigator = (signedIn = false) => {
       },
       SignedOut: {
         screen: SignedOut,
+        
       }
     },
     {
@@ -271,6 +272,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   HomescreenStyle: {
-    backgroundColor: '#D0D0D0'
+    backgroundColor: '#A7CFDB'
   }
 });
