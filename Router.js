@@ -15,7 +15,7 @@ import Scroll from './components/Scroll';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
-//import
+//import 
 
 
 const instructions = Platform.select({
