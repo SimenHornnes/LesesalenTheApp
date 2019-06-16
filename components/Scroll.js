@@ -1,63 +1,57 @@
 import React, {Component} from 'react';
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, ScrollView, SafeAreaView, StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Dimensions} from 'react-native';
+//import { List, ListItem } from 'react-native-elements'
 
+const { height } = Dimensions.get('window'); 
 
-
-class LeaderboardUpdate extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      highScoreList: [] 
-    }
-  }
-  getHighscoreList = () => {
-    fetch("https://lesesalentheapp.firebaseio.com/places.json")
-      .then(res => res.json())
-      .then(parsedRes => {
-        const hList = ['hei'];
-        for (const key in parsedRes) {
-          hList.push({
-            navn: parsedRes[key].lat
-          });
-        }
-        this.setState({
-          highScoreList: hList
-        })
-      })
-      .catch(err => Console.log(err));
+export default class Scroll extends React.Component {
+  state = {
+    screenHeight: height,
   };
 
+  onContentSizeChange = (contentWidth, contentHeight) => {
+    this.setState({ screenHeight: contentHeight });
+  };
+  
   render() {
+    const scrollEnabled = this.state.screenHeight > height;
     return (
-      <View>
-        <Text style={{fontWeight: 'bold', ...styles.fontsize}}>
-          {this.props.title}
-        </Text>
-        {this.state.highScoreList.map(name => <Text key = {name} style = {{textAlign: 'center', marginBottom: 10}}>{name}</Text>)}
-      </View>
+      <SafeAreaView style={styles.container1}>
+        <StatusBar barStyle="light-content" backgroundColor="#468189" />
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.scrollview}
+          scrollEnabled={scrollEnabled}
+          onContentSizeChange={this.onContentSizeChange}
+        >
+          <View style={styles.content}>
+            {this.props.children}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
-
 }
 
 const TopTabNavigator = createMaterialTopTabNavigator(
   {
     Alltime: { 
-      screen: LeaderboardUpdate,
+      screen: Scroll,
       navigationOptions: {
           tabBarIcon: () => { return (<Icon name="md-home" size = {sizeOfIcons} color = '#0097A7' />)},
         } 
     },
     Semester: { 
-      screen: LeaderboardUpdate,
+      screen: Scroll,
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)}
       } 
     },
     Weekly: {
-      screen: LeaderboardUpdate,
+      screen: Scroll,
       navigationOptions: {
         //change md-more
         tabBarIcon: () => { return (<Icon name = "md-more" size = {sizeOfIcons} color = '#0097A7' />) }
@@ -80,11 +74,18 @@ const TopTabNavigator = createMaterialTopTabNavigator(
 
 
 
-export default LeaderboardUpdate;
+//export default LeaderboardUpdate;
 
 //export default createAppContainer(TopTabNavigator);
 
 const styles = StyleSheet.create({
+  container1: {
+    flex: 1,
+    backgroundColor: "#85D4E7",
+  },
+  scrollview: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -106,5 +107,10 @@ const styles = StyleSheet.create({
   },
   HomescreenStyle: {
     backgroundColor: '#D0D0D0'
-  }
+  },
+  content: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+    padding: 10,
+  },
 });
