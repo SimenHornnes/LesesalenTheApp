@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
-import { createBottomTabNavigator, createAppContainer, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+//import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import List from './components/List';
 import firebase from 'firebase/app';
@@ -36,6 +37,7 @@ class App extends React.Component{
   }
 
   getUserCoord = () => {
+    console.log("pressed")
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({ 
         position: { 
@@ -43,16 +45,18 @@ class App extends React.Component{
           lat: position.coords.latitude
         }
       });
+      console.log(position)
       fetch('https://lesesalentheapp.firebaseio.com/places.json', {
         method: 'POST',
         body: JSON.stringify({
           lng: position.coords.longitude, 
           lat: position.coords.latitude,
-          inside: this.isInside(9999999999999.0)
+          //TODO change radius value
+          inside: this.isInside(99.0)
         })
       })
-      .then(res => Console.log(res))
-      .catch(err => Console.log(err));
+      .then(res => console.log("res"))
+      .catch(err => console.log(err));
     }, err => console.log(err));
   }
 
@@ -74,10 +78,10 @@ class App extends React.Component{
     const triLong = Math.abs(lesesalenLng-lng) * radians;
     
     const a = (Math.sin(triLat/2)*Math.sin(triLat/2))+(Math.cos(lesesalenLat*radians)*Math.cos(lat*radians)*Math.sin(triLong/2.0)*Math.sin(triLong/2.0));
-    console.log(a)
+    //console.log(a)
     
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    console.log(c)
+    //console.log(c)
     const answer = R * c
     console.log(answer)
     if(answer > radius){
@@ -180,6 +184,7 @@ export const SignedIn = createBottomTabNavigator(
       </Scroll>,
       }),
       navigationOptions: {
+        //Styling for ikon.
         tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},
       } 
     },

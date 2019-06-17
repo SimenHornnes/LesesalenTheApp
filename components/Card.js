@@ -11,7 +11,7 @@ export default class Card extends React.Component {
   }
   
 
-  componentDidMount(){
+  componentWillMount(){
     fetch("https://lesesalentheapp.firebaseio.com/places.json")
     .then(res => res.json())
     .then(parsedRes => {
