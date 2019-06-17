@@ -35,7 +35,7 @@ export default ({ navigation }) => (
         />
 
         <Input
-          placeholder='PASSWORD'
+          placeholder='PASSWORD' secureTextEntry={true} 
           
           leftIcon={{ type: 'font-awesome', name: 'lock' }}
         />

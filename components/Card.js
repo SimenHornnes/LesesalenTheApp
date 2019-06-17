@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import firebase from 'firebase/app';
 
 
 export default class Card extends React.Component {
@@ -11,14 +12,28 @@ export default class Card extends React.Component {
   }
   
 
-  componentDidMount(){
-    fetch("https://lesesalentheapp.firebaseio.com/places.json")
+  componentDidMount() {
+    const mostHours = firebase.database().ref('users').orderByChild('hours');
+    const hList = [];
+    for (const key in mostHours) {
+      hList.push({
+        name: mostHours[key].name,
+        hours: mostHours[key].hours,
+        id: key
+      });
+    }
+    this.setState({
+      highScoreList: hList
+    })
+    /*fetch(this.props.highList)
     .then(res => res.json())
     .then(parsedRes => {
       const hList = [];
-      for (const key in parsedRes) {
+      for (const key in mostHours) {
         hList.push({
-          navn: parsedRes[key].lat
+          name: mostHours[key].name,
+          hours: mostHours[key].hours,
+          id: key
         });
       }
       this.setState({
@@ -27,14 +42,18 @@ export default class Card extends React.Component {
       console.log("Received data from firebase:");
       console.log(this.state);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err));*/
   }
+
+  componentWillUpdate(){
+  }
+
 
   render(){
     if(this.state){
       return (
         <View style={styles.card}>
-          {this.state.highScoreList.map(name => <Text key = {name} style = {{textAlign: 'center', marginBottom: 10}}>{name.navn}</Text>)}
+          {this.state.highScoreList.map( user => <Text key = {user.id} style = {{textAlign: 'center', marginBottom: 10}}>{user.name}        {user.hours}</Text>)}
         </View>
       )
     }else{
@@ -43,6 +62,7 @@ export default class Card extends React.Component {
   }
    
 }
+
 
 const styles = StyleSheet.create({
   card: {
