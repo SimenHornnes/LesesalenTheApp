@@ -37,7 +37,7 @@ export default class SignUp extends React.Component {
                             marginBottom: 5
                         }}
                     >
-                        <Text style={{ color: 'pink', fontSize: 28, fontWeight: 'bold' }}>Sign In</Text>
+                        <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>Sign In</Text>
                     </View>
 
                     <Card>
@@ -77,7 +77,7 @@ export default class SignUp extends React.Component {
 
 const styles = StyleSheet.create({
     fullsize: {
-        backgroundColor: '#ADFF2F',
+        backgroundColor: '#77cde5',
         //flex: 1,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,

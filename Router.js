@@ -36,9 +36,15 @@ class Homescreen extends React.Component {
       position: undefined,
       inside: false,
       userId: undefined,
-      hours: undefined,
-      displayName: undefined
+      name: undefined,
+      hours: undefined
     }
+  }
+
+  componentDidMount() {
+    const { currentUser } = firebase.auth()
+    console.log(currentUser)
+    this.setState({ userId: currentUser.uid, name: currentUser.email })
   }
 
   componentWillMount() {
@@ -62,8 +68,7 @@ class Homescreen extends React.Component {
       });
       if (this.isInside(999999999999999.9)) {
         firebase.database().ref(`users/${this.state.userId}`).set({
-          //displayName
-          name: "Torjus",
+          name: this.state.name,
           hours: 100 + this.state.hours
         })
         this.setState({

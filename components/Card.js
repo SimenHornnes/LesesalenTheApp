@@ -17,7 +17,7 @@ export default class Card extends React.Component {
 
   
   
-  componentDidMount() {
+componentDidMount() {
     this.fetchData().done()
   }
 

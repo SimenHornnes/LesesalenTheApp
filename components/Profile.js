@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
+import firebase from 'firebase/app';
+
 
 export default ({ navigation }) => (
   <View style={{ paddingVertical: 20 }}>
@@ -23,7 +25,7 @@ export default ({ navigation }) => (
       <Button
         backgroundColor="#03A9F4"
         title="SIGN OUT"
-        onPress={() => onSignOut().then(() => navigation.navigate('SignedOut'))}
+        onPress={() => onSignOut().then(() => navigation.navigate('SignedOut'), firebase.auth().signOut())}
       />
     </Card>
   </View>
