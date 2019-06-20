@@ -191,7 +191,7 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () => <Scroll>
-          <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />
+          <Card />
         </Scroll>,
         Semester: () => <Scroll>
           <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />

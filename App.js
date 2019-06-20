@@ -8,7 +8,9 @@
  * 5. Lage foreground/background funksjonalitet for å hente location og sende til server
  * 6. Burde begynne med å trykke på knappen for å hente, og så sende loc til server og oppdatere
  * lista og displaye lista 
- * 7. Fiks leaderboard rendering etter å ha trykka på knappen
+ * 7. Fiks leaderboard rendering etter å ha trykka på knappen, trur vi må ha en on('value') i card.
+ * 8. Send riktig username til firebase, og hent riktig username.
+ * 9. 
  */
 
 
