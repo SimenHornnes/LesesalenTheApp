@@ -13,7 +13,7 @@ import firebase from 'firebase/app';
 export default class SignUp extends React.Component {
     constructor(props){
         super(props)
-        this.state = { email: '', password: '', errorMessage: null }
+        this.state = { email: '', password: '', displayName: '', errorMessage: null }
     }
     
     
@@ -21,6 +21,8 @@ export default class SignUp extends React.Component {
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => this.props.navigation.navigate("SignedIn"))
       .catch(error => this.setState({ errorMessage: error.message }))
+
+    
   }
 
 
@@ -59,6 +61,18 @@ export default class SignUp extends React.Component {
                             onChangeText={password => this.setState({ password })}
                             value={this.state.password}
                             leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                        />
+                        <Input
+                            placeholder='DisplayName'
+                            onChangeText={displayName => this.setState({ displayName })}
+                            value={this.state.displayName}
+                            leftIcon={
+                                <Icon
+                                    name='user'
+                                    size={24}
+                                    color='black'
+                                />
+                            }
                         />
                         
                         <Button
