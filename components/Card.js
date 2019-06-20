@@ -13,51 +13,51 @@ export default class Card extends React.Component {
   
 
   componentDidMount() {
-    const mostHours = firebase.database().ref('users').orderByChild('hours');
-    const hList = [];
-    for (const key in mostHours) {
+    const hList = []
+    const ref = firebase.database().ref('users')
+    ref.orderByChild('hours').on('child_added', snapshot => {
+      console.log(snapshot.key)
       hList.push({
-        name: mostHours[key].name,
-        hours: mostHours[key].hours,
-        id: key
+        name: snapshot.val().name,
+        hours: snapshot.val().hours,
+        id: snapshot.key
       });
-    }
-    this.setState({
-      highScoreList: hList
-    })
-    /*fetch(this.props.highList)
+      return hList;
+    });
+    console.log(hList)
+    this.setState({highScoreList: hList})
+  
+   /* fetch(`${this.props.highList}`)
     .then(res => res.json())
     .then(parsedRes => {
       const hList = [];
-      for (const key in mostHours) {
+      for (const key in parsedRes) {
         hList.push({
-          name: mostHours[key].name,
-          hours: mostHours[key].hours,
+          name: parsedRes[key].name,
+          hours: parsedRes[key].hours,
           id: key
         });
       }
       this.setState({
         highScoreList: hList
       })
-      console.log("Received data from firebase:");
-      console.log(this.state);
+      //console.log("Received data from firebase:");
+      //console.log(this.state);
     })
     .catch(err => console.log(err));*/
   }
 
-  componentWillUpdate(){
-  }
-
-
   render(){
     if(this.state){
+    console.log(this.state.highScoreList)
+
       return (
         <View style={styles.card}>
-          {this.state.highScoreList.map( user => <Text key = {user.id} style = {{textAlign: 'center', marginBottom: 10}}>{user.name}        {user.hours}</Text>)}
+          {this.state.highScoreList.map( user => <Text key = {user.id} style = {{textAlign: 'center', color: 'black'}}>{user}funsefine{user}</Text>)}
         </View>
       )
     }else{
-      return (<Text> Waiting for data</Text>)
+      return (<Text> Waiting for data...</Text>)
     }
   }
    
