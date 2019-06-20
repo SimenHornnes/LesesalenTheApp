@@ -14,9 +14,10 @@ import "firebase/database";
 import { Firebase } from './components/src/Config';
 import Card from './components/Card';
 import Scroll from './components/Scroll';
-import SignUp from './components/SignUp';
+import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
+import SignUp from './components/SignUp';
 //import 
 
 
@@ -160,16 +161,22 @@ const sizeOfIcons = 30;
 
 export const SignedOut = createStackNavigator(
   {
-    SignUp: {
-      screen: SignUp,
+    Login: {
+      screen: Login,
       navigationOptions: {
-        title: "Sign Up",
+        title: "Login",
       }
     },
     SignIn: {
       screen: SignIn,
       navigationOptions: {
         title: "Sign In"
+      }
+    },
+    SignUp: {
+      screen: SignUp,
+      navigationOptions: {
+        title: "Sign Up"
       }
     }
   });
