@@ -10,9 +10,22 @@ import firebase from 'firebase/app';
 
 //Evt add epost, og confirm password.
 export default class SignUp extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = { email: '', password: '', errorMessage: null }
+  }
+
+  handleLogin = () => {
+    const { email, password } = this.state
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate('SignedIn'))
+      .catch(error => this.setState({ errorMessage: error.message }))
+  }
 
 
     render() {
+      console.log(this.state)
+        console.log(this.state.password)
         return (
             <View style={styles.fullsize}>
                 <View style={{ paddingVertical: 20 }}>
@@ -29,7 +42,10 @@ export default class SignUp extends React.Component {
 
                     <Card>
                         <Input
-                            placeholder='USERNAME'
+                            placeholder='Email'
+                            autoCapitalize="none"
+                            onChangeText={email => this.setState({ email })}
+                            value={this.state.email}
                             leftIcon={
                                 <Icon
                                     name='user'
@@ -40,6 +56,9 @@ export default class SignUp extends React.Component {
                         />
                         <Input
                             placeholder='PASSWORD' secureTextEntry={true}
+                            autoCapitalize="none"
+                            onChangeText={password => this.setState({ password })}
+                            value={this.state.password}
 
                             leftIcon={{ type: 'font-awesome', name: 'lock' }}
                         />
@@ -47,9 +66,7 @@ export default class SignUp extends React.Component {
                             buttonStyle={{ marginTop: 20 }}
                             backgroundColor="#03A9F4"
                             title="SIGN IN"
-                            onPress={() => {
-                                onSignIn().then(() => this.props.navigation.navigate("SignedIn"));
-                            }}
+                            onPress={this.handleLogin}
                         />
                     </Card>
                 </View>
