@@ -15,6 +15,7 @@ export default class Main extends React.Component {
     
     }
     
+    
     componentDidMount() {
         isSignedIn()
           .then(res => this.setState({ signedIn: res, checkedSignIn: true }))

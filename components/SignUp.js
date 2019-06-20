@@ -1,50 +1,68 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, FormLabel, FormInput } from 'react-native-elements';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import { Card, Button } from 'react-native-elements';
 import { onSignIn } from '../Auth';
-import {Dimensions} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
+import { Dimensions } from 'react-native';
+import firebase from 'firebase/app';
 
-export default ({ navigation }) => (
-  //View for heile sida
-  <View style={styles2.fullsize}>
-    <View style = {styles2.card}>
-      
-      <Button
-        buttonStyle={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}
-        //backgroundColor="#03A9F4"
-        
-        title="SIGN UP"
-        //Denne linja bestemmer action knappen "sign up"
-        onPress={() => {
-          onSignIn().then(() => navigation.navigate("SignedIn"));
-        }}
-      />
-      <Button
-        buttonStyle={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}
-        //backgroundColor="transparent"
-        textStyle={{ color: "#027F93" }}
-        title="Sign In"
-        onPress={() => navigation.navigate("SignIn")}
-      />
-    </View>
-  </View>
-);
 
-const styles2 = StyleSheet.create({
-  fullsize: {
-    backgroundColor: '#FDD979',
-    //flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-  card: {
-    marginTop: 50,
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: '#0C9DAE',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    minHeight: 33
-  },
+//Evt add epost, og confirm password.
+export default class SignUp extends React.Component {
+
+
+    render() {
+        return (
+            <View style={styles.fullsize}>
+                <View style={{ paddingVertical: 20 }}>
+                    <View
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                            alignSelf: "center",
+                            marginBottom: 5
+                        }}
+                    >
+                        <Text style={{ color: 'pink', fontSize: 28, fontWeight: 'bold' }}>Sign Up</Text>
+                    </View>
+
+                    <Card>
+                        <Input
+                            placeholder='USERNAME'
+                            leftIcon={
+                                <Icon
+                                    name='user'
+                                    size={24}
+                                    color='black'
+                                />
+                            }
+                        />
+                        <Input
+                            placeholder='PASSWORD' secureTextEntry={true}
+
+                            leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                        />
+                        <Button
+                            buttonStyle={{ marginTop: 20 }}
+                            backgroundColor="#03A9F4"
+                            title="SIGN IN"
+                            onPress={() => {
+                                onSignIn().then(() => this.props.navigation.navigate("SignedIn"));
+                            }}
+                        />
+                    </Card>
+                </View>
+            </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    fullsize: {
+        backgroundColor: '#ADFF2F',
+        //flex: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    },
 })
