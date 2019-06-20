@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
-import { createBottomTabNavigator, createAppContainer, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+//import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import List from './components/List';
 import firebase from 'firebase/app';
@@ -46,6 +47,7 @@ class Homescreen extends React.Component {
   }
 
   getUserCoord = () => {
+    console.log("pressed")
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         position: {
@@ -67,7 +69,8 @@ class Homescreen extends React.Component {
         body: JSON.stringify({
           lng: position.coords.longitude,
           lat: position.coords.latitude,
-          inside: this.isInside(9999999999999.0)
+          //TODO change radius value
+          inside: this.isInside(99.0)
         })
       })
 
@@ -188,7 +191,7 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () => <Scroll>
-          <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />
+          <Card />
         </Scroll>,
         Semester: () => <Scroll>
           <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />
