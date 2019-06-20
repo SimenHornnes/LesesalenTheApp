@@ -17,54 +17,7 @@ export default class Card extends React.Component {
 
   
   
-  componentDidMount() {
-<<<<<<< HEAD
-    const hList = []
-    const ref = firebase.database().ref('users')
-    ref.orderByChild('hours').on('child_added', snapshot => {
-      console.log(snapshot.key)
-      hList.push({
-        name: snapshot.val().name,
-        hours: snapshot.val().hours,
-        id: snapshot.key
-      });
-      return hList;
-    });
-    console.log(hList)
-    this.setState({highScoreList: hList})
-  
-   /* fetch(`${this.props.highList}`)
-    .then(res => res.json())
-    .then(parsedRes => {
-      const hList = [];
-      for (const key in parsedRes) {
-        hList.push({
-          name: parsedRes[key].name,
-          hours: parsedRes[key].hours,
-          id: key
-        });
-      }
-      this.setState({
-        highScoreList: hList
-      })
-      //console.log("Received data from firebase:");
-      //console.log(this.state);
-    })
-    .catch(err => console.log(err));*/
-  }
-
-  render(){
-    if(this.state){
-    console.log(this.state.highScoreList)
-
-      return (
-        <View style={styles.card}>
-          {this.state.highScoreList.map( user => <Text key = {user.id} style = {{textAlign: 'center', color: 'black'}}>{user}funsefine{user}</Text>)}
-        </View>
-      )
-    }else{
-      return (<Text> Waiting for data...</Text>)
-=======
+componentDidMount() {
     this.fetchData().done()
   }
 
@@ -111,7 +64,6 @@ export default class Card extends React.Component {
     } else {
       console.log("State var tom")
       return (<Text> Waiting for data</Text>)
->>>>>>> 667e688b252d75ab35f9eb156cdca953734a46ad
     }
   }
 
