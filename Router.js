@@ -39,10 +39,10 @@ class Homescreen extends React.Component {
     }
   }
 
-  /*componentDidMount() {
+  componentDidMount() {
     const { currentUser } = firebase.auth()
     console.log(currentUser)
-    this.setState({ userId: currentUser.uid, name: currentUser.email })
+    this.setState({ userId: currentUser.uid, name: currentUser.displayName })
   }
 
   componentWillMount() {
@@ -69,20 +69,21 @@ class Homescreen extends React.Component {
           lat: position.coords.latitude
         }
       });
-      /*if (this.isInside(999999999999999.9)) {
+      if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
+          const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+          recentPost.once('value').then(snapshot => {
           firebase.database().ref(`users/${this.state.userId}`).set({
             name: this.state.name,
-            hours: 100 + this.state.hours
+            hours: 100 + snapshot.val()
           })
-          this.setState({
-            hours: this.state.hours + 100
+          this.setState({ hours: snapshot.val() + 100})
           })
         }
       }
       else {
         console.log("Ingen userId")
-      }*/
+      }
 
     }, err => console.log(err));
   }

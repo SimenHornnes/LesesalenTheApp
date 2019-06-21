@@ -27,12 +27,15 @@ export default class SignUp extends React.Component {
                         userCredentials.user.updateProfile({
                             displayName: this.state.displayName
                         }).then((s) => {
-                            this.props.navigation.navigate('SignedIn');
+                            this.props.navigation.navigate('SignedIn')
                         })
                     }
                 })
+                .catch(error => this.setState({ errorMessage: error.message }))
+
         }
         else{
+            this.setState({ errorMessage: "Username must be between 4 and 15 characters long" })       
             console.log("For kort brukernavn")
         }
     }
@@ -81,6 +84,72 @@ export default class SignUp extends React.Component {
     render() {
         //console.log(this.state)
         //console.log(this.state.password)
+        if (this.state.errorMessage) {
+            return (
+                <View style={styles.fullsize} >
+                    <View style={{ paddingVertical: 20 }}>
+                        <View
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                marginBottom: 5
+                            }}
+                        >
+                            <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>Sign Up</Text>
+                        </View>
+    
+                        <Card>
+                            <Input
+                                placeholder='Email'
+                                onChangeText={email => this.setState({ email })}
+                                value={this.state.email}
+                                leftIcon={
+                                    <Icon
+                                        name='user'
+                                        size={24}
+                                        color='black'
+                                    />
+                                }
+                            />
+                            <Input
+                                placeholder='PASSWORD' secureTextEntry={true}
+                                onChangeText={password => this.setState({ password })}
+                                value={this.state.password}
+                                leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                            />
+                            <Input
+                                placeholder='DisplayName'
+                                onChangeText={displayName => this.setState({ displayName })}
+                                value={this.state.displayName}
+                                leftIcon={
+                                    <Icon
+                                        name='user'
+                                        size={24}
+                                        color='black'
+                                    />
+                                }
+                            />
+    
+                            <Button
+                                buttonStyle={{ marginTop: 20 }}
+                                backgroundColor="#03A9F4"
+                                title="SIGN IN"
+                                onPress={this.handleSignUp}
+                            />
+                        </Card>
+                        <View style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                marginBottom: 5
+                            }}>
+                            <Text style={{ color: 'red', fontSize: 15, paddingLeft: 15, paddingRight: 15, textAlign: 'center' }}>{this.state.errorMessage}</Text>
+                        </View>
+                    </View>
+                </View>
+            )
+        }
         return (
             <View style={styles.fullsize} >
                 <View style={{ paddingVertical: 20 }}>

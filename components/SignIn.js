@@ -27,6 +27,62 @@ export default class SignUp extends React.Component {
     render() {
       console.log(this.state)
         console.log(this.state.password)
+        if (this.state.errorMessage) {
+            return (
+                <View style={styles.fullsize}>
+                    <View style={{ paddingVertical: 20 }}>
+                        <View
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                marginBottom: 5
+                            }}
+                        >
+                            <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>Sign In</Text>
+                        </View>
+    
+                        <Card>
+                            <Input
+                                placeholder='Email'
+                                autoCapitalize="none"
+                                onChangeText={email => this.setState({ email })}
+                                value={this.state.email}
+                                leftIcon={
+                                    <Icon
+                                        name='user'
+                                        size={24}
+                                        color='black'
+                                    />
+                                }
+                            />
+                            <Input
+                                placeholder='PASSWORD' secureTextEntry={true}
+                                autoCapitalize="none"
+                                onChangeText={password => this.setState({ password })}
+                                value={this.state.password}
+    
+                                leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                            />
+                            <Button
+                                buttonStyle={{ marginTop: 20 }}
+                                backgroundColor="#03A9F4"
+                                title="SIGN IN"
+                                onPress={this.handleLogin}
+                            />
+                        </Card>
+                        <View style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                marginBottom: 5
+                            }}>
+                            <Text style={{ color: 'red', fontSize: 15, paddingLeft: 15, paddingRight: 15, textAlign: 'center' }}>{this.state.errorMessage}</Text>
+                        </View>
+                    </View>
+                </View>
+            )
+        }
         return (
             <View style={styles.fullsize}>
                 <View style={{ paddingVertical: 20 }}>
