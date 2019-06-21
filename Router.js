@@ -35,7 +35,7 @@ class Homescreen extends React.Component {
   componentDidMount() {
     const { currentUser } = firebase.auth()
     console.log(currentUser)
-    this.setState({ userId: currentUser.uid, name: currentUser.email })
+    this.setState({ userId: currentUser.uid, name: currentUser.displayName })
   }
 
   componentWillMount() {
