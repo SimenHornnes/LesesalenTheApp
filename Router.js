@@ -10,8 +10,7 @@ import List from './components/List';
 import firebase from 'firebase/app';
 import { FirebaseDatabaseProvider, FirebaseDatabaseNode } from "@react-firebase/database";
 import "firebase/database";
-//Blir ikke brukt i koden, men initialiserer firebasedatabasen
-import { Firebase } from './components/src/Config';
+
 import Card from './components/Card';
 import Scroll from './components/Scroll';
 import Login from './components/Login';
@@ -29,7 +28,6 @@ const instructions = Platform.select({
 });
 
 class Homescreen extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -37,28 +35,33 @@ class Homescreen extends React.Component {
       inside: false,
       userId: undefined,
       name: undefined,
-      hours: undefined
+      hours: undefined,
     }
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     this.setState({ userId: currentUser.uid, name: currentUser.email })
   }
 
   componentWillMount() {
-    const { currentUser } = firebase.auth()
-    console.log(currentUser.email)
-    this.setState({userId: currentUser.uid })
     const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
     recentPost.once('value').then(snapshot => {
       this.setState({ hours: snapshot.val() })
     })
   }
 
+
+  /*async getUid() {
+    const { currentUser } = firebase.auth()
+    console.log(user)
+    console.log(email)
+}*/
+
+
   getUserCoord = () => {
-    console.log("pressed")
+    //console.log("pressed")
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         position: {
@@ -66,34 +69,28 @@ class Homescreen extends React.Component {
           lat: position.coords.latitude
         }
       });
-      if (this.isInside(999999999999999.9)) {
-        firebase.database().ref(`users/${this.state.userId}`).set({
-          name: this.state.name,
-          hours: 100 + this.state.hours
-        })
-        this.setState({
-          hours: this.state.hours + 100
-        })
+      /*if (this.isInside(999999999999999.9)) {
+        if (this.state.userId) {
+          firebase.database().ref(`users/${this.state.userId}`).set({
+            name: this.state.name,
+            hours: 100 + this.state.hours
+          })
+          this.setState({
+            hours: this.state.hours + 100
+          })
+        }
       }
-      /*fetch('https://lesesalentheapp.firebaseio.com/lol.json', {
-        method: 'POST',
-        body: JSON.stringify({
-          lng: position.coords.longitude,
-          lat: position.coords.latitude,
-          //TODO change radius value
-          inside: this.isInside(99.0)
-        })
-      })
+      else {
+        console.log("Ingen userId")
+      }*/
 
-        .then(res => console.log(res))
-        .catch(err => console.log(err));*/
     }, err => console.log(err));
   }
 
   isInside = radius => {
     const R = 6371000;
     if (!this.state.position) {
-      console.log("No position!")
+      //console.log("No position!")
       return false;
     }
     const { lat, lng } = this.state.position;
@@ -108,25 +105,20 @@ class Homescreen extends React.Component {
     const triLong = Math.abs(lesesalenLng - lng) * radians;
 
     const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(lat * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-    console.log(a)
+    //console.log(a)
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    console.log(c)
+    //console.log(c)
     const answer = R * c
-    console.log(answer)
+    //console.log(answer)
     if (answer > radius) {
       return false;
     }
     return true;
   }
 
-  getUserLocationHandler = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      //     console.log(position);
-    }, err => console.log(err));
-  }
-  //<FetchLocation title={"Find location"} onGetLocation = {this.getUserLocationHandler} />
   render() {
+    console.log("Entered render")
     return (
       <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
@@ -230,6 +222,9 @@ export const SignedIn = createBottomTabNavigator(
       }
     },
   },
+  {
+    initialRouteName: 'Homescreen'
+  }
   /*{
     navigationOptions: ({ navigation, screenProps }) => ({
     header: null,

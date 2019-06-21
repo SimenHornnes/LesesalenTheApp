@@ -16,6 +16,7 @@ export default class SignUp extends React.Component {
   }
 
   handleLogin = () => {
+    console.log("Pressed sign in button")
     const { email, password } = this.state
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate('SignedIn'))

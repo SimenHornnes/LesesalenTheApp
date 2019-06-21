@@ -8,29 +8,81 @@ import { Dimensions } from 'react-native';
 import firebase from 'firebase/app';
 
 
-
 //Evt add epost, og confirm password.
 export default class SignUp extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = { email: '', password: '', displayName: '', errorMessage: null }
     }
-    
-    
-  handleSignUp = () => {
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate("SignedIn"))
-      .catch(error => this.setState({ errorMessage: error.message }))
 
+
+    handleSignUp = () => {
+        //Limit på lengden av brukernavnet.
+        if (this.state.displayName.length > 4 && this.state.displayName.length < 15) {
+            //The createUserWithEmailAndPassword method returns a UserCredential object. 
+            //This is not a User itself, but has a user property, which is a User object.
+            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then((userCredentials) => {
+                    if (userCredentials.user) {
+                        userCredentials.user.updateProfile({
+                            displayName: this.state.displayName
+                        }).then((s) => {
+                            this.props.navigation.navigate('SignedIn');
+                        })
+                    }
+                })
+        }
+        else{
+            console.log("For kort brukernavn")
+        }
+    }
+/*handleSignUp = () => {
+        //Limit på lengden av brukernavnet.
+        if (this.state.displayName.length > 4 || this.state.displayName.length < 15) {
+            //The createUserWithEmailAndPassword method returns a UserCredential object. 
+            //This is not a User itself, but has a user property, which is a User object.
+            //firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+            this.createUser();
+            if(this.state.finishedSignUp){
+                this.props.navigation.navigate('SignedIn');
+                /*.then((userCredentials) => {
+                    if (userCredentials.user) {
+                        userCredentials.user.updateProfile({
+                            displayName: this.state.displayName
+                        }).then((s) => {
+                            this.props.navigation.navigate('SignedIn');
+                        })
+                    }
+                })
+            }
+        }
+        else{
+            console.log("For kort brukernavn")
+        }
+    }
+    async createUser() {
     
-  }
+        try {
+            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+            
+            console.log("Logged In!");
+            this.setState({finishedSignUp: true})
+    
+            // Navigate to the Home page
+    
+        } catch (error) {
+            console.log(error.toString())
+        }
+    
+    }*/
+
 
 
     render() {
-        console.log(this.state)
-        console.log(this.state.password)
+        //console.log(this.state)
+        //console.log(this.state.password)
         return (
-            <View style={styles.fullsize}>
+            <View style={styles.fullsize} >
                 <View style={{ paddingVertical: 20 }}>
                     <View
                         style={{
@@ -74,7 +126,7 @@ export default class SignUp extends React.Component {
                                 />
                             }
                         />
-                        
+
                         <Button
                             buttonStyle={{ marginTop: 20 }}
                             backgroundColor="#03A9F4"

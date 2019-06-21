@@ -22,9 +22,7 @@ export default class Login extends React.Component {
 
             title="SIGN UP"
             //Denne linja bestemmer action knappen "sign up"
-            onPress={() => {
-              onSignIn().then(() => this.props.navigation.navigate("SignUp"));
-            }}
+            onPress={() => {this.props.navigation.navigate("SignUp")}}
           />
           <Button
             buttonStyle={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}

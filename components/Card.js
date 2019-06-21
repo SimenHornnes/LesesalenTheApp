@@ -51,7 +51,7 @@ componentDidMount() {
     //If statementa må vere riktig for at man ikkje skal reversere lista for tidlig slik at den blir feilsortert
     if (this.state.highScoreList.length) {
       console.log("we made IT")
-      console.log(this.state.highScoreList)
+      //console.log(this.state.highScoreList)
       //listReversed = this.state.highScoreList
       //listRev = listReversed.reverse()
       //console.log(listRev)
@@ -74,7 +74,7 @@ componentDidMount() {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1, flexDirection: 'row',
+    flex: 1, flexDirection: 'column',
     backgroundColor: "#fff",
     paddingVertical: 20,
     paddingHorizontal: 10,

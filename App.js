@@ -10,7 +10,9 @@
  * lista og displaye lista 
  * 7. Fiks leaderboard rendering etter å ha trykka på knappen, trur vi må ha en on('value') i card.
  * 8. Send riktig username til firebase, og hent riktig username.
- * 9. 
+ * 9. I SignUp burde vi displaye errors viss lengda på username er for kort/langt, og om eposten allerede er tatt.
+ * 10. I SignIn burde vi ha muligheten til å resette passord, samt email verification.
+ * 11. I Profile burde vi ha muligheten til å endre username.
  */
 
 

@@ -25,7 +25,8 @@ export default ({ navigation }) => (
       <Button
         backgroundColor="#03A9F4"
         title="SIGN OUT"
-        onPress={() => onSignOut().then(() => navigation.navigate('SignedOut'), firebase.auth().signOut())}
+        
+        onPress={() => (navigation.navigate('SignedOut'), firebase.auth().signOut())}
       />
     </Card>
   </View>
