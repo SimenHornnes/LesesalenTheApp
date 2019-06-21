@@ -8,7 +8,6 @@ import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNav
 import Icon from 'react-native-vector-icons/Ionicons';
 import List from './components/List';
 import firebase from 'firebase/app';
-import { FirebaseDatabaseProvider, FirebaseDatabaseNode } from "@react-firebase/database";
 import "firebase/database";
 
 import Card from './components/Card';
@@ -17,15 +16,9 @@ import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-//import 
 
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+
 
 class Homescreen extends React.Component {
   constructor(props) {
@@ -39,7 +32,7 @@ class Homescreen extends React.Component {
     }
   }
 
-  /*componentDidMount() {
+  componentDidMount() {
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     this.setState({ userId: currentUser.uid, name: currentUser.email })
@@ -69,20 +62,21 @@ class Homescreen extends React.Component {
           lat: position.coords.latitude
         }
       });
-      /*if (this.isInside(999999999999999.9)) {
+      if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
+          const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+          recentPost.once('value').then(snapshot => {
           firebase.database().ref(`users/${this.state.userId}`).set({
             name: this.state.name,
-            hours: 100 + this.state.hours
+            hours: 100 + snapshot.val()
           })
-          this.setState({
-            hours: this.state.hours + 100
+          this.setState({ hours: snapshot.val() + 100})
           })
         }
       }
       else {
         console.log("Ingen userId")
-      }*/
+      }
 
     }, err => console.log(err));
   }

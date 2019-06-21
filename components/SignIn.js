@@ -38,7 +38,7 @@ export default class SignUp extends React.Component {
                             marginBottom: 5
                         }}
                     >
-                        <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>Sign In</Text>
+                        <Text style={{ color: 'white', fontSize: 28, fontWeight: 'bold' }}>Sign In</Text>
                     </View>
 
                     <Card>
