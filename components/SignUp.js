@@ -101,6 +101,7 @@ export default class SignUp extends React.Component {
     
                         <Card>
                             <Input
+                                inputStyle={{marginBottom: 5}}
                                 placeholder='Email'
                                 onChangeText={email => this.setState({ email })}
                                 value={this.state.email}
@@ -113,12 +114,14 @@ export default class SignUp extends React.Component {
                                 }
                             />
                             <Input
+                                inputStyle={{marginBottom: 5}}
                                 placeholder='PASSWORD' secureTextEntry={true}
                                 onChangeText={password => this.setState({ password })}
                                 value={this.state.password}
                                 leftIcon={{ type: 'font-awesome', name: 'lock' }}
                             />
                             <Input
+                                inputStyle={{marginBottom: 5}}
                                 placeholder='DisplayName'
                                 onChangeText={displayName => this.setState({ displayName })}
                                 value={this.state.displayName}
@@ -166,6 +169,7 @@ export default class SignUp extends React.Component {
 
                     <Card>
                         <Input
+                            inputStyle={{marginBottom: 5}}                        
                             placeholder='Email'
                             onChangeText={email => this.setState({ email })}
                             value={this.state.email}
@@ -178,12 +182,14 @@ export default class SignUp extends React.Component {
                             }
                         />
                         <Input
+                            inputStyle={{marginBottom: 5}}
                             placeholder='PASSWORD' secureTextEntry={true}
                             onChangeText={password => this.setState({ password })}
                             value={this.state.password}
                             leftIcon={{ type: 'font-awesome', name: 'lock' }}
                         />
                         <Input
+                            inputStyle={{marginBottom: 5}}                    
                             placeholder='DisplayName'
                             onChangeText={displayName => this.setState({ displayName })}
                             value={this.state.displayName}
