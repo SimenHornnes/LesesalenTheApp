@@ -51,7 +51,7 @@ export default class SignUp extends React.Component {
                     if (this.state.email.length == 0) {
                         this.setState({ emailError: "The email address is empty" })
                     } else {
-                        if (_error.message == "The email address is badly formatted.") {
+                        if (_error.message == "The email address is badly formatted." || _error.message == "The email address is already in use by another account.") {
                             this.setState({ emailError: _error.message })
                         } else if (_error.message == "Password should be at least 6 characters" || _error.message == "The password must be 6 characters long or more.") {
                             this.setState({ passwordError: _error.message })
