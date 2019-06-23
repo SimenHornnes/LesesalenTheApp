@@ -87,8 +87,9 @@ export default class Card extends React.Component {
       )
     } else {
       console.log("State var tom")
-      return (<Text> Waiting for data</Text>)
-    }
+      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245'}}>
+      <Text style={{color:'white'}}> Waiting for data...</Text>
+    </View>)    }
   }
 
 }

@@ -240,11 +240,14 @@ export const SignedIn = createBottomTabNavigator(
 
       },{
         tabBarOptions: {
+          labelStyle:{
+            fontSize: 14
+          },
           indicatorStyle: { backgroundColor: 'transparent'},
-          activeTintColor: 'red',
-          inactiveTintColor: 'black',
+          activeTintColor: '#2D3245',
+          inactiveTintColor: 'white',
           style:{
-            backgroundColor:'#2D3245'
+            backgroundColor:'orange'
           }
         }}
       ),
