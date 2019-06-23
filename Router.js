@@ -77,8 +77,9 @@ class Homescreen extends React.Component {
     BackgroundTask.schedule();
     const { currentUser } = firebase.auth()
     console.log(currentUser)
-    this.setState({ userId: currentUser.uid, name: currentUser.displayName })
-    console.log(`This is the name ${this.state.name}`)
+    if (currentUser != null) {
+      this.setState({ userId: currentUser.uid, name: currentUser.displayName })
+    }
   }
 
   componentWillMount() {
@@ -213,18 +214,23 @@ const sizeOfIcons = 30;
 
 export const SignedOut = createStackNavigator(
   {
-    Login: {
+    /*Login: {
       screen: Login,
       navigationOptions: {
         title: "Login",
 
         // tabBarIcon: () => {return (backgroundColor='#2D3245')}
       }
-    },
+    },*/
     SignIn: {
       screen: SignIn,
       navigationOptions: {
-        title: "Sign In"
+        //title: "Sign In",
+        header: null,
+        headerMode: 'none',
+        navigationOptions: {
+          headerVisible: false,
+        }
       }
     },
     SignUp: {
