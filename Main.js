@@ -48,6 +48,7 @@ export default class Main extends React.Component {
     YellowBox.ignoreWarnings(['Warning: Async Storage has been extracted from react-native core']);
     YellowBox.ignoreWarnings(['Warning: ViewPagerAndroid has been extracted from react-native core']);
     YellowBox.ignoreWarnings(['Warning: Encountered two children with the same key']);
+    YellowBox.ignoreWarnings(['Setting a timer']);
 
     const { checkedSignIn, signedIn } = this.state;
 
