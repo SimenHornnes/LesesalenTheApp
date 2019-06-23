@@ -217,15 +217,13 @@ export const SignedIn = createBottomTabNavigator(
     //Card kan vere tabellen med lista, scroll er en wrapper(?) funksjon som må ver på utsida av card
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
-        Alltime: () => <Scroll>
-          <Card />
-        </Scroll>,
-        Semester: () => <Scroll>
-          <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />
-        </Scroll>,
-        Weekly: () => <Scroll>
-          <Card highList="https://lesesalentheapp.firebaseio.com/users.json" />
-        </Scroll>,
+        Alltime: () =>
+          <Card />,
+        Semester: () =>
+          <Card />,
+        Weekly: () =>
+          <Card />,
+
       }),
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#0097A7' />) },
