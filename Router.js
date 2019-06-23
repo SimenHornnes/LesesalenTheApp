@@ -67,11 +67,11 @@ class Homescreen extends React.Component {
         if (this.state.userId) {
           const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
           recentPost.once('value').then(snapshot => {
-          firebase.database().ref(`users/${this.state.userId}`).set({
-            name: this.state.name,
-            hours: 100 + snapshot.val()
-          })
-          this.setState({ hours: snapshot.val() + 100})
+            firebase.database().ref(`users/${this.state.userId}`).set({
+              name: this.state.name,
+              hours: 100 + snapshot.val()
+            })
+            this.setState({ hours: snapshot.val() + 100 })
           })
         }
       }
@@ -162,6 +162,8 @@ export const SignedOut = createStackNavigator(
       screen: Login,
       navigationOptions: {
         title: "Login",
+
+        // tabBarIcon: () => {return (backgroundColor='#2D3245')}
       }
     },
     SignIn: {
@@ -173,8 +175,23 @@ export const SignedOut = createStackNavigator(
     SignUp: {
       screen: SignUp,
       navigationOptions: {
-        title: "Sign Up"
+        title: "Sign Up",
+        /*headerStyle: {
+          backgroundColor: 'orange',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },*/
       }
+    },
+  },
+  {
+    defaultNavigationOptions: {
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'orange',
+      },
     }
   });
 export const SignedIn = createBottomTabNavigator(

@@ -39,7 +39,7 @@ export default class Login extends React.Component {
 
 const styles2 = StyleSheet.create({
   fullsize: {
-    backgroundColor: '#FDD979',
+    backgroundColor: '#2D3245',
     //flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

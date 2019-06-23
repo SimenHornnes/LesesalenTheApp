@@ -11,6 +11,7 @@ export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
 
 
 
+
 //FLYTTA OVER TIL MAIN
 /*export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
