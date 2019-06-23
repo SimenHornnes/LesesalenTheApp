@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
@@ -16,7 +16,48 @@ import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
+import BackgroundTask from 'react-native-background-task'
 
+
+
+BackgroundTask.define(() => {
+  console.log("BACKGROUND CHECK!!!!!")
+  const position = navigator.geolocation.getCurrentPosition();
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  const isInside = () => {
+    const radius = 999999999999999.9
+    const R = 6371000;
+    const lesesalenLat = 60.381192;
+    const lesesalenLng = 5.331556;
+    const radians = Math.PI / 180.0;
+    const rlesesalenLat = lesesalenLat * radians;
+    const rlat = latitude * radians;
+    const triLat = Math.abs(latitude - lesesalenLat) * radians;
+    const triLong = Math.abs(lesesalenLng - longitude) * radians;
+
+    const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(latitude * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const answer = R * c
+    if (answer > radius) {
+      return false;
+    }
+    return true;
+  }
+  if (isInside()) {
+    const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+    recentPost.once('value').then(snapshot => {
+      firebase.database().ref(`users/${this.state.userId}`).set({
+        name: this.state.name,
+        hours: 15 + snapshot.val()
+      })
+      this.setState({ hours: snapshot.val() + 15 })
+    })
+  }
+  BackgroundTask.finish()
+
+})
 
 
 
@@ -33,6 +74,7 @@ class Homescreen extends React.Component {
   }
 
   componentDidMount() {
+    BackgroundTask.schedule();
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     this.setState({ userId: currentUser.uid, name: currentUser.displayName })
@@ -116,7 +158,20 @@ class Homescreen extends React.Component {
     console.log("Entered render")
     return (
       <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
-        <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
+        <Button title={"Send user location"} onPress={async () => {
+          const result = AsyncStorage.getItem('@Homescreen:key')
+          console.log("BACKGROUND CHECK!!!!!")
+          if (result) {
+            const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+            recentPost.once('value').then(snapshot => {
+              firebase.database().ref(`users/${this.state.userId}`).set({
+                name: this.state.name,
+                hours: 15 + snapshot.val()
+              })
+              this.setState({ hours: snapshot.val() + 15 })
+            })
+          }
+        }} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
         <UsersMap />
