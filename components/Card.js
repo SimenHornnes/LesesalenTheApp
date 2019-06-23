@@ -58,7 +58,7 @@ componentDidMount() {
       
       return (
         <View style={styles.card}>
-          {(this.state.highScoreList).map(user => <Text key={user.id} style={{ textAlign: 'center', marginBottom: 10 }}>{user.name}        {user.hours}</Text>)}
+          {(this.state.highScoreList).map(user => <Text key={user.id} style={{ textAlign: 'left', marginBottom: 10 }}>{user.name}        {user.hours}</Text>)}
         </View>
       )
     } else {
