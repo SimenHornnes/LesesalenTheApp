@@ -14,12 +14,26 @@ import { TextInput } from 'react-native-gesture-handler';
 export default class SignUp extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '', displayName: '', errorMessage: null }
+        this.state = {
+            email: '',
+            password: '',
+            displayName: '',
+            emailError: null,
+            passwordError: null,
+            usernameError: null,
+            displayCheckMark: false,
+        }
     }
+
 
 
     handleSignUp = () => {
         //Limit på lengden av brukernavnet.
+        this.setState({
+            emailError: null,
+            passwordError: null,
+            usernameError: null
+        })
         if (this.state.displayName.length > 4 && this.state.displayName.length < 15) {
             //The createUserWithEmailAndPassword method returns a UserCredential object. 
             //This is not a User itself, but has a user property, which is a User object.
@@ -34,55 +48,36 @@ export default class SignUp extends React.Component {
                     }
                 }).catch((_error) => {
                     console.log("Login Failed!", _error);
-                    this.setState({ errorMessage: _error })
-                })
-                .catch(error => this.setState({ errorMessage: error.message }))
+                    if (this.state.email.length == 0) {
+                        this.setState({ emailError: "The email address is empty" })
+                    } else {
+                        if (_error.message == "The email address is badly formatted.") {
+                            this.setState({ emailError: _error.message })
+                        } else if (_error.message == "Password should be at least 6 characters" || _error.message == "The password must be 6 characters long or more.") {
+                            this.setState({ passwordError: _error.message })
+                        }
+                    }
 
+                })
         }
-        else{
-            this.setState({ errorMessage: "Username must be between 4 and 15 characters long" })       
+        else {
+            this.setState({ usernameError: "Username must be between 4 and 15 characters long" })
             console.log("For kort brukernavn")
         }
     }
-    /*handleSignUp = () => {
-            //Limit på lengden av brukernavnet.
-            if (this.state.displayName.length > 4 || this.state.displayName.length < 15) {
-                //The createUserWithEmailAndPassword method returns a UserCredential object. 
-                //This is not a User itself, but has a user property, which is a User object.
-                //firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-                this.createUser();
-                if(this.state.finishedSignUp){
-                    this.props.navigation.navigate('SignedIn');
-                    /*.then((userCredentials) => {
-                        if (userCredentials.user) {
-                            userCredentials.user.updateProfile({
-                                displayName: this.state.displayName
-                            }).then((s) => {
-                                this.props.navigation.navigate('SignedIn');
-                            })
-                        }
-                    })
-                }
-            }
-            else{
-                console.log("For kort brukernavn")
-            }
+
+    displayCheckMark = () => {
+        console.log(this.state.email)
+        console.log(this.state.password)
+        console.log(this.state.displayName)
+        console.log("entered")
+        if (!(this.state.emailError && this.state.passwordError && this.state.usernameError) && (this.state.displayName.length > 4 && this.state.email.length && this.state.password.length > 5)) {
+            this.setState({ displayCheckMark: true })
+        } else {
+            this.setState({ displayCheckMark: false })
         }
-        async createUser() {
-        
-            try {
-                await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-                
-                console.log("Logged In!");
-                this.setState({finishedSignUp: true})
-        
-                // Navigate to the Home page
-        
-            } catch (error) {
-                console.log(error.toString())
-            }
-        
-        }*/
+    }
+
     /* backfaceVisibility?: "visible" | "hidden";
         backgroundColor?: string;
         borderBottomColor?: string;
@@ -115,129 +110,119 @@ export default class SignUp extends React.Component {
     render() {
         //console.log(this.state)
         //console.log(this.state.password)
-        if (this.state.errorMessage) {
-            return (
-                <View style={styles.fullsize} >
-                    <View style={{ paddingVertical: 20 }}>
-                        <View
-                            style={{
-                                alignItems: "center",
-                                justifyContent: "center",
-                                alignSelf: "center",
-                                marginBottom: 5
-                            }}
-                        >
-                            <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold' }}>Sign Up</Text>
-                        </View>
-    
-                        <Card>
-                            <Input
-                                placeholder='Email'
-                                onChangeText={email => this.setState({ email })}
-                                value={this.state.email}
-                                leftIcon={
-                                    <Icon
-                                        name='user'
-                                        size={24}
-                                        color='black'
-                                    />
-                                }
-                            />
-                            <Input
-                                placeholder='PASSWORD' secureTextEntry={true}
-                                onChangeText={password => this.setState({ password })}
-                                value={this.state.password}
-                                leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                            />
-                            <Input
-                                placeholder='DisplayName'
-                                onChangeText={displayName => this.setState({ displayName })}
-                                value={this.state.displayName}
-                                leftIcon={
-                                    <Icon
-                                        name='user'
-                                        size={24}
-                                        color='black'
-                                    />
-                                }
-                            />
-    
-                            <Button
-                                buttonStyle={{ marginTop: 20 }}
-                                backgroundColor="#03A9F4"
-                                title="SIGN IN"
-                                onPress={this.handleSignUp}
-                            />
-                        </Card>
-                        <View style={{
-                                alignItems: "center",
-                                justifyContent: "center",
-                                alignSelf: "center",
-                                marginBottom: 5
-                            }}>
-                            <Text style={{ color: 'red', fontSize: 15, paddingLeft: 15, paddingRight: 15, textAlign: 'center' }}>{this.state.errorMessage}</Text>
-                        </View>
-                    </View>
-                </View>
-            )
+
+        if (this.state.displayCheckMark == true) {
+            console.log("Displayit")
         }
         return (
             <View style={styles.fullsize} >
-                <View style={{ paddingVertical: 20, padding: 40 }}>
-                    <View
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            alignSelf: "center",
-                            marginBottom: 5
-                        }}
-                    >
-                        <Text style={{ color: 'white', fontSize: 28, fontWeight: 'bold' }}>Sign Up</Text>
-                    </View>
-                    
-                        <Input
-                            placeholder='Email'
-                            onChangeText={email => this.setState({ email })}
-                            value={this.state.email}
-                            containerStyle={{ backgroundColor: 'green' }}
-                            inputContainerStyle={{ backgroundColor: 'white' }}
-                            leftIcon={
-                                <Icon
-                                    name='user'
-                                    size={24}
-                                    color='black'
-                                />
-                            }
-                        />
-                        <Input
-                            placeholder='PASSWORD' secureTextEntry={true}
-                            onChangeText={password => this.setState({ password })}
-                            value={this.state.password}
-                            inputContainerStyle={{ backgroundColor: 'white', borderColor: 'red', borderTopColor: 'red' }}
-                            leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                        />
-                        <Input
-                            placeholder='DisplayName'
-                            onChangeText={displayName => this.setState({ displayName })}
-                            value={this.state.displayName}
-                            inputContainerStyle={{ backgroundColor: 'white' }}
+                <View
+                    style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        marginTop: 25,
+                        marginBottom: 25
+                    }}
+                >
+                    <Text style={{ color: 'white', fontSize: 28, fontWeight: 'bold' }}>Join the competition!</Text>
+                </View>
 
-                            leftIcon={
-                                <Icon
-                                    name='user'
-                                    size={24}
-                                    color='black'
-                                />
-                            }
-                        />
+                <View
+                    style={{
+                        marginBottom: 25,
+                        alignItems: "center",
 
-                        <Button
-                            buttonStyle={{ marginTop: 20 }}
-                            backgroundColor="#03A9F4"
-                            title="SIGN IN"
-                            onPress={this.handleSignUp}
-                        />
-            
+                    }}>
+                    <Input
+                        placeholder='USERNAME'
+                        placeholderTextColor='grey'
+
+                        //label = 'Må vere mellom 5 og 15'
+                        //labelStyle = {{color: 'white'}}
+                        onChangeText={displayName => this.setState({
+                            displayName: displayName
+                        }, () => {
+                            this.displayCheckMark();
+                        })}
+                        value={this.state.displayName}
+                        errorMessage={this.state.usernameError}
+                        errorStyle={{ color: 'orange' }}
+                        //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+
+                        leftIcon={
+                            <Icon
+                                name='user'
+                                size={32}
+                                color='black'
+                            />
+                        }
+                    />
+                    <Input
+                        placeholder='E-MAIL'
+                        placeholderTextColor='grey'
+                        //label = 'Email'
+                        //labelStyle = {{color: 'white'}}
+                        onChangeText={email => this.setState({
+                            email: email
+                        }, () => {
+                            this.displayCheckMark();
+                        })}
+                        value={this.state.email}
+                        errorMessage={this.state.emailError}
+                        errorStyle={{ color: 'orange' }}
+                        //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        leftIcon={
+                            <Icon
+                                name='envelope'
+                                size={24}
+                                color='black'
+                            />
+                        }
+                    />
+                    <Input
+                        placeholder='PASSWORD' secureTextEntry={true}
+                        placeholderTextColor='grey'
+                        onChangeText={password => this.setState({
+                            password: password
+                        }, () => {
+                            this.displayCheckMark();
+                        })}
+                        value={this.state.password}
+                        errorMessage={this.state.passwordError}
+                        errorStyle={{ color: 'orange' }}
+                        shake={true}
+
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        leftIcon={
+                            <Icon
+                                name='lock'
+                                size={32}
+                                color='black'
+                            />
+                        }
+                    />
+
+                    <Button
+                        buttonStyle={{ marginTop: 28, borderRadius: 40, backgroundColor: 'orange', minWidth: 340, maxWidth: 340 }}
+
+                        /*icon={
+                            <Icon
+                                name="check"
+                                size={30}
+                                color="green"
+                            />
+                        }
+                        iconRight*/
+
+                        title="CREATE ACCOUNT"
+                        titleStyle={{ fontSize: 22, }}
+                        onPress={this.handleSignUp}
+                    />
                 </View>
             </View>
         )
@@ -250,6 +235,9 @@ const styles = StyleSheet.create({
         //flex: 1,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+
+        paddingHorizontal: 24
+
     },
     boxes: {
         //inputContainerStyle= {{backgroundColor: 'white'}}
