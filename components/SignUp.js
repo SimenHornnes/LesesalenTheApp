@@ -34,7 +34,7 @@ export default class SignUp extends React.Component {
             passwordError: null,
             usernameError: null
         })
-        if (this.state.displayName.length > 4 && this.state.displayName.length < 15) {
+        if (this.state.displayName.length > 4 && this.state.displayName.length < 16) {
             //The createUserWithEmailAndPassword method returns a UserCredential object. 
             //This is not a User itself, but has a user property, which is a User object.
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -61,7 +61,7 @@ export default class SignUp extends React.Component {
                 })
         }
         else {
-            this.setState({ usernameError: "Username must be between 4 and 15 characters long" })
+            this.setState({ usernameError: "Username must be between 5 and 15 characters long" })
             console.log("For kort brukernavn")
         }
     }

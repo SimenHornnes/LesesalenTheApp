@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Dimensions, ScrollView } from "react-native";
 import firebase from 'firebase/app';
+import { Table, TableWrapper, Row } from 'react-native-table-component';
 
 
 
@@ -10,33 +11,35 @@ export default class Card extends React.Component {
     super(props);
     this.state = {
       highScoreList: [],
+      tableHead: ['Rank', 'User', 'Hours', 'Streak'],
+      widthArr: [Dimensions.get('window').width / 6, Dimensions.get('window').width / 2, Dimensions.get('window').width / 6, Dimensions.get('window').width / 6]
       //isDataLoaded: false
     }
   }
 
 
-  
-  
-componentDidMount() {
+
+
+  componentDidMount() {
     this.fetchData().done()
   }
 
   async fetchData() {
     const ref = firebase.database().ref('users')
 
-    ref.orderByChild('hours').on('child_added', async(snapshot) => {
+    ref.orderByChild('hours').on('child_added', async (snapshot) => {
       //console.log(snapshot.key + " " + snapshot.val().hours)
       const lista = this.state.highScoreList
-      
+
       lista.push({
-        id: await(snapshot.key),
-        hours: await(snapshot.val().hours),
-        name: await(snapshot.val().name)
-      }); 
-      
-      this.setState({highScoreList:lista})
+        id: await (snapshot.key),
+        hours: await (snapshot.val().hours),
+        name: await (snapshot.val().name)
+      });
+
+      this.setState({ highScoreList: lista })
       //console.log(this.state.highScoreList)
-    }); 
+    });
   }
 
 
@@ -48,17 +51,38 @@ componentDidMount() {
     //const temp =Object.values(this.state)
     //console.log(temp)
     //console.log(((Object.values(this.state))[0]).length)
-    //If statementa må vere riktig for at man ikkje skal reversere lista for tidlig slik at den blir feilsortert
     if (this.state.highScoreList.length) {
       console.log("we made IT")
-      //console.log(this.state.highScoreList)
-      //listReversed = this.state.highScoreList
-      //listRev = listReversed.reverse()
-      //console.log(listRev)
-      
+
+      console.log(this.state.highScoreList)
       return (
-        <View style={styles.card}>
-          {(this.state.highScoreList).map(user => <Text key={user.id} style={{ textAlign: 'left', marginBottom: 10 }}>{user.name}        {user.hours}</Text>)}
+        <View style={styles.container}>
+          <View>
+
+            <Table borderStyle={{ borderColor: 'black' }}>
+              <Row data={this.state.tableHead}
+                widthArr={this.state.widthArr}
+                style={styles.header}
+                textStyle={styles.headerText} />
+            </Table>
+
+
+            <ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{ borderColor: 'black' }}>
+                {
+                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={[index+1,rowData.name,rowData.hours, 0]}
+                      widthArr={this.state.widthArr}
+                      style={[styles.row, index % 2 && { backgroundColor: '#A7CFDB' }]}
+                      textStyle={styles.text}
+                    />
+                  ))
+                }
+              </Table>
+            </ScrollView>
+          </View>
         </View>
       )
     } else {
@@ -68,46 +92,32 @@ componentDidMount() {
   }
 
 }
-//          {this.state.highScoreList.map( user => <Text key = {user.key} style = {{textAlign: 'center', marginBottom: 10}}>{user[key].name}        {user.hours}</Text>)}
-
+//              {this.state.highScoreList.slice(0).reverse().map(user => <Text key={user.id} style={{ textAlign: 'center', marginBottom: 10, }}>{user.name}        {user.hours}</Text>)}
+/*<Table borderStyle={{ borderColor: 'black' }}>
+                {
+                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={rowData}
+                      widthArr={this.state.widthArr}
+                      style={[styles.row, index % 2 && { backgroundColor: '#A7CFDB' }]}
+                      textStyle={styles.text}
+                    />
+                  ))
+                }
+              </Table>*/
 
 
 const styles = StyleSheet.create({
-  card: {
-    flex: 1, flexDirection: 'column',
-    backgroundColor: "#fff",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    minHeight: 333
-  },
   text: {
     fontSize: 30,
     marginBottom: 20,
     color: "black",
   },
+  container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#fff' },
+  header: { height: 50, backgroundColor: '#2D3245' },
+  headerText: { textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 20 },
+  text: { textAlign: 'center', fontWeight: '100', fontSize: 18 },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 40, backgroundColor: '#53ACBC' }
 });
-
-/*
-export default props => (
-
-  <View style={styles.card}>
-    <Text style={styles.text}>{props.children}</Text>
-  </View>
-);
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#fff",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    borderRadius: 20,
-    minHeight: 333
-  },
-  text: {
-    fontSize: 30,
-    marginBottom: 20,
-    color: "#4A4A4A",
-  },
-});
-*/
