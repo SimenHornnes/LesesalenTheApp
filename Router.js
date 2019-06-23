@@ -20,6 +20,8 @@ import BackgroundTask from 'react-native-background-task'
 
 
 
+
+
 BackgroundTask.define(() => {
   console.log("BACKGROUND CHECK!!!!!")
   const position = navigator.geolocation.getCurrentPosition();
@@ -45,20 +47,18 @@ BackgroundTask.define(() => {
     }
     return true;
   }
-  if (isInside()) {
-    const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+  //if (isInside()) {
+    const recentPost = firebase.database().ref(`users/UselSXRebsbyaJlI7qvy9ANL7XP2/hours`);
     recentPost.once('value').then(snapshot => {
-      firebase.database().ref(`users/${this.state.userId}`).set({
-        name: this.state.name,
+      firebase.database().ref(`users/UselSXRebsbyaJlI7qvy9ANL7XP2`).set({
+        name: "Torjus",
         hours: 15 + snapshot.val()
       })
-      this.setState({ hours: snapshot.val() + 15 })
     })
-  }
+  //}
   BackgroundTask.finish()
 
 })
-
 
 
 class Homescreen extends React.Component {
@@ -92,7 +92,10 @@ class Homescreen extends React.Component {
 
   /*async getUid() {
     const { currentUser } = firebase.auth()
-    console.log(user)
+    console.log(user)BackgroundTask.define(() => {
+  console.log('Hello from a background task')
+  BackgroundTask.finish()
+})
     console.log(email)
 }*/
 

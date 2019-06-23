@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-background-job')
     implementation project(':react-native-background-task')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-vector-icons')
