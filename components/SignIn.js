@@ -58,10 +58,10 @@ export default class SignUp extends React.Component {
         style={styles.fullsize}
         behavior='padding'
       >
+        <View>
 
-        <Image
-          source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ height: 250, resizeMode: 'center', marginTop: 25, }}
-        //https://i.imgur.com/efkEvWV.png logo + tekst
+        <Image source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ resizeMode: 'contain', marginTop: 25, height: 250, padding: 10 }}
+        //https://i.imgur.com/efkEvWV.png logo + tekst height: 250,
         //https://i.imgur.com/7iYvirQ.png berre logoen
         //https://i.imgur.com/JZygUiH.png logo + tekst sidelengds
         />
@@ -124,7 +124,7 @@ export default class SignUp extends React.Component {
         />
 
         <Button
-          buttonStyle={{ marginTop: 28, marginBottom: 10, alignItems: "center", borderRadius: 40, backgroundColor: 'orange', minWidth: 340, maxWidth: 340 }}
+          buttonStyle={{ marginTop: 28, marginBottom: 10, alignSelf: "center", borderRadius: 40, backgroundColor: 'orange', minWidth: 340, maxWidth: 340 }}
           /*icon={
               <Icon
                   name="check"
@@ -151,7 +151,7 @@ export default class SignUp extends React.Component {
           titleStyle={{ fontSize: 17, fontStyle: 'normal' }}
           onPress={() => { this.props.navigation.navigate("SignUp") }}
         />
-
+</View>
       </KeyboardAvoidingView>
     )
   }
@@ -162,11 +162,11 @@ export default class SignUp extends React.Component {
 const styles = StyleSheet.create({
   fullsize: {
     backgroundColor: '#2D3245',
-    //flex: 1,
+    flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     paddingHorizontal: 24,
-    height: '100%',
+    justifyContent: 'center',
   },
   title: {
     color: 'white',
