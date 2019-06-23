@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Image, KeyboardAvoidingView } from 'react-native';
-import { Card, Button } from 'react-native-elements';
-import { onSignIn } from '../Auth';
+import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { Dimensions } from 'react-native';
@@ -49,10 +48,7 @@ export default class SignUp extends React.Component {
 
 
   render() {
-    console.log(this.state.errorMessage)
-    console.log(this.state.password)
-
-
+    
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={Header.HEIGHT + 20}

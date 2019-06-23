@@ -10,13 +10,15 @@ import List from './components/List';
 import firebase from 'firebase/app';
 import "firebase/database";
 
-import Card from './components/Card';
-import Scroll from './components/Scroll';
-import Login from './components/Login';
+import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
+<<<<<<< HEAD
 import BackgroundTask from 'react-native-background-task'
+=======
+import DidYouKnow from './components/DidYouKnow'
+>>>>>>> 7b61c4bf4e30bc0c2c51c0f61afa5ee592bba1f9
 
 
 
@@ -70,11 +72,16 @@ class Homescreen extends React.Component {
       userId: undefined,
       name: undefined,
       hours: undefined,
+      funfact: undefined
     }
   }
 
   componentDidMount() {
+<<<<<<< HEAD
     BackgroundTask.schedule();
+=======
+    this.DidYouKnow()
+>>>>>>> 7b61c4bf4e30bc0c2c51c0f61afa5ee592bba1f9
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     if (currentUser != null) {
@@ -158,7 +165,18 @@ class Homescreen extends React.Component {
     return true;
   }
 
+  DidYouKnow = () => {
+    const rand = Math.floor(Math.random() * 7);
+    const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
+        "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
+    console.log(didYouKnow[rand])
+    this.setState({funfact:didYouKnow[rand]})
+    
+};
+  
+
   render() {
+    
     console.log("Entered render")
     return (
       <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
@@ -166,6 +184,7 @@ class Homescreen extends React.Component {
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
         <UsersMap />
+        <Text>{this.state.funfact}</Text>
       </View>
     );
   }
@@ -263,13 +282,26 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
-          <Card />,
+          <AllTimeLeaderBoard />,
         Semester: () =>
-          <Card />,
+          <AllTimeLeaderBoard />,
         Weekly: () =>
-          <Card />,
+          <AllTimeLeaderBoard />,
+          
 
-      }),
+      },{
+        tabBarOptions: {
+          labelStyle:{
+            fontSize: 14
+          },
+          indicatorStyle: { backgroundColor: 'transparent'},
+          activeTintColor: '#2D3245',
+          inactiveTintColor: 'white',
+          style:{
+            backgroundColor:'orange'
+          }
+        }}
+      ),
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#0097A7' />) },
       }
@@ -284,7 +316,8 @@ export const SignedIn = createBottomTabNavigator(
     },
   },
   {
-    initialRouteName: 'Homescreen'
+    initialRouteName: 'Homescreen',
+  
   }
   /*{
     navigationOptions: ({ navigation, screenProps }) => ({

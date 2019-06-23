@@ -87,10 +87,16 @@ export default class Card extends React.Component {
       )
     } else {
       console.log("State var tom")
+<<<<<<< HEAD:components/Card.js
       return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text > Waiting for data...</Text>
       </View>)
     }
+=======
+      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245'}}>
+      <Text style={{color:'white'}}> Waiting for data...</Text>
+    </View>)    }
+>>>>>>> 7b61c4bf4e30bc0c2c51c0f61afa5ee592bba1f9:components/AllTimeLeaderBoard.js
   }
 
 }
