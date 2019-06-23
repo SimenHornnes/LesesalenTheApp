@@ -162,20 +162,7 @@ class Homescreen extends React.Component {
     console.log("Entered render")
     return (
       <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
-        <Button title={"Send user location"} onPress={async () => {
-          const result = AsyncStorage.getItem('@Homescreen:key')
-          console.log("BACKGROUND CHECK!!!!!")
-          if (result) {
-            const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
-            recentPost.once('value').then(snapshot => {
-              firebase.database().ref(`users/${this.state.userId}`).set({
-                name: this.state.name,
-                hours: 15 + snapshot.val()
-              })
-              this.setState({ hours: snapshot.val() + 15 })
-            })
-          }
-        }} />
+         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
         <UsersMap />

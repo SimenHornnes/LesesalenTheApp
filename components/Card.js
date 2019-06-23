@@ -73,7 +73,7 @@ export default class Card extends React.Component {
                   this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
                     <Row
                       key={index}
-                      data={[index+1,rowData.name,rowData.hours, 0]}
+                      data={[index + 1, rowData.name, rowData.hours, 0]}
                       widthArr={this.state.widthArr}
                       style={[styles.row, index % 2 && { backgroundColor: '#A7CFDB' }]}
                       textStyle={styles.text}
@@ -87,7 +87,9 @@ export default class Card extends React.Component {
       )
     } else {
       console.log("State var tom")
-      return (<Text> Waiting for data</Text>)
+      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text > Waiting for data...</Text>
+      </View>)
     }
   }
 

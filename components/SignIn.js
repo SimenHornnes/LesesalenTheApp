@@ -33,12 +33,13 @@ export default class SignUp extends React.Component {
       .then(() => this.props.navigation.navigate('SignedIn'))
       .catch((_error) => {
         console.log("Login Failed!", _error);
+        console.log(_error.message)
         if (this.state.email.length == 0) {
           this.setState({ emailError: "The email address is empty" })
         } else {
           if (_error.message == "The email address is badly formatted.") {
             this.setState({ emailError: _error.message })
-          } else if (_error.message == "The password is invalid or the user does not have a password." || _error.message == "Password should be at least 6 characters" || _error.message == "The password must be 6 characters long or more.") {
+          } else if (_error.message == "The password is invalid or the user does not have a password." || _error.message == "Password should be at least 6 characters" || _error.message == "The password must be 6 characters long or more." || _error.message == "There is no user record corresponding to this identifier. The user may have been deleted.") {
             this.setState({ passwordError: "The password is invalid or the user does not exist" })
           }
         }
