@@ -12,7 +12,8 @@ export default class Card extends React.Component {
     this.state = {
       highScoreList: [],
       tableHead: ['Rank', 'User', 'Hours', 'Streak'],
-      widthArr: [Dimensions.get('window').width / 6, Dimensions.get('window').width / 2, Dimensions.get('window').width / 6, Dimensions.get('window').width / 6]
+      widthArr: [Dimensions.get('window').width / 6, Dimensions.get('window').width / 2, Dimensions.get('window').width / 6, Dimensions.get('window').width / 6],
+      username: undefined
       //isDataLoaded: false
     }
   }
@@ -22,6 +23,12 @@ export default class Card extends React.Component {
 
   componentDidMount() {
     this.fetchData().done()
+
+    //For å displaye currentuser i tabellen
+    const { currentUser } = firebase.auth()
+    console.log(currentUser)
+    this.setState({ username: currentUser.displayName })
+
   }
 
   async fetchData() {
@@ -68,14 +75,14 @@ export default class Card extends React.Component {
 
 
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{ borderColor: 'black' }}>
+              <Table borderStyle={{ borderColor: 'white' }}>
                 {
                   this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
                     <Row
                       key={index}
-                      data={[index+1,rowData.name,rowData.hours, 0]}
+                      data={[index + 1, rowData.name, rowData.hours, 0]}
                       widthArr={this.state.widthArr}
-                      style={[styles.row, index % 2 && { backgroundColor: '#A7CFDB' }]}
+                      style={[styles.row, index % 2 && { backgroundColor: 'white' }, index / 1 == 0 && { backgroundColor: 'gold' }, index / 1 == 1 && { backgroundColor: 'silver' }, , index / 1 == 2 && { backgroundColor: '#cd7f32' }, rowData.name == this.state.username && !(index/1== 2 || index/1==1||index/1==0) && {backgroundColor:'red'}]}
                       textStyle={styles.text}
                     />
                   ))
@@ -87,9 +94,10 @@ export default class Card extends React.Component {
       )
     } else {
       console.log("State var tom")
-      return (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245'}}>
-      <Text style={{color:'white'}}> Waiting for data...</Text>
-    </View>)    }
+      return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
+        <Text style={{ color: 'white' }}> Waiting for data...</Text>
+      </View>)
+    }
   }
 
 }
@@ -116,9 +124,9 @@ const styles = StyleSheet.create({
     color: "black",
   },
   container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#fff' },
-  header: { height: 50, backgroundColor: '#2D3245' },
+  header: { height: 35, backgroundColor: '#2D3245' },
   headerText: { textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 20 },
-  text: { textAlign: 'center', fontWeight: '100', fontSize: 18 },
+  text: { textAlign: 'center', fontWeight: '200', fontSize: 18 },
   dataWrapper: { marginTop: -1 },
-  row: { height: 40, backgroundColor: '#53ACBC' }
+  row: { height: 30, backgroundColor: 'white' }
 });
