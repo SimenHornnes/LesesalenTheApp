@@ -14,11 +14,8 @@ import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-<<<<<<< HEAD
 import BackgroundTask from 'react-native-background-task'
-=======
 import DidYouKnow from './components/DidYouKnow'
->>>>>>> 7b61c4bf4e30bc0c2c51c0f61afa5ee592bba1f9
 
 
 
@@ -77,11 +74,8 @@ class Homescreen extends React.Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
     BackgroundTask.schedule();
-=======
     this.DidYouKnow()
->>>>>>> 7b61c4bf4e30bc0c2c51c0f61afa5ee592bba1f9
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     if (currentUser != null) {
