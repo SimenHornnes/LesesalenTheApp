@@ -13,6 +13,7 @@
  * 9. I SignUp burde vi displaye errors viss lengda på username er for kort/langt, og om eposten allerede er tatt.
  * 10. I SignIn burde vi ha muligheten til å resette passord, samt email verification.
  * 11. I Profile burde vi ha muligheten til å endre username.
+ * 12. Vi burde som displaye at email password reset er sendt
  */
 
 

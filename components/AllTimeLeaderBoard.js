@@ -26,7 +26,7 @@ export default class Card extends React.Component {
 
     //For å displaye currentuser i tabellen
     const { currentUser } = firebase.auth()
-    console.log(currentUser)
+    //console.log(currentUser)
     this.setState({ username: currentUser.displayName })
 
   }
