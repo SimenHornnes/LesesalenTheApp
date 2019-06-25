@@ -21,6 +21,8 @@ import LesesalProgram from './components/lesesalprogram'
 
 
 
+
+
 BackgroundTask.define(() => {
   console.log("BACKGROUND CHECK!!!!!")
   const position = navigator.geolocation.getCurrentPosition();
