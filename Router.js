@@ -8,6 +8,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import List from './components/List';
 import firebase from 'firebase/app';
 import "firebase/database";
+import { Button } from 'react-native-elements';
+import { parse } from 'himalaya';
+//import ApiCalendar from 'react-google-calendar-api';
+//import GetEvents from './components/Lesesalprogram2'
 
 import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
@@ -28,19 +32,25 @@ class Homescreen extends React.Component {
       userId: undefined,
       name: undefined,
       hours: undefined,
-      funfact: undefined
+      funfact: undefined,
+      dataSource: [],
+      pageToken: '',
+      error: null,
+      loc: null
     }
   }
+  //t3rc186t378bvsv4mjpie6l1ic@group.calendar.google.com
 
   componentDidMount() {
     const { currentUser } = firebase.auth()
-    console.log(currentUser)
+    //console.log(currentUser)
     if (currentUser != null) {
       this.setState({ userId: currentUser.uid, name: currentUser.displayName })
     }
   }
 
   componentWillMount() {
+    this.displayGoogleCalendar()
     this.DidYouKnow()
     const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
     recentPost.once('value').then(snapshot => {
@@ -49,12 +59,35 @@ class Homescreen extends React.Component {
   }
 
 
+
+
   /*async getUid() {
     const { currentUser } = firebase.auth()
     console.log(user)
     console.log(email)
 }*/
 
+  displayGoogleCalendar = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var currentTime = `${year}-${month}-${date}T00:00:00Z`;
+    console.log(currentTime)
+    const API_KEY = 'AIzaSyDX56itpFfR3zfjfJK0nUesbFLBo4pYfVc';
+    let url = `https://www.googleapis.com/calendar/v3/calendars/t3rc186t378bvsv4mjpie6l1ic@group.calendar.google.com/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=50&singleEvents=true&orderBy=startTime&pageToken=${this.state.pageToken}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          pageToken: responseJson.nextPageToken,
+          dataSource: [...this.state.dataSource, ...responseJson.items],
+          error: responseJson.error || null,
+        });
+      })
+      .catch(error => {
+        this.setState({ error});
+    });
+  }
 
   getUserCoord = () => {
     //console.log("pressed")
@@ -125,48 +158,25 @@ class Homescreen extends React.Component {
 
 
   render() {
+    console.log(this.state.dataSource)
 
-    console.log("Entered render")
+    const isDataSourceLoaded = this.state.dataSource.length > 0
+    
+    
     return (
-      <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
-        <Text style={styles.textStyleHomescreen}>LesesalProgram</Text>
-        <View style={{height:'50%', marginBottom: 30}}><LesesalProgram/></View>
-        
+      <View style={{ ...styles.HomescreenStyle }}>
+        <Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text>
+        <View style={{ height: '50%', marginBottom: 30 }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource}/>) : (<Text>Loading</Text>)}</View>
+
         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <Text style={{color: 'white'}}>{this.state.funfact}</Text>
+        <Text style={{ color: 'white' }}>{this.state.funfact}</Text>
       </View>
     );
   }
 }
 
-/*class LeaderBoard extends React.Component {
-  
-  render() {
-    return (
-      <View></View>
-    );
-  }
-
-}
-*/ //flytta ut i egen component
-/*class Profile extends React.Component {
-  render() {
-    return (
-      <FirebaseDatabaseProvider firebase={firebase} {...firebaseConfig}>
-        <FirebaseDatabaseNode path={"lesesalentheapp"}>
-          { d => { console.log(d); return (
-            <View>
-              
-              <List data={d}/>
-            </View>)
-          }}
-        </FirebaseDatabaseNode>
-       </FirebaseDatabaseProvider>
-    );
-  }
-}*/
 
 
 const sizeOfIcons = 32;
@@ -270,7 +280,7 @@ export const SignedIn = createBottomTabNavigator(
     },
   },
   {
-    
+
     tabBarOptions: {
       showLabel: false,
       activeTintColor: '#2D3245',
@@ -323,11 +333,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   HomescreenStyle: {
+    flex: 1,
+    padding: 0,
     backgroundColor: '#2D3245'
   },
-  textStyleHomescreen:{
+  textStyleHomescreen: {
+    paddingTop: 8,
+    paddingLeft: 15,
+    paddingBottom: 8,
     fontSize: 30,
     color: 'white',
-    marginBottom: 20
+    
   }
 });

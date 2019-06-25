@@ -168,7 +168,7 @@ export default class SignUp extends React.Component {
             onPress={() => { this.props.navigation.navigate("SignUp") }}
           />
           <Button
-            buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', paddingBottom:10 }}
+            buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', marginBottom:15 }}
             
             title="Reset Password"
             titleStyle={{ fontSize: 14, fontStyle: 'italic' }}
