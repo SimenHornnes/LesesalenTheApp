@@ -49,9 +49,10 @@ export default class LesesalProgram extends Component {
 const styles = StyleSheet.create({  
     container: {  
         flex: 1,  
+        backgroundColor: 'grey'
     },  
     item: {  
-        paddingTop: 15,
+        paddingTop: 13,
         paddingLeft: 15,  
         fontSize: 18,  
         height: 44,  

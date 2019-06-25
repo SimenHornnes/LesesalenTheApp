@@ -9,7 +9,6 @@ import List from './components/List';
 import firebase from 'firebase/app';
 import "firebase/database";
 import { Button } from 'react-native-elements';
-import { parse } from 'himalaya';
 //import ApiCalendar from 'react-google-calendar-api';
 //import GetEvents from './components/Lesesalprogram2'
 
@@ -31,15 +30,14 @@ class Homescreen extends React.Component {
       inside: false,
       userId: undefined,
       name: undefined,
-      hours: undefined,
+     // hours: undefined,
       funfact: undefined,
       dataSource: [],
       pageToken: '',
       error: null,
-      loc: null
+ 
     }
   }
-  //t3rc186t378bvsv4mjpie6l1ic@group.calendar.google.com
 
   componentDidMount() {
     const { currentUser } = firebase.auth()
@@ -52,20 +50,8 @@ class Homescreen extends React.Component {
   componentWillMount() {
     this.displayGoogleCalendar()
     this.DidYouKnow()
-    const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
-    recentPost.once('value').then(snapshot => {
-      this.setState({ hours: snapshot.val() })
-    })
   }
 
-
-
-
-  /*async getUid() {
-    const { currentUser } = firebase.auth()
-    console.log(user)
-    console.log(email)
-}*/
 
   displayGoogleCalendar = () => {
     var date = new Date().getDate();
@@ -106,7 +92,23 @@ class Homescreen extends React.Component {
               name: this.state.name,
               hours: 100 + snapshot.val()
             })
-            this.setState({ hours: snapshot.val() + 100 })
+            //this.setState({ hours: snapshot.val() + 100 })
+          })
+          const recentPost2 = firebase.database().ref(`semester/${this.state.userId}/hours`);
+          recentPost2.once('value').then(snapshot => {
+            firebase.database().ref(`semester/${this.state.userId}`).set({
+              name: this.state.name,
+              hours: 100 + snapshot.val()
+            })
+            //this.setState({ hours: snapshot.val() + 100 })
+          })
+          const recentPost3 = firebase.database().ref(`weekly/${this.state.userId}/hours`);
+          recentPost3.once('value').then(snapshot => {
+            firebase.database().ref(`weekly/${this.state.userId}`).set({
+              name: this.state.name,
+              hours: 100 + snapshot.val()
+            })
+            //this.setState({ hours: snapshot.val() + 100 })
           })
         }
       }
@@ -165,13 +167,14 @@ class Homescreen extends React.Component {
     
     return (
       <View style={{ ...styles.HomescreenStyle }}>
-        <Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text>
-        <View style={{ height: '50%', marginBottom: 30 }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource}/>) : (<Text>Loading</Text>)}</View>
+        
+        <View style = {{borderBottomWidth: 2, borderColor: 'black',backgroundColor:'orange'}}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+        <View style={{ height: '50%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource}/>) : (<Text>Loading</Text>)}</View>
 
         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <Text style={{ color: 'white' }}>{this.state.funfact}</Text>
+        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
       </View>
     );
   }
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingBottom: 8,
     fontSize: 30,
-    color: 'white',
+    color: 'black',
     
   }
 });

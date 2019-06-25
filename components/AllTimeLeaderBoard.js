@@ -64,8 +64,6 @@ export default class Card extends React.Component {
       console.log(this.state.highScoreList)
       return (
         <View style={styles.container}>
-          <View>
-
             <Table borderStyle={{ borderColor: 'black' }}>
               <Row data={this.state.tableHead}
                 widthArr={this.state.widthArr}
@@ -75,7 +73,7 @@ export default class Card extends React.Component {
 
 
             <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{ borderColor: 'white' }}>
+              <Table borderStyle={{ borderColor: 'white'}}>
                 {
                   this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
                     <Row
@@ -89,7 +87,6 @@ export default class Card extends React.Component {
                 }
               </Table>
             </ScrollView>
-          </View>
         </View>
       )
     } else {
@@ -101,32 +98,14 @@ export default class Card extends React.Component {
   }
 
 }
-//              {this.state.highScoreList.slice(0).reverse().map(user => <Text key={user.id} style={{ textAlign: 'center', marginBottom: 10, }}>{user.name}        {user.hours}</Text>)}
-/*<Table borderStyle={{ borderColor: 'black' }}>
-                {
-                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
-                    <Row
-                      key={index}
-                      data={rowData}
-                      widthArr={this.state.widthArr}
-                      style={[styles.row, index % 2 && { backgroundColor: '#A7CFDB' }]}
-                      textStyle={styles.text}
-                    />
-                  ))
-                }
-              </Table>*/
+
 
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 30,
-    marginBottom: 20,
-    color: "black",
-  },
   container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#fff' },
   header: { height: 35, backgroundColor: '#2D3245' },
   headerText: { textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 20 },
-  text: { textAlign: 'center', fontWeight: '200', fontSize: 18 },
+  text: { textAlign: 'center', fontWeight: '200', fontSize: 18, color: "black", },
   dataWrapper: { marginTop: -1 },
   row: { height: 30, backgroundColor: 'white' }
 });
