@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { Platform, StyleSheet, Text, View} from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
@@ -17,53 +17,11 @@ import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-import BackgroundTask from 'react-native-background-task'
 import DidYouKnow from './components/DidYouKnow'
 import LesesalProgram from './components/lesesalprogram'
 
 
 
-
-
-
-
-BackgroundTask.define(() => {
-  console.log("BACKGROUND CHECK!!!!!")
-  const position = navigator.geolocation.getCurrentPosition();
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  const isInside = () => {
-    const radius = 999999999999999.9
-    const R = 6371000;
-    const lesesalenLat = 60.381192;
-    const lesesalenLng = 5.331556;
-    const radians = Math.PI / 180.0;
-    const rlesesalenLat = lesesalenLat * radians;
-    const rlat = latitude * radians;
-    const triLat = Math.abs(latitude - lesesalenLat) * radians;
-    const triLong = Math.abs(lesesalenLng - longitude) * radians;
-
-    const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(latitude * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const answer = R * c
-    if (answer > radius) {
-      return false;
-    }
-    return true;
-  }
-  //if (isInside()) {
-    const recentPost = firebase.database().ref(`users/UselSXRebsbyaJlI7qvy9ANL7XP2/hours`);
-    recentPost.once('value').then(snapshot => {
-      firebase.database().ref(`users/UselSXRebsbyaJlI7qvy9ANL7XP2`).set({
-        name: "Torjus",
-        hours: 15 + snapshot.val()
-      })
-    })
-  //}
-  BackgroundTask.finish()
-
-})
 
 
 class Homescreen extends React.Component {
@@ -95,8 +53,18 @@ class Homescreen extends React.Component {
   componentWillMount() {
     this.displayGoogleCalendar()
     this.DidYouKnow()
-    const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+
+    const recentPost = firebase.database().ref(`alltime/${this.state.userId}/hours`);
+    const recentPostSem = firebase.database().ref(`semester/${this.state.userId}/hours`);
+    const recentPostWeek = firebase.database().ref(`weekly/${this.state.userId}/hours`);
+
     recentPost.once('value').then(snapshot => {
+      this.setState({ hours: snapshot.val() })
+    })
+    recentPostSem.once('value').then(snapshot => {
+      this.setState({ hours: snapshot.val() })
+    })
+    recentPostWeek.once('value').then(snapshot => {
       this.setState({ hours: snapshot.val() })
     })
   }
@@ -146,9 +114,26 @@ class Homescreen extends React.Component {
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
-          const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+          const recentPost = firebase.database().ref(`allTime/${this.state.userId}/hours`);
+          const recentPostSem = firebase.database().ref(`semester/${this.state.userId}/hours`);
+          const recentPostWeek = firebase.database().ref(`weekly/${this.state.userId}/hours`);
+
           recentPost.once('value').then(snapshot => {
-            firebase.database().ref(`users/${this.state.userId}`).set({
+            firebase.database().ref(`allTime/${this.state.userId}`).set({
+              name: this.state.name,
+              hours: 100 + snapshot.val()
+            })
+            this.setState({ hours: snapshot.val() + 100 })
+          })
+          recentPostSem.once('value').then(snapshot => {
+            firebase.database().ref(`semester/${this.state.userId}`).set({
+              name: this.state.name,
+              hours: 100 + snapshot.val()
+            })
+            this.setState({ hours: snapshot.val() + 100 })
+          })
+          recentPostWeek.once('value').then(snapshot => {
+            firebase.database().ref(`weekly/${this.state.userId}`).set({
               name: this.state.name,
               hours: 100 + snapshot.val()
             })
@@ -289,11 +274,11 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard location="allTime"/>,
         Semester: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard location="semester"/>,
         Weekly: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard location="weekly"/>,
 
 
       }, {
