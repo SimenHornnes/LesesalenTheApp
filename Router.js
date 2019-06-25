@@ -4,7 +4,6 @@ import { Platform, StyleSheet, Text, View, Button } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
-//import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import List from './components/List';
 import firebase from 'firebase/app';
@@ -16,6 +15,7 @@ import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import BackgroundTask from 'react-native-background-task'
 import DidYouKnow from './components/DidYouKnow'
+import LesesalProgram from './components/lesesalprogram'
 
 
 
@@ -74,8 +74,6 @@ class Homescreen extends React.Component {
   }
 
   componentDidMount() {
-    BackgroundTask.schedule();
-    this.DidYouKnow()
     const { currentUser } = firebase.auth()
     console.log(currentUser)
     if (currentUser != null) {
@@ -84,6 +82,7 @@ class Homescreen extends React.Component {
   }
 
   componentWillMount() {
+    this.DidYouKnow()
     const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
     recentPost.once('value').then(snapshot => {
       this.setState({ hours: snapshot.val() })
@@ -160,25 +159,27 @@ class Homescreen extends React.Component {
   }
 
   DidYouKnow = () => {
-    const rand = Math.floor(Math.random() * 7);
     const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
-        "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
+      "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
+    const rand = Math.floor(Math.random() * didYouKnow.length);
     console.log(didYouKnow[rand])
-    this.setState({funfact:didYouKnow[rand]})
-    
-};
-  
+    this.setState({ funfact: didYouKnow[rand] })
+
+  };
+
 
   render() {
-    
+
     console.log("Entered render")
     return (
       <View style={{ ...styles.HomescreenStyle, ...styles.container }}>
-         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
+        <Text style={styles.textStyleHomescreen}>LesesalProgram</Text>
+        <View style={{height:'50%', marginBottom: 30}}><LesesalProgram/></View>
+        
+        <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
         {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <UsersMap />
-        <Text>{this.state.funfact}</Text>
+        <Text style={{color: 'white'}}>{this.state.funfact}</Text>
       </View>
     );
   }
@@ -212,7 +213,7 @@ class Homescreen extends React.Component {
 }*/
 
 
-const sizeOfIcons = 30;
+const sizeOfIcons = 32;
 
 
 export const SignedOut = createStackNavigator(
@@ -263,7 +264,7 @@ export const SignedIn = createBottomTabNavigator(
     Homescreen: {
       screen: Homescreen,
       navigationOptions: {
-        tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color='#0097A7' />) },
+        tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color='#2D3245' />) },
       }
     },
     /*Leaderboard: { 
@@ -281,71 +282,51 @@ export const SignedIn = createBottomTabNavigator(
           <AllTimeLeaderBoard />,
         Weekly: () =>
           <AllTimeLeaderBoard />,
-          
 
-      },{
-        tabBarOptions: {
-          labelStyle:{
-            fontSize: 14
-          },
-          indicatorStyle: { backgroundColor: 'transparent'},
-          activeTintColor: '#2D3245',
-          inactiveTintColor: 'white',
-          style:{
-            backgroundColor:'orange'
+
+      }, {
+          tabBarOptions: {
+            pressColor: 'white',
+            labelStyle: {
+              fontSize: 16,
+              fontWeight: '300'
+            },
+            indicatorStyle: { backgroundColor: 'transparent' },
+            activeTintColor: '#2D3245',
+            inactiveTintColor: '#2D3245',
+            style: {
+              backgroundColor: 'orange'
+            }
           }
-        }}
+        }
       ),
       navigationOptions: {
-        tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#0097A7' />) },
+        tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
     },
     Profile: {
       screen: Profile,
       navigationOptions: {
         //change md-more
-        tabBarIcon: () => { return (<Icon name="md-more" size={sizeOfIcons} color='#0097A7' />) }
+        tabBarIcon: () => { return (<Icon name="md-more" size={sizeOfIcons} color='#2D3245' />) }
 
       }
     },
   },
   {
-    initialRouteName: 'Homescreen',
-  
-  }
-  /*{
-    navigationOptions: ({ navigation, screenProps }) => ({
-    header: null,
-    headerMode: 'none',
-    tabBarVisible: true,
-    tabBarLabel: () => {
-      const { routeName } = navigation.state;
-      switch (routeName) {
-        //
-      }
-      return <Text>{routeName}</Text>;
-    },
-  }),
-  animationEnabled: false,
-  swipeEnabled: true,
-  tabBarOptions: {
-    activeTintColor: 'rgb(12,157,197)',
-    inactiveTintColor: 'black',
-    indicatorStyle: {
-      backgroundColor: 'rgb(102,134,205)',
-    },
-    tabStyle: {  isInside = radius => {
+    
+    tabBarOptions: {
+      showLabel: false,
+      activeTintColor: '#2D3245',
+      activeBackgroundColor: 'orange',
+      style: {
+        backgroundColor: 'white',
+        //backgroundColor: '#2D3245'
+      },
+      initialRouteName: 'Homescreen',
+    }
 
-      height: 48,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    style: {
-      backgroundColor: 'white',
-    },
-    statusBarStyle: 'light-content',
-  },
-}*/
+  }
 );
 
 export const createRootNavigator = (signedIn = false) => {
@@ -365,13 +346,11 @@ export const createRootNavigator = (signedIn = false) => {
   );
 };
 
-//export const createAppContainer(createRootNavigator);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20
     //backgroundColor: '#F5FCFF',
   },
   fontsize: {
@@ -388,6 +367,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   HomescreenStyle: {
-    backgroundColor: '#A7CFDB'
+    backgroundColor: '#2D3245'
+  },
+  textStyleHomescreen:{
+    fontSize: 30,
+    color: 'white',
+    marginBottom: 20
   }
 });
