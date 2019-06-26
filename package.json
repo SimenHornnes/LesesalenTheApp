@@ -25,6 +25,11 @@
     "react-navigation": "^3.11.0",
     "superagent": "^5.1.0"
   },
+  "rnpm": {
+    "assets": [
+	"./assets/fonts/"
+    ]
+},
   "devDependencies": {
     "@babel/core": "7.4.5",
     "@babel/runtime": "7.4.5",

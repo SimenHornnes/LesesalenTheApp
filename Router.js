@@ -86,9 +86,9 @@ class Homescreen extends React.Component {
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
-          const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
+          const recentPost = firebase.database().ref(`allTime/${this.state.userId}/hours`);
           recentPost.once('value').then(snapshot => {
-            firebase.database().ref(`users/${this.state.userId}`).set({
+            firebase.database().ref(`allTime/${this.state.userId}`).set({
               name: this.state.name,
               hours: 100 + snapshot.val()
             })
@@ -246,11 +246,11 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard path="allTime"/>,
         Semester: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard path="semester"/>,
         Weekly: () =>
-          <AllTimeLeaderBoard />,
+          <AllTimeLeaderBoard path="weekly"/>,
 
 
       }, {
@@ -261,7 +261,7 @@ export const SignedIn = createBottomTabNavigator(
               fontWeight: '300'
             },
             indicatorStyle: { backgroundColor: 'transparent' },
-            activeTintColor: '#2D3245',
+            activeTintColor: 'white',
             inactiveTintColor: '#2D3245',
             style: {
               backgroundColor: 'orange'
@@ -277,7 +277,7 @@ export const SignedIn = createBottomTabNavigator(
       screen: Profile,
       navigationOptions: {
         //change md-more
-        tabBarIcon: () => { return (<Icon name="md-more" size={sizeOfIcons} color='#2D3245' />) }
+        tabBarIcon: () => { return (<Icon name='md-person' size={sizeOfIcons} color='#2D3245' />) }
 
       }
     },

@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, FlatList, Dimensions, ScrollView } from "react-native";
 import firebase from 'firebase/app';
 import { Table, TableWrapper, Row } from 'react-native-table-component';
+import CustomTable from './CustomTable'
 
 
 
@@ -32,7 +33,7 @@ export default class Card extends React.Component {
   }
 
   async fetchData() {
-    const ref = firebase.database().ref('users')
+    const ref = firebase.database().ref(this.props.path)
 
     ref.orderByChild('hours').on('child_added', async (snapshot) => {
       //console.log(snapshot.key + " " + snapshot.val().hours)
@@ -49,6 +50,23 @@ export default class Card extends React.Component {
     });
   }
 
+  /*
+<ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{ borderColor: 'white'}}>
+                {
+                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={[index + 1, rowData.name, rowData.hours, 0]}
+                      widthArr={this.state.widthArr}
+                      style={[styles.row, index % 2 && { backgroundColor: 'white' }, index / 1 == 0 && { backgroundColor: 'gold' }, index / 1 == 1 && { backgroundColor: 'silver' }, , index / 1 == 2 && { backgroundColor: '#cd7f32' }, rowData.name == this.state.username && !(index/1== 2 || index/1==1||index/1==0) && {backgroundColor:'red'}]}
+                      textStyle={styles.text}
+                    />
+                  ))
+                }
+              </Table>
+            </ScrollView>
+  */
 
 
   render() {
@@ -64,29 +82,15 @@ export default class Card extends React.Component {
       console.log(this.state.highScoreList)
       return (
         <View style={styles.container}>
-            <Table borderStyle={{ borderColor: 'black' }}>
-              <Row data={this.state.tableHead}
-                widthArr={this.state.widthArr}
-                style={styles.header}
-                textStyle={styles.headerText} />
-            </Table>
-
-
-            <ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{ borderColor: 'white'}}>
-                {
-                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
-                    <Row
-                      key={index}
-                      data={[index + 1, rowData.name, rowData.hours, 0]}
-                      widthArr={this.state.widthArr}
-                      style={[styles.row, index % 2 && { backgroundColor: 'white' }, index / 1 == 0 && { backgroundColor: 'gold' }, index / 1 == 1 && { backgroundColor: 'silver' }, , index / 1 == 2 && { backgroundColor: '#cd7f32' }, rowData.name == this.state.username && !(index/1== 2 || index/1==1||index/1==0) && {backgroundColor:'red'}]}
-                      textStyle={styles.text}
-                    />
-                  ))
-                }
-              </Table>
-            </ScrollView>
+          {/*<Table borderStyle={{ borderColor: 'black' }}>
+            <Row data={this.state.tableHead}
+              widthArr={this.state.widthArr}
+              style={styles.header}
+              textStyle={styles.headerText} />
+      </Table> */}
+          <ScrollView style={styles.dataWrapper}>
+            <CustomTable list={this.state.highScoreList} name={this.state.username}></CustomTable>
+          </ScrollView>
         </View>
       )
     } else {
@@ -102,7 +106,7 @@ export default class Card extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#2D3245' },
   header: { height: 35, backgroundColor: '#2D3245' },
   headerText: { textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 20 },
   text: { textAlign: 'center', fontWeight: '200', fontSize: 18, color: "black", },
