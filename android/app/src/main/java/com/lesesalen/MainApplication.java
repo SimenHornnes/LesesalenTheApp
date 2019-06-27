@@ -3,6 +3,7 @@ package com.lesesalen;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.lottie.LottiePackage;
 import com.eddieowens.RNBoundaryPackage;
 import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.pilloxa.backgroundjob.BackgroundJobPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LottiePackage(),
             new RNBoundaryPackage(),
             new BackgroundTaskPackage(),
             new BackgroundJobPackage(),

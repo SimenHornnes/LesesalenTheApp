@@ -45,6 +45,7 @@ class Homescreen extends React.Component {
     if (currentUser != null) {
       this.setState({ userId: currentUser.uid, name: currentUser.displayName })
     }
+    console.log("THIS IS THE USERNAME: ", this.state.name)
   }
 
   componentWillMount() {
@@ -83,6 +84,7 @@ class Homescreen extends React.Component {
           lng: position.coords.longitude,
           lat: position.coords.latitude
         }
+        
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
@@ -228,6 +230,7 @@ export const SignedOut = createStackNavigator(
       },
     }
   });
+
 export const SignedIn = createBottomTabNavigator(
   {
     Homescreen: {
@@ -246,19 +249,20 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
-          <AllTimeLeaderBoard path="allTime"/>,
+          <AllTimeLeaderBoard path="allTime" />,
         Semester: () =>
-          <AllTimeLeaderBoard path="semester"/>,
+          <AllTimeLeaderBoard path="semester" />,
         Weekly: () =>
-          <AllTimeLeaderBoard path="weekly"/>,
+          <AllTimeLeaderBoard path="weekly" />,
 
 
-      }, {
+      },
+      {
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
               fontSize: 16,
-              fontWeight: '300'
+              fontWeight: '300',
             },
             indicatorStyle: { backgroundColor: 'transparent' },
             activeTintColor: 'white',
@@ -266,6 +270,11 @@ export const SignedIn = createBottomTabNavigator(
             style: {
               backgroundColor: 'orange'
             }
+          }
+        },
+        {
+          navigationOptions: {
+            headerTitle: 'Leaderboard'
           }
         }
       ),

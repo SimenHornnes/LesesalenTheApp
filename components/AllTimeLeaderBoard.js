@@ -28,6 +28,15 @@ export default class Card extends React.Component {
     
   }
 
+
+
+  componentWillMount() {
+    const { currentUser } = firebase.auth()
+    //console.log(currentUser)
+    this.setState({ username: currentUser.displayName })
+  }
+
+
   componentDidMount() {
     this.fetchData().done()
 
@@ -39,8 +48,10 @@ export default class Card extends React.Component {
   }
 
   async fetchData() {
+    const { currentUser } = firebase.auth()
     await this.setState({
-      highScoreList: []
+      highScoreList: [],
+      username: currentUser.displayName
     })
     console.log("This is the highscorelist: ", this.state.highScoreList)
     const ref = firebase.database().ref(this.props.path)
@@ -102,6 +113,8 @@ export default class Card extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
+              progressBackgroundColor="orange"
+              colors= {['white']}
             />
           }>
             <CustomTable list={this.state.highScoreList} name={this.state.username}></CustomTable>

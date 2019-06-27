@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import firebase from 'firebase/app';
 
 
 
 
-const renderRow = (e1, e2, e3, e4, userId) => {
+const renderRow = (e1, e2, e3, e4, userId, userId2) => {
     return (
         <View style={styles.wrapper}>
             <View style={styles.col1}>
@@ -25,7 +26,7 @@ const renderRow = (e1, e2, e3, e4, userId) => {
                     )}
             </View>
             <View style={styles.col2}>
-                <Text style={[styles.text, userId == e2 && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
+                <Text style={[styles.text, userId == userId2 && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
             </View>
             <View style={styles.col3}>
                 <Text style={styles.text}>{e3}</Text>
@@ -40,6 +41,15 @@ const renderRow = (e1, e2, e3, e4, userId) => {
 export default class CustomTable extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            userId: undefined,
+        }
+    }
+
+    componentDidMount() {
+    const { currentUser } = firebase.auth()
+    this.setState({ userId: currentUser.uid })
+
     }
 
     render() {
@@ -47,7 +57,7 @@ export default class CustomTable extends Component {
             <View>
                 {
                     this.props.list.slice(0).reverse().map((rowData, index) =>  // This will render a row for each data element.
-                        renderRow(index, rowData.name, rowData.hours, '3', this.props.name)
+                        renderRow(index, rowData.name, rowData.hours, '3', this.state.userId, rowData.id)
                     )
                 }
             </View>
@@ -61,7 +71,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'grey',
         borderBottomWidth: 1,
         backgroundColor: '#2D3245',
-        height: 61.8,
+        height: 75,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
