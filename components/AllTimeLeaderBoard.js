@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, FlatList, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, View, Text, FlatList, Dimensions, ScrollView, RefreshControl } from "react-native";
 import firebase from 'firebase/app';
 import { Table, TableWrapper, Row } from 'react-native-table-component';
 import CustomTable from './CustomTable'
@@ -14,13 +14,19 @@ export default class Card extends React.Component {
       highScoreList: [],
       tableHead: ['Rank', 'User', 'Hours', 'Streak'],
       widthArr: [Dimensions.get('window').width / 6, Dimensions.get('window').width / 2, Dimensions.get('window').width / 6, Dimensions.get('window').width / 6],
-      username: undefined
+      username: undefined,
+      refreshing: false,
       //isDataLoaded: false
     }
   }
 
-
-
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.fetchData().then(() => {
+      this.setState({ refreshing: false });
+    });
+    
+  }
 
   componentDidMount() {
     this.fetchData().done()
@@ -33,6 +39,10 @@ export default class Card extends React.Component {
   }
 
   async fetchData() {
+    await this.setState({
+      highScoreList: []
+    })
+    console.log("This is the highscorelist: ", this.state.highScoreList)
     const ref = firebase.database().ref(this.props.path)
 
     ref.orderByChild('hours').on('child_added', async (snapshot) => {
@@ -88,7 +98,12 @@ export default class Card extends React.Component {
               style={styles.header}
               textStyle={styles.headerText} />
       </Table> */}
-          <ScrollView style={styles.dataWrapper}>
+          <ScrollView style={styles.dataWrapper} refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
             <CustomTable list={this.state.highScoreList} name={this.state.username}></CustomTable>
           </ScrollView>
         </View>
