@@ -12,6 +12,7 @@ import { Button } from 'react-native-elements';
 //import ApiCalendar from 'react-google-calendar-api';
 //import GetEvents from './components/Lesesalprogram2'
 
+import Achievements from './components/Achievements';
 import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
@@ -283,11 +284,30 @@ export const SignedIn = createBottomTabNavigator(
       }
     },
     Profile: {
-      screen: Profile,
+      screen: createMaterialTopTabNavigator({
+        Profile: () => 
+          <Profile/>,
+        Achievements: () =>
+          <Achievements userId= {this.state.userId}/>,
+        
+      }, {
+          tabBarOptions: {
+            pressColor: 'white',
+            labelStyle: {
+              fontSize: 16,
+              fontWeight: '300'
+            },
+            indicatorStyle: { backgroundColor: 'transparent' },
+            activeTintColor: 'white',
+            inactiveTintColor: '#2D3245',
+            style: {
+              backgroundColor: 'orange'
+            }
+          }
+        }
+      ),
       navigationOptions: {
-        //change md-more
         tabBarIcon: () => { return (<Icon name='md-person' size={sizeOfIcons} color='#2D3245' />) }
-
       }
     },
   },

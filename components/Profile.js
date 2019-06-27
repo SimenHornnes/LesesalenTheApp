@@ -22,7 +22,7 @@ export default class Profile extends React.Component {
   componentWillMount() {
     if (!(this.state.userId && this.state.username)) {
       const { currentUser } = firebase.auth()
-      console.log(currentUser)
+      //console.log(currentUser)
 
       const recentPost = firebase.database().ref(`allTime/${currentUser.uid}/hours`);
       recentPost.once('value').then(snapshot => {
@@ -41,8 +41,6 @@ export default class Profile extends React.Component {
 
 
   render() {
-    console.log(this.state)
-    console.log(this.state.hours)
     return (
       <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
         <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>

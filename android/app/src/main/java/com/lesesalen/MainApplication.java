@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.eddieowens.RNBoundaryPackage;
-import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.pilloxa.backgroundjob.BackgroundJobPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -18,8 +17,9 @@ import com.airbnb.android.react.maps.MapsPackage;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
 
+
+public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
@@ -32,7 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new LottiePackage(),
             new RNBoundaryPackage(),
-            new BackgroundTaskPackage(),
             new BackgroundJobPackage(),
             new RNGestureHandlerPackage(),
             new VectorIconsPackage(),
@@ -53,6 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
+    
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
   }

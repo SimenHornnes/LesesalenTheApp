@@ -14,6 +14,10 @@
  * 10. I SignIn burde vi ha muligheten til å resette passord, samt email verification.
  * 11. I Profile burde vi ha muligheten til å endre username.
  * 12. Vi burde som displaye at email password reset er sendt
+ * 13. Logikk for streaks (cloud functions?), logikk for achivements.
+ * 14. Leaderboard, kunne trykke på profiler, evt kunne søke opp profiler.
+ * 15. Scheduled task i veka/semester om kem som leda leaderboardet, send en value true til den useren
+ i databasen, if true display badge i profila til brukeren.
  */
 
 
