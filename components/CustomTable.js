@@ -57,11 +57,7 @@ export default class CustomTable extends Component {
             <View>
                 {
                     this.props.list.slice(0).reverse().map((rowData, index) =>  // This will render a row for each data element.
-<<<<<<< HEAD
-                        renderRow(index, rowData.name, rowData.hours, '3', this.state.userId, rowData.id)
-=======
                         renderRow(index, rowData.name, rowData.hours, rowData.streak, this.props.name)
->>>>>>> b104aa25af7c9e7180b27da5ed9109497cdab723
                     )
                 }
             </View>
