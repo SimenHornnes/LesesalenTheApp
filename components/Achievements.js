@@ -26,11 +26,11 @@ export default class Achievements extends React.Component {
         }
     }
 
-    componentDidMount() {
+    /*componentDidMount() {
         if (this.state.userId != null) {
             this.fetchAchievements()
         }
-    }
+    }*/
 
     fetchAchievements() {
         if (this.state.userId != null) {
@@ -70,15 +70,19 @@ export default class Achievements extends React.Component {
 
 
     render() {
+        if(this.state.userId && !this.state.achievementsObject){
+            console.log("entered")
+            this.fetchAchievements()
+        }
         isDataloaded = this.state.userId != null
-        console.log(this.state.userId)
+       // console.log(this.state.userId)
         isAchievementObjectLoaded = this.state.achievementsObject != null
         if (isAchievementObjectLoaded) {
             // console.log(this.state.achievementsObject["semesterwinner"])
         }
         //  console.log(isDataloaded)
         //console.log(this.state.userId)
-        //  console.log(this.state.achievementsObject)
+        console.log(this.state.achievementsObject)
 
         //{this.state.achievementsObject[achievement] vil displaye achievement x0
         if (isDataloaded) {
@@ -89,7 +93,8 @@ export default class Achievements extends React.Component {
                         style={{ alignItems: 'center' }}>
 
                         {isAchievementObjectLoaded ? (Object.keys(this.state.achievementsObject).map(achievement =>
-                            <Text style={{ color: "white", fontSize: 28 }}>{achievement} x{this.state.achievementsObject[achievement]}</Text>)) : (<Text>You have no achievements</Text>)}
+                        
+                            <Text style={{ color: "white", fontSize: 28 }}>{achievement}{this.state.achievementsObject[achievement] === true ? (null) : " x"+(this.state.achievementsObject[achievement])}</Text>)) : (<Text>You have no achievements</Text>)}
 
 
                     </View>

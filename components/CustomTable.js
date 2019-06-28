@@ -33,8 +33,9 @@ const renderRow = (e1, e2, e3, e4, userId) => {
                 <Text style={styles.text}>{e3}</Text>
             </View>
             <View style={styles.col4}>
-            {e4 > 0 ? (<Icon name='md-flame' color='orange' size={20}></Icon>):  (<Text>    </Text>)}
-                <Text style={styles.text}>  {e4}</Text>
+                <Text style={styles.text}>  {e4}  </Text>
+
+                {e4 > 0 ? (<Icon name='md-flame' color='orange' size={25}></Icon>):  (null)}
             </View>
         </View>
     );
