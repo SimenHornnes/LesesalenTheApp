@@ -3,6 +3,7 @@ import { View, Dimensions, StyleSheet } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
+import { withNavigation } from 'react-navigation';
 
 
 export default class Profile extends React.Component {
@@ -61,11 +62,11 @@ export default class Profile extends React.Component {
         </View>
 
 
-        <View style={{ paddingTop: 40 }}>
+        <View style={{ paddingTop: 5 }}>
           <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
 
             title="SIGN OUT"
-            onPress={() => (this.props.navigation.navigate('SignedOut'), firebase.auth().signOut())}
+            onPress={() => (firebase.auth().signOut())}
           />
         </View>
       </View>

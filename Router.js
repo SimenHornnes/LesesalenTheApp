@@ -31,12 +31,12 @@ class Homescreen extends React.Component {
       inside: false,
       userId: undefined,
       name: undefined,
-     // hours: undefined,
+      // hours: undefined,
       funfact: undefined,
       dataSource: [],
       pageToken: '',
       error: null,
- 
+
     }
   }
 
@@ -59,7 +59,6 @@ class Homescreen extends React.Component {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     var currentTime = `${year}-${month}-${date}T00:00:00Z`;
-    console.log(currentTime)
     const API_KEY = 'AIzaSyDX56itpFfR3zfjfJK0nUesbFLBo4pYfVc';
     let url = `https://www.googleapis.com/calendar/v3/calendars/t3rc186t378bvsv4mjpie6l1ic@group.calendar.google.com/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=50&singleEvents=true&orderBy=startTime&pageToken=${this.state.pageToken}`;
     fetch(url)
@@ -72,9 +71,15 @@ class Homescreen extends React.Component {
         });
       })
       .catch(error => {
-        this.setState({ error});
-    });
+        this.setState({ error });
+      });
   }
+
+  
+  
+  
+
+
 
   getUserCoord = () => {
     //console.log("pressed")
@@ -87,27 +92,31 @@ class Homescreen extends React.Component {
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
+
           const recentPost = firebase.database().ref(`allTime/${this.state.userId}/hours`);
           recentPost.once('value').then(snapshot => {
-            firebase.database().ref(`allTime/${this.state.userId}`).set({
+            firebase.database().ref(`allTime/${this.state.userId}`).update({
               name: this.state.name,
-              hours: 100 + snapshot.val()
+              hours: 100 + snapshot.val(),
+              haveBeenToSchool: true
             })
             //this.setState({ hours: snapshot.val() + 100 })
           })
           const recentPost2 = firebase.database().ref(`semester/${this.state.userId}/hours`);
           recentPost2.once('value').then(snapshot => {
-            firebase.database().ref(`semester/${this.state.userId}`).set({
+            firebase.database().ref(`semester/${this.state.userId}`).update({
               name: this.state.name,
-              hours: 100 + snapshot.val()
+              hours: 100 + snapshot.val(),
+              haveBeenToSchool: true
             })
             //this.setState({ hours: snapshot.val() + 100 })
           })
           const recentPost3 = firebase.database().ref(`weekly/${this.state.userId}/hours`);
           recentPost3.once('value').then(snapshot => {
-            firebase.database().ref(`weekly/${this.state.userId}`).set({
+            firebase.database().ref(`weekly/${this.state.userId}`).update({
               name: this.state.name,
-              hours: 100 + snapshot.val()
+              hours: 100 + snapshot.val(),
+              haveBeenToSchool: true
             })
             //this.setState({ hours: snapshot.val() + 100 })
           })
@@ -161,16 +170,16 @@ class Homescreen extends React.Component {
 
 
   render() {
-    console.log(this.state.dataSource)
+    //console.log(this.state.dataSource)
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
-    
-    
+
+
     return (
       <View style={{ ...styles.HomescreenStyle }}>
-        
-        <View style = {{borderBottomWidth: 2, borderColor: 'black',backgroundColor:'orange'}}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '50%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource}/>) : (<Text>Loading</Text>)}</View>
+
+        <View style={{ borderBottomWidth: 2, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+        <View style={{ height: '50%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
 
         <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
         {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
@@ -247,11 +256,11 @@ export const SignedIn = createBottomTabNavigator(
     Leaderboard: {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
-          <AllTimeLeaderBoard path="allTime"/>,
+          <AllTimeLeaderBoard path="allTime" />,
         Semester: () =>
-          <AllTimeLeaderBoard path="semester"/>,
+          <AllTimeLeaderBoard path="semester" />,
         Weekly: () =>
-          <AllTimeLeaderBoard path="weekly"/>,
+          <AllTimeLeaderBoard path="weekly" />,
 
 
       }, {
@@ -276,11 +285,11 @@ export const SignedIn = createBottomTabNavigator(
     },
     Profile: {
       screen: createMaterialTopTabNavigator({
-        Profile: () => 
-          <Profile/>,
+        Profile: () =>
+          <Profile />,
         Achievements: () =>
-          <Achievements userId= {this.state.userId}/>,
-        
+          <Achievements userId={this.state.userId} />,
+
       }, {
           tabBarOptions: {
             pressColor: 'white',
@@ -366,6 +375,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     fontSize: 30,
     color: 'black',
-    
+
   }
 });
