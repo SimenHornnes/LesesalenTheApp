@@ -65,7 +65,7 @@ export default class Profile extends React.Component {
           <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
 
             title="SIGN OUT"
-            onPress={() => (this.props.navigation.navigate('SignedOut'), firebase.auth().signOut())}
+            onPress={() => (firebase.auth().signOut())}
           />
         </View>
       </View>
