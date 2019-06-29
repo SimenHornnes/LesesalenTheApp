@@ -6,11 +6,13 @@ import firebase from 'firebase/app';
 
 
 
-const renderRow = (e1, e2, e3, e4, userId, userId2) => {
+
+const renderRow = (e1, e2, e3, e4, userId) => {
+    console.log(e4)
     return (
         <View style={styles.wrapper}>
             <View style={styles.col1}>
-            <Text style={styles.places}>{e1 + 1}. </Text>
+                <Text style={styles.places}>{e1 + 1}. </Text>
                 {e1 == 0 || e1 == 1 || e1 == 2 ? (
                     e1 == 0 ? (
                         <Icon name='md-trophy' color='gold' size={30}></Icon>
@@ -22,7 +24,7 @@ const renderRow = (e1, e2, e3, e4, userId, userId2) => {
                                 )
                         )
                 ) : (
-                    null
+                        null
                     )}
             </View>
             <View style={styles.col2}>
@@ -32,11 +34,14 @@ const renderRow = (e1, e2, e3, e4, userId, userId2) => {
                 <Text style={styles.text}>{e3}</Text>
             </View>
             <View style={styles.col4}>
-                <Text style={styles.text}>{e4}</Text>
+                <Text style={styles.text}>  {e4}  </Text>
+
+                {e4 > 0 ? (<Icon name='md-flame' color='orange' size={25}></Icon>) : (null)}
             </View>
         </View>
     );
 }
+//-fire
 
 export default class CustomTable extends Component {
     constructor(props) {
@@ -47,17 +52,19 @@ export default class CustomTable extends Component {
     }
 
     componentDidMount() {
-    const { currentUser } = firebase.auth()
-    this.setState({ userId: currentUser.uid })
+        const { currentUser } = firebase.auth()
+        this.setState({ userId: currentUser.uid })
 
     }
 
+
     render() {
+        console.log(this.props.list)
         return (
             <View>
                 {
                     this.props.list.slice(0).reverse().map((rowData, index) =>  // This will render a row for each data element.
-                        renderRow(index, rowData.name, rowData.hours, rowData.streak, this.props.name)
+                        renderRow(index, rowData.name, rowData.hours, rowData.streak == null ? ('0') : (rowData.streak), this.props.name)
                     )
                 }
             </View>
@@ -107,6 +114,9 @@ const styles = StyleSheet.create({
     },
     col4: {
         width: '16%',
-        alignItems: "center"
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        flex: 1,
+        flexDirection: 'row'
     }
 });

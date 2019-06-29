@@ -63,7 +63,8 @@ export default class Card extends React.Component {
       lista.push({
         id: await (snapshot.key),
         hours: await (snapshot.val().hours),
-        name: await (snapshot.val().name)
+        name: await (snapshot.val().name),
+        streak: await (snapshot.val().streak)
       });
 
       this.setState({ highScoreList: lista })
