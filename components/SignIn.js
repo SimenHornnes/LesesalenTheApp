@@ -6,6 +6,7 @@ import { Input } from 'react-native-elements';
 import { Dimensions } from 'react-native';
 import firebase from 'firebase/app';
 import { Header } from 'react-navigation';
+import DropdownAlert from 'react-native-dropdownalert';
 
 
 //Evt add epost, og confirm password.
@@ -19,6 +20,7 @@ export default class SignUp extends React.Component {
       emailError: null,
       passwordError: null,
       resetPasswordError: null,
+      resetPasswordEmailSent: true
     }
   }
 
@@ -53,12 +55,15 @@ export default class SignUp extends React.Component {
     })
     if (this.state.email) {
       firebase.auth().sendPasswordResetEmail(`${this.state.email}`)
-        .then(()=> {
+        .then(() => {
+          this.dropDownAlertRef.alertWithType('success', 'Success', 'Email sent');
+          this.setState({ resetPasswordEmailSent: true })
           console.log("Sent password reset mail")
+
         })
         .catch((err) => {
           console.log(err)
-          this.setState({emailError: "There is no user record corresponding to this email."})
+          this.setState({ emailError: "There is no user record corresponding to this email." })
         })
     }
     else {
@@ -70,13 +75,16 @@ export default class SignUp extends React.Component {
   render() {
 
     return (
+      //Finnes bedre ting enn keyboardavoidingview
       <KeyboardAvoidingView
         keyboardVerticalOffset={Header.HEIGHT + 20}
         style={styles.fullsize}
         behavior='padding'
       >
+        <DropdownAlert
+          ref={ref => this.dropDownAlertRef = ref}
+          successColor='orange' />
         <View>
-
           <Image source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ resizeMode: 'contain', marginTop: 25, height: 250, padding: 10 }}
           //https://i.imgur.com/efkEvWV.png logo + tekst height: 250,
           //https://i.imgur.com/7iYvirQ.png berre logoen
@@ -169,12 +177,14 @@ export default class SignUp extends React.Component {
             onPress={() => { this.props.navigation.navigate("SignUp") }}
           />
           <Button
-            buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', marginBottom:15 }}
-            
+            buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', marginBottom: 15 }}
+
             title="Reset Password"
             titleStyle={{ fontSize: 14, fontStyle: 'italic' }}
-            onPress={this.handlePasswordReset }
+            onPress={this.handlePasswordReset}
           />
+
+
         </View>
       </KeyboardAvoidingView>
     )
