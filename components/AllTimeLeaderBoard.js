@@ -98,9 +98,7 @@ export default class Card extends React.Component {
     //console.log(temp)
     //console.log(((Object.values(this.state))[0]).length)
     if (this.state.highScoreList.length) {
-      console.log("we made IT")
 
-      console.log(this.state.highScoreList)
       return (
         <View style={styles.container}>
           {/*<Table borderStyle={{ borderColor: 'black' }}>
