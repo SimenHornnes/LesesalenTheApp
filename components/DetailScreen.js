@@ -30,10 +30,17 @@ export default class Profile extends React.Component {
     fetchProfilePic() {
         const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);
         recentPost.once('value').then(snapshot => {
-          this.setState({profilePic: snapshot.val(), profilepiccheck: true})
+            if(snapshot.val().photoURL != null){
+          this.setState({profilePic: snapshot.val().photoURL, profilepiccheck: true})
+            }
+            else{
+                this.setState({profilePic: null, profilepiccheck: true})
+            }
         }
     
-        )
+        ).catch((err) => {
+            console.log(err)
+          })
       }
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
@@ -50,6 +57,7 @@ export default class Profile extends React.Component {
 
 
     render() {
+        const doesUserHavePicture = this.state.profilePic != null
         if (this.state.userId && !this.state.profilepiccheck) {
             this.fetchProfilePic()
           }
@@ -57,6 +65,7 @@ export default class Profile extends React.Component {
         if(this.state.userId && !this.state.username){
             this.fetchData()
         }
+        console.log(this.state.profilePic)
         if(this.state.username && this.state.hours){
         return (
             <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
@@ -73,7 +82,7 @@ export default class Profile extends React.Component {
                         marginBottom: 20
                     }}
                 >
-            {this.state.profilePic ? (<Image source={{ uri: 'https://i.imgur.com/dwH1H2M.jpg' }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
+            {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
                 </View>
 
             </View>
