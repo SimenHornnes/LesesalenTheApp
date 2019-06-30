@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DetailScreen from './DetailScreen'
 import { createStackNavigator } from 'react-navigation';
@@ -53,19 +53,21 @@ export default class CustomTable extends Component {
                     <View style={styles.col2}>
                         <Text style={[styles.text, userId == this.state.userId && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
                     </View>
-                    <View style={styles.col3}>
-                        <Text style={styles.text}>{e3}</Text>
-                    </View>
-                    <View style={styles.col4}>
-                        <Text style={[styles.text, {fontSize: 15}]}>  {e4}  </Text>
-                        {e4 > 10 ? (<View style={{marginRight: 10}}><Icon name='md-flame' color='orange' size={28} ></Icon></View>) :
+                <View style={styles.col3}>
+                    <Text style={styles.textHours}>{e3}</Text>
+                </View>
+                <View style={styles.col4}>
+                    <Text style={styles.text1}>  {e4}  </Text>
+
+                </View>
+                <View style={styles.col5}>
+                    {e4 > 15 ? (<View><Icon name='md-flame' color='orange' size={34} ></Icon></View>) :
+                        e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={28} ></Icon></View>) :
                             e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={25} ></Icon></View>) :
                                 e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
-                                    e4 > 3 ? (<View style={{ marginTop: 5 }}><Icon name='md-flame' color='orange' size={18}></Icon></View>) :
+                                    e4 > 3 ? (<View style={{}}><Icon name='md-flame' color='orange' size={18}></Icon></View>) :
                                         e4 > 2 ? (<Icon name='md-flame' color='orange' size={14}></Icon>) : (null)}
-
-                    </View>
-                    
+                </View>
 
                 </View>
             </TouchableHighlight>
@@ -104,6 +106,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white'
     },
+    textHours: {
+        fontSize: 18,
+        color: 'black',
+        alignItems: 'center',
+        color: 'white',
+        textAlign: 'right', alignSelf: 'stretch'
+    },
+    text1: {
+        fontSize: 15,
+        color: 'black',
+        alignItems: 'center',
+        color: 'white',textAlign: 'right', alignSelf: 'stretch'
+    },
+
     places: {
         fontSize: 18,
         color: 'black',
@@ -113,30 +129,32 @@ const styles = StyleSheet.create({
 
     col1: {
         justifyContent: 'flex-start',
-        marginLeft: 17,
         flexDirection: 'row',
-        width: '12%',
+        marginLeft: 15,
+        width: (Dimensions.get('window').width/100)*20,
         alignItems: 'flex-start'
     },
     col2: {
-        width: '54%',
+        width: (Dimensions.get('window').width/100)*54,
         alignItems: 'flex-start',
-        paddingLeft: 15
+        paddingLeft: 14
     },
     col3: {
-        width: '14%',
-        alignItems: "flex-start"
+        width: (Dimensions.get('window').width/100)*14,
+        alignItems: "center"
     },
     col4: {
-        width: '20%',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: (Dimensions.get('window').width/100)*11,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
         flexDirection: 'row',
     },
     col5: {
-        width: '9%',
+        width: (Dimensions.get('window').width/100)*6,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
+        marginRight: 10,
+        marginLeft:-5
     }
 });

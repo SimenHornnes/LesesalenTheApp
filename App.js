@@ -10,6 +10,11 @@
  * 18. Screen for voting på forskjellige ting(?)
  * 19. score system i profile, avatar? 
  * 20. hatt en felles gruppechat/diskusjonsforum
+ * 21. Achievement for høgste streak alltime. 
+ * 22. Link til badge i databasen
+ * 23. Send inn value true kvart 15. min viss man er på skulen
+ * 24. update username, email verificiation, achievement view, styling homescreen, delete account, add custom photo, profile description,
+ * 
  */
 
 
