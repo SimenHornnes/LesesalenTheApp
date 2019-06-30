@@ -6,8 +6,7 @@ import CustomTable from './CustomTable'
 
 
 
-
-export default class Card extends React.Component {
+export default class Leaderboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +52,6 @@ export default class Card extends React.Component {
       highScoreList: [],
       username: currentUser.displayName
     })
-    console.log("This is the highscorelist: ", this.state.highScoreList)
     const ref = firebase.database().ref(this.props.path)
 
     ref.orderByChild('hours').on('child_added', async (snapshot) => {
@@ -68,48 +66,19 @@ export default class Card extends React.Component {
       });
 
       this.setState({ highScoreList: lista })
-      //console.log(this.state.highScoreList)
     });
   }
 
-  /*
-<ScrollView style={styles.dataWrapper}>
-              <Table borderStyle={{ borderColor: 'white'}}>
-                {
-                  this.state.highScoreList.slice(0).reverse().map((rowData, index) => (
-                    <Row
-                      key={index}
-                      data={[index + 1, rowData.name, rowData.hours, 0]}
-                      widthArr={this.state.widthArr}
-                      style={[styles.row, index % 2 && { backgroundColor: 'white' }, index / 1 == 0 && { backgroundColor: 'gold' }, index / 1 == 1 && { backgroundColor: 'silver' }, , index / 1 == 2 && { backgroundColor: '#cd7f32' }, rowData.name == this.state.username && !(index/1== 2 || index/1==1||index/1==0) && {backgroundColor:'red'}]}
-                      textStyle={styles.text}
-                    />
-                  ))
-                }
-              </Table>
-            </ScrollView>
-  */
 
 
   render() {
-    //console.log(this.state)
-    //console.log("length" + this.state.highScoreList)
-    //if(this.state.highScoreList){
-    //const temp =Object.values(this.state)
-    //console.log(temp)
-    //console.log(((Object.values(this.state))[0]).length)
+  
+    
     if (this.state.highScoreList.length) {
-      console.log("we made IT")
 
-      console.log(this.state.highScoreList)
       return (
         <View style={styles.container}>
-          {/*<Table borderStyle={{ borderColor: 'black' }}>
-            <Row data={this.state.tableHead}
-              widthArr={this.state.widthArr}
-              style={styles.header}
-              textStyle={styles.headerText} />
-      </Table> */}
+
           <ScrollView style={styles.dataWrapper} refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -118,12 +87,11 @@ export default class Card extends React.Component {
               colors= {['white']}
             />
           }>
-            <CustomTable list={this.state.highScoreList} name={this.state.username}></CustomTable>
+            <CustomTable navigation={this.props.navigation} list={this.state.highScoreList} name={this.state.username}></CustomTable>
           </ScrollView>
         </View>
       )
     } else {
-      console.log("State var tom")
       return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
         <Text style={{ color: 'white' }}> Waiting for data...</Text>
       </View>)

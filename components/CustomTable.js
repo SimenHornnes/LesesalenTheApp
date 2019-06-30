@@ -1,46 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import DetailScreen from './DetailScreen'
+import { createStackNavigator } from 'react-navigation';
 import firebase from 'firebase/app';
 
 
 
 
 
-const renderRow = (e1, e2, e3, e4, userId) => {
-    console.log(e4)
-    return (
-        <View style={styles.wrapper}>
-            <View style={styles.col1}>
-                <Text style={styles.places}>{e1 + 1}. </Text>
-                {e1 == 0 || e1 == 1 || e1 == 2 ? (
-                    e1 == 0 ? (
-                        <Icon name='md-trophy' color='gold' size={30}></Icon>
-                    ) : (
-                            e1 == 1 ? (
-                                <Icon name='md-trophy' color='silver' size={27.5}></Icon>
-                            ) : (
-                                    <Icon name='md-trophy' color='#cd7f32' size={25}></Icon>
-                                )
-                        )
-                ) : (
-                        null
-                    )}
-            </View>
-            <View style={styles.col2}>
-                <Text style={[styles.text, userId == userId2 && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
-            </View>
-            <View style={styles.col3}>
-                <Text style={styles.text}>{e3}</Text>
-            </View>
-            <View style={styles.col4}>
-                <Text style={styles.text}>  {e4}  </Text>
 
-                {e4 > 0 ? (<Icon name='md-flame' color='orange' size={25}></Icon>) : (null)}
-            </View>
-        </View>
-    );
-}
+
+
 //-fire
 
 export default class CustomTable extends Component {
@@ -57,14 +28,58 @@ export default class CustomTable extends Component {
 
     }
 
+    renderRow(e1, e2, e3, e4, userId) {
+        return (
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate("DetailScreen", { userId }) }}
+                underlayColor="white">
+
+                <View style={styles.wrapper}>
+                    <View style={styles.col1}>
+                        <Text style={styles.places}>{e1 + 1}. </Text>
+                        {e1 == 0 || e1 == 1 || e1 == 2 ? (
+                            e1 == 0 ? (
+                                <Icon name='md-trophy' color='gold' size={30}></Icon>
+                            ) : (
+                                    e1 == 1 ? (
+                                        <Icon name='md-trophy' color='silver' size={27.5}></Icon>
+                                    ) : (
+                                            <Icon name='md-trophy' color='#cd7f32' size={25}></Icon>
+                                        )
+                                )
+                        ) : (
+                                null
+                            )}
+                    </View>
+                    <View style={styles.col2}>
+                        <Text style={[styles.text, userId == this.state.userId && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
+                    </View>
+                    <View style={styles.col3}>
+                        <Text style={styles.text}>{e3}</Text>
+                    </View>
+                    <View style={styles.col4}>
+                        <Text style={[styles.text, {fontSize: 15}]}>  {e4}  </Text>
+                        {e4 > 10 ? (<View style={{marginRight: 10}}><Icon name='md-flame' color='orange' size={28} ></Icon></View>) :
+                            e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={25} ></Icon></View>) :
+                                e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
+                                    e4 > 3 ? (<View style={{ marginTop: 5 }}><Icon name='md-flame' color='orange' size={18}></Icon></View>) :
+                                        e4 > 2 ? (<Icon name='md-flame' color='orange' size={14}></Icon>) : (null)}
+
+                    </View>
+                    
+
+                </View>
+            </TouchableHighlight>
+
+        );
+    }
+
 
     render() {
-        console.log(this.props.list)
         return (
             <View>
                 {
                     this.props.list.slice(0).reverse().map((rowData, index) =>  // This will render a row for each data element.
-                        renderRow(index, rowData.name, rowData.hours, rowData.streak == null ? ('0') : (rowData.streak), this.props.name)
+                        this.renderRow(index, rowData.name, rowData.hours, rowData.streak == null ? ('0') : (rowData.streak), rowData.id)
                     )
                 }
             </View>
@@ -97,26 +112,31 @@ const styles = StyleSheet.create({
     },
 
     col1: {
-        flex: 1,
         justifyContent: 'flex-start',
         marginLeft: 17,
         flexDirection: 'row',
-        width: '25%',
+        width: '12%',
         alignItems: 'flex-start'
     },
     col2: {
-        width: '49%',
-        alignItems: 'flex-start'
+        width: '54%',
+        alignItems: 'flex-start',
+        paddingLeft: 15
     },
     col3: {
-        width: '16%',
-        alignItems: "center"
+        width: '14%',
+        alignItems: "flex-start"
     },
     col4: {
-        width: '16%',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        flex: 1,
-        flexDirection: 'row'
+        width: '20%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+    },
+    col5: {
+        width: '9%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
     }
 });

@@ -19,6 +19,7 @@ import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import DidYouKnow from './components/DidYouKnow'
 import LesesalProgram from './components/lesesalprogram'
+import DetailScreen from './components/DetailScreen'
 
 
 
@@ -76,9 +77,9 @@ class Homescreen extends React.Component {
       });
   }
 
-  
-  
-  
+
+
+
 
 
 
@@ -196,17 +197,89 @@ class Homescreen extends React.Component {
 
 const sizeOfIcons = 32;
 
+const LeaderBoardWrapperView = createStackNavigator(
+  
+  {
+    Leaderboard: {
+      screen: Leaderboard = createMaterialTopTabNavigator({
+        //THANK YOU SAEED
+        Alltime: ({navigation}) =>
+          <AllTimeLeaderBoard navigation={navigation} path="allTime" />,
+        Semester: ({navigation}) =>
+          <AllTimeLeaderBoard navigation={navigation} path="semester" />,
+        Weekly: ({navigation}) =>
+          <AllTimeLeaderBoard navigation={navigation} path="weekly" />,
+
+
+      }, {
+          tabBarOptions: {
+            pressColor: 'white',
+            labelStyle: {
+              fontSize: 16,
+              fontWeight: '300'
+            },
+            indicatorStyle: { backgroundColor: 'transparent' },
+            activeTintColor: 'white',
+            inactiveTintColor: '#2D3245',
+            style: {
+              backgroundColor: 'orange'
+            }
+          }
+        }
+      ),
+      navigationOptions: {
+        header: null,
+        headerMode: 'none'
+      }
+    },
+    DetailScreen: {
+      screen: DetailScreen,
+
+    },
+  },
+
+  {
+    initialRouteName: 'Leaderboard',
+    defaultNavigationOptions: {
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'orange',
+      },
+    }
+  })
+
+
+
+/*const Leaderboard = createMaterialTopTabNavigator({
+  Alltime: () =>
+    <AllTimeLeaderBoard path="allTime" />,
+  Semester: () =>
+    <AllTimeLeaderBoard path="semester" />,
+  Weekly: () =>
+    <AllTimeLeaderBoard path="weekly" />,
+
+
+}, {
+    tabBarOptions: {
+      pressColor: 'white',
+      labelStyle: {
+        fontSize: 16,
+        fontWeight: '300'
+      },
+      indicatorStyle: { backgroundColor: 'transparent' },
+      activeTintColor: 'white',
+      inactiveTintColor: '#2D3245',
+      style: {
+        backgroundColor: 'orange'
+      }
+    }
+  }
+)*/
+
+
 
 export const SignedOut = createStackNavigator(
   {
-    /*Login: {
-      screen: Login,
-      navigationOptions: {
-        title: "Login",
-
-        // tabBarIcon: () => {return (backgroundColor='#2D3245')}
-      }
-    },*/
     SignIn: {
       screen: SignIn,
       navigationOptions: {
@@ -249,14 +322,13 @@ export const SignedIn = createBottomTabNavigator(
         tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color='#2D3245' />) },
       }
     },
-    /*Leaderboard: { 
-      screen: TopTabNavigator,
-      navigationOptions: {
-        tabBarIcon: () => { return (<Icon name = "md-list" size = {sizeOfIcons} color = '#0097A7' />)},
-      } 
-    },*/
-    //Card kan vere tabellen med lista, scroll er en wrapper(?) funksjon som må ver på utsida av card
     Leaderboard: {
+      screen: LeaderBoardWrapperView,
+      navigationOptions: {
+        tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
+      }
+    }
+    /*Leaderboard:  {
       screen: createMaterialTopTabNavigator({
         Alltime: () =>
           <AllTimeLeaderBoard path="allTime" />,
@@ -291,7 +363,7 @@ export const SignedIn = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
-    },
+    }*/,
     Profile: {
       screen: createMaterialTopTabNavigator({
         Profile: () =>
