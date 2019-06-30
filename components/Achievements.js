@@ -36,7 +36,6 @@ export default class Achievements extends React.Component {
         if (this.state.userId != null) {
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
-                console.log(snapshot.val())
                 this.setState({ achievementsObject: snapshot.val() })
             })
         }
@@ -71,7 +70,6 @@ export default class Achievements extends React.Component {
 
     render() {
         if(this.state.userId && !this.state.achievementsObject){
-            console.log("entered")
             this.fetchAchievements()
         }
         isDataloaded = this.state.userId != null
@@ -82,7 +80,6 @@ export default class Achievements extends React.Component {
         }
         //  console.log(isDataloaded)
         //console.log(this.state.userId)
-        console.log(this.state.achievementsObject)
 
         //{this.state.achievementsObject[achievement] vil displaye achievement x0
         if (isDataloaded) {
