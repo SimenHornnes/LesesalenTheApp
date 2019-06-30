@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet, Image } from 'react-native';
+import { View, Dimensions, StyleSheet, Image, ScrollView } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
@@ -14,7 +14,8 @@ export default class Profile extends React.Component {
             profilePic: undefined,
             hours: 0,
             userId: undefined,
-            profilepiccheck: false
+            profilepiccheck: false,
+            achievementsObject: null,
         }
     }
 
@@ -39,6 +40,7 @@ export default class Profile extends React.Component {
         }
 
         ).catch((err) => {
+            this.setState({profilepiccheck: true})
             console.log(err)
         })
     }
@@ -54,22 +56,34 @@ export default class Profile extends React.Component {
             })
         }
     }
+    fetchAchievements() {
+        if (this.state.userId != null) {
+            const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
+            recentPost.once('value').then(snapshot => {
+                this.setState({ achievementsObject: snapshot.val() })
+            })
+        }
+    }
 
 
 
     render() {
         const doesUserHavePicture = this.state.profilePic != null
-        if (this.state.userId && !this.state.profilepiccheck) {
+        if (this.state.userId && !this.state.profilepiccheck && !this.state.profilePic) {
             this.fetchProfilePic()
         }
-
+        if (this.state.userId && !this.state.achievementsObject) {
+            this.fetchAchievements()
+        }
         if (this.state.userId && !this.state.username) {
             this.fetchData()
         }
-        console.log(this.state.profilePic)
-        if (this.state.username && this.state.hours) {
+        isAchievementObjectLoaded = this.state.achievementsObject != null
+        if (this.state.profilepiccheck) {
             return (
+                <ScrollView style={styles.dataWrapper} >
                 <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
+                   
                     <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
                     <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
                     <View
@@ -86,12 +100,26 @@ export default class Profile extends React.Component {
                         {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
                     </View>
 
+                    <Text style={styles.textStyleHomescreen}>Achievements</Text>
+                    <View
+                        style={{ alignItems: 'center' }}>
+
+                        {isAchievementObjectLoaded ? (Object.keys(this.state.achievementsObject).map(achievement =>
+
+                            <Text style={{ color: "white", fontSize: 28 }}>{achievement}{this.state.achievementsObject[achievement] === true ? (null) : " x" + (this.state.achievementsObject[achievement])}</Text>)) : (<Text>You have no achievements</Text>)}
+
+
+                    </View>
+                    
                 </View>
+                </ScrollView>
             )
         }
         else {
             return (
-                <View><Text>Loading</Text></View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
+                    <Text style={{ color: 'white' }}> Waiting for data...</Text>
+                </View>
             )
         }
     }
@@ -104,5 +132,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         paddingVertical: 25
-    }
+    },
+    dataWrapper: { marginTop: -1 },
 });
