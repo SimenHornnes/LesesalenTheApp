@@ -7,7 +7,7 @@ import { name as appName } from './app.json';
 import BackgroundFetch from "react-native-background-fetch";
 import firebase from 'firebase/app';
 
-let MyHeadlessTask = async () => {
+/*let MyHeadlessTask = async () => {
     console.log('[BackgroundFetch HeadlessTask] start');
     
 
@@ -22,7 +22,7 @@ let MyHeadlessTask = async () => {
 }
 
 // Register your BackgroundFetch HeadlessTask
-BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
+BackgroundFetch.registerHeadlessTask(MyHeadlessTask);*/
 
 
 AppRegistry.registerComponent(appName, () => App);

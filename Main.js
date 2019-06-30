@@ -16,7 +16,9 @@ export default class Main extends React.Component {
     super(props)
     this.state = {
       signedIn: false,
-      checkedSignIn: false
+      checkedSignIn: false,
+      isOnLesesalen: false,
+      time: undefined,
     };
   }
   /*ShowAlertWithDelay = () => {
@@ -51,19 +53,22 @@ export default class Main extends React.Component {
       // or assign battery-blame for consuming too much background-time
       const { currentUser } = firebase.auth()
 
-    const pos = navigator.geolocation.getCurrentPosition(position => {
-        return position;
-    }, err => console.log(err));
+      navigator.geolocation.getCurrentPosition(position => {
+        
+      
 
 
-    isInside = (radius = 100) => {
+      isInside = (radius = 9999999999) => {
         const R = 6371000;
-        if (!this.state.position) {
-            //console.log("No position!")
-            return false;
+        if (!position) {
+          //console.log("No position!")
+          return false;
         }
-        const lat = pos.latitude
-        const lng = pos.longitude
+        const lat = position.coords.latitude
+        const lng = position.coords.longitude
+        console.log("This is the latitude: ", lat)
+        console.log("This is the longitude: ", lng)
+
         //const lat = 60.382186;
         //const lng = 5.332215;
         const lesesalenLat = 60.4595623;
@@ -82,26 +87,60 @@ export default class Main extends React.Component {
         const answer = R * c
         //console.log(answer)
         if (answer > radius) {
-            return false;
+          return false;
         }
+        console.log("Returned true")
         return true;
-    }
-    if (currentUser.uid) {
+      }
+
+      let date = new Date().getDate(); //Current Date
+      let month = new Date().getMonth() + 1; //Current Month
+      let year = new Date().getFullYear(); //Current Year
+      let hours = new Date().getHours(); //Current Hours
+      let min = new Date().getMinutes(); //Current Minutes
+
+      console.log(month)
+
+      let time = {
+        date: date,
+        month: month,
+        year: year,
+        hours: hours,
+        min: min,
+      }
+
+
+      if (currentUser.uid) {
         console.log('THERE IS A USER!')
-        if (!isInside()) {
+        if (isInside()) {
+          if (this.state.isOnLesesalen) {
+            let differenceInTime = ((time.hours - this.state.time.hours) * 60 + (time.min - this.state.time.min))
+            console.log("The difference in time is: ", differenceInTime)
             const recentPost = firebase.database().ref(`allTime/${currentUser.uid}/hours`);
             recentPost.once('value').then(snapshot => {
-                firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                    hours: snapshot.val() + 15,
-                    haveBeenToSchool: true, 
-                })
-                //this.setState({ hours: snapshot.val() + 100 })
+              firebase.database().ref(`allTime/${currentUser.uid}`).update({
+                hours: snapshot.val() + differenceInTime,
+                haveBeenToSchool: true,
+              })
+              //this.setState({ hours: snapshot.val() + 100 })
             })
+          }
+          this.setState({
+            isOnLesesalen: true,
+            time: time
+          })
         }
-    }
-    else {
+        else {
+          console.log("NOT INSIDE")
+          this.setState({
+            isOnLesesalen: false,
+          })
+        }
+      }
+      else {
         console.log('THERE IS NOT A USER!')
-    }
+      }
+    }, err => console.log(err));
       BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
     }, (error) => {
       console.log("[js] RNBackgroundFetch failed to start");
@@ -109,7 +148,7 @@ export default class Main extends React.Component {
 
     // Optional: Query the authorization status.
     BackgroundFetch.status((status) => {
-      switch(status) {
+      switch (status) {
         case BackgroundFetch.STATUS_RESTRICTED:
           console.log("BackgroundFetch restricted");
           break;
