@@ -40,9 +40,9 @@ export default class Profile extends React.Component {
     if (this.state.userId) {
       var input = ""
       firebase.database().ref(`userPictures/${this.state.userId}`).update({
-        photoURL: "https://i.imgur.com/dwH1H2M.jpg" //input denne
+        photoURL: "https://i.imgur.com/wBIga8z.jpg" //input denne
       }).then(() => {
-        this.setState({ profilePic: "https://i.imgur.com/dwH1H2M.jpg" })
+        this.setState({ profilePic: "https://i.imgur.com/wBIga8z.jpg" })
       }).catch((err) => {
         console.log(err)
       })
@@ -52,7 +52,7 @@ export default class Profile extends React.Component {
   fetchProfilePic() {
     const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);
     recentPost.once('value').then(snapshot => {
-      this.setState({profilePic: snapshot.val(), profilepiccheck: true})
+      this.setState({profilePic: snapshot.val().photoURL, profilepiccheck: true})
     }
 
     )
@@ -103,7 +103,7 @@ export default class Profile extends React.Component {
               alignSelf: "center",
             }}
           >
-            {this.state.profilePic ? (<Image source={{ uri: 'https://i.imgur.com/dwH1H2M.jpg' }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
+            {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
 
 
 
