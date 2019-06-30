@@ -64,7 +64,6 @@ export default class Profile extends React.Component {
                 <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
                 <View
                     style={{
-                        backgroundColor: "#bcbec1",
                         alignItems: "center",
                         justifyContent: "center",
                         width: 240,
