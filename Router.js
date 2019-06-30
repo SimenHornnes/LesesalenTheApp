@@ -34,7 +34,7 @@ class Homescreen extends React.Component {
       name: undefined,
       // hours: undefined,
       funfact: undefined,
-      dataSource: [],
+      dataSource: [], //for google calender
       pageToken: '',
       error: null,
 
@@ -65,6 +65,7 @@ class Homescreen extends React.Component {
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson.items)
         this.setState({
           pageToken: responseJson.nextPageToken,
           dataSource: [...this.state.dataSource, ...responseJson.items],
@@ -171,23 +172,28 @@ class Homescreen extends React.Component {
 
 
   render() {
-    //console.log(this.state.dataSource)
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
+    console.log(this.state.name)
+    if (this.state.name) {
+      return (
+        <View style={{ ...styles.HomescreenStyle }}>
 
+          <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+          <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
 
-    return (
-      <View style={{ ...styles.HomescreenStyle }}>
-
-        <View style={{ borderBottomWidth: 2, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '50%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
-
-        <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
-        {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
-        {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
-      </View>
-    );
+          <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
+          {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
+          {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
+          <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
+        </View>
+      );
+    }
+    else {
+      return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
+        <Text style={{ color: 'white' }}> Waiting for data...</Text>
+      </View>)
+    }
   }
 }
 
@@ -200,11 +206,11 @@ const LeaderBoardWrapperView = createStackNavigator(
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
         //THANK YOU SAEED
-        Alltime: ({navigation}) =>
+        Alltime: ({ navigation }) =>
           <AllTimeLeaderBoard navigation={navigation} path="allTime" />,
-        Semester: ({navigation}) =>
+        Semester: ({ navigation }) =>
           <AllTimeLeaderBoard navigation={navigation} path="semester" />,
-        Weekly: ({navigation}) =>
+        Weekly: ({ navigation }) =>
           <AllTimeLeaderBoard navigation={navigation} path="weekly" />,
 
 
@@ -231,13 +237,16 @@ const LeaderBoardWrapperView = createStackNavigator(
     },
     DetailScreen: {
       screen: DetailScreen,
-
+      
     },
   },
 
   {
     initialRouteName: 'Leaderboard',
+    
     defaultNavigationOptions: {
+
+      gesturesEnabled: true,
       headerTintColor: '#fff',
       headerStyle: {
         backgroundColor: 'orange',
@@ -323,6 +332,7 @@ export const SignedIn = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
+      
     }
     /*Leaderboard:  {
       screen: createMaterialTopTabNavigator({
@@ -445,7 +455,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingBottom: 8,
     fontSize: 30,
-    color: 'black',
+    color: 'white',
 
   }
 });

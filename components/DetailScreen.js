@@ -18,7 +18,7 @@ export default class Profile extends React.Component {
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         const { navigation } = this.props;
         //console.log(navigation)
         const uid = navigation.getParam('userId', 'NO-ID');
@@ -30,18 +30,19 @@ export default class Profile extends React.Component {
     fetchProfilePic() {
         const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);
         recentPost.once('value').then(snapshot => {
-            if(snapshot.val().photoURL != null){
-          this.setState({profilePic: snapshot.val().photoURL, profilepiccheck: true})
+            if (snapshot.val().photoURL != null) {
+                this.setState({ profilePic: snapshot.val().photoURL, profilepiccheck: true })
             }
-            else{
-                this.setState({profilePic: null, profilepiccheck: true})
+            else {
+                this.setState({ profilePic: null, profilepiccheck: true })
             }
         }
-    
+
         ).catch((err) => {
             console.log(err)
-          })
-      }
+        })
+    }
+
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
@@ -60,39 +61,39 @@ export default class Profile extends React.Component {
         const doesUserHavePicture = this.state.profilePic != null
         if (this.state.userId && !this.state.profilepiccheck) {
             this.fetchProfilePic()
-          }
-        
-        if(this.state.userId && !this.state.username){
+        }
+
+        if (this.state.userId && !this.state.username) {
             this.fetchData()
         }
         console.log(this.state.profilePic)
-        if(this.state.username && this.state.hours){
-        return (
-            <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
-                <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
-                <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
-                <View
-                    style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 240,
-                        height: 240,
-                        borderRadius: 50,
-                        alignSelf: "center",
-                        marginBottom: 20
-                    }}
-                >
-            {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
-                </View>
+        if (this.state.username && this.state.hours) {
+            return (
+                <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
+                    <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
+                    <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
+                    <View
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 240,
+                            height: 240,
+                            borderRadius: 50,
+                            alignSelf: "center",
+                            marginBottom: 20
+                        }}
+                    >
+                        {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
+                    </View>
 
-            </View>
-        )
-                }
-                else{
-                    return (
-                        <View><Text>Loading</Text></View>
-                    )
-                }
+                </View>
+            )
+        }
+        else {
+            return (
+                <View><Text>Loading</Text></View>
+            )
+        }
     }
 }
 const styles = StyleSheet.create({

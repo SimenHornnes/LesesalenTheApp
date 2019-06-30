@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet, TouchableHighlight, Image } from 'react-native';
+import { View, Dimensions, StyleSheet, TouchableHighlight, Image, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
 import { withNavigation } from 'react-navigation';
+import { Input } from 'react-native-elements';
+import { Header } from 'react-navigation';
+
 
 
 export default class Profile extends React.Component {
@@ -14,6 +17,8 @@ export default class Profile extends React.Component {
       profilePic: undefined,
       hours: 0,
       userId: undefined,
+      buttonPressed: false,
+      acceptButton: false,
     }
   }
 
@@ -37,16 +42,19 @@ export default class Profile extends React.Component {
 
 
   setProfilePic() {
+    console.log("setting pic")
+    
     if (this.state.userId) {
       var input = ""
       firebase.database().ref(`userPictures/${this.state.userId}`).update({
-        photoURL: "https://i.imgur.com/wBIga8z.jpg" //input denne
+        photoURL: this.state.profilePic //input denne
       }).then(() => {
-        this.setState({ profilePic: "https://i.imgur.com/wBIga8z.jpg" })
+        this.setState({ profilePic: this.state.profilePic, profilepiccheck: false, buttonPressed: false })
       }).catch((err) => {
         console.log(err)
       })
     }
+    else{this.setState({buttonPressed: true})}
   }
 
   fetchProfilePic() {
@@ -74,17 +82,25 @@ export default class Profile extends React.Component {
 
 
   render() {
+    console.log(this.state)
     console.log(this.state.profilePic)
     if (this.state.userId && !this.state.profilepiccheck) {
       this.fetchProfilePic()
     }
 
     return (
-      <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
+      <KeyboardAvoidingView
+      keyboardVerticalOffset={Header.HEIGHT + 20}
+      style={{ paddingVertical: 20, backgroundColor: '#2D3245', flex:1, width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height, justifyContent: 'center' }}
+      behavior='padding'
+    >
+      <View>
         <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
         <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
-        <TouchableHighlight underlayColor='orange' activeOpacity={0.5} onPress={() => { this.setProfilePic() }} style={{
+        <TouchableHighlight underlayColor='white' activeOpacity={0.9} onLongPress={() => { this.setState({buttonPressed: true}) }} style={{
           borderColor: 'black',
+          borderWidth: 1,
           alignItems: "center",
           justifyContent: "center",
           width: 240,
@@ -103,15 +119,28 @@ export default class Profile extends React.Component {
               alignSelf: "center",
             }}
           >
-            {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
+            {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Long press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
 
 
 
           </View>
         </TouchableHighlight>
+        {this.state.buttonPressed ? (<Input
+            placeholder=''
+            placeholderTextColor='grey'
+            onChangeText={profilePic => this.setState({
+              profilePic: profilePic
+            })}
+            value={this.state.profilePic}
+
+            inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+            
+          />) : null}
+          {this.state.buttonPressed ? (<Button title= "Accept change" onPress = {() => {this.setProfilePic()}}/>): null }
+         
 
 
-        <View style={{ paddingTop: 5 }}>
+        <View style={{ paddingTop: 30 }}>
           <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
 
             title="SIGN OUT"
@@ -119,6 +148,7 @@ export default class Profile extends React.Component {
           />
         </View>
       </View>
+      </KeyboardAvoidingView>
     )
   }
 }
