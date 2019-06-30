@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, Dimensions, StyleSheet, Image } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
@@ -13,7 +13,8 @@ export default class Profile extends React.Component {
             username: undefined,
             profilePic: undefined,
             hours: 0,
-            userId: undefined
+            userId: undefined,
+            profilepiccheck: false
         }
     }
 
@@ -25,6 +26,15 @@ export default class Profile extends React.Component {
             this.setState({ userId: uid })
         }
     }
+
+    fetchProfilePic() {
+        const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);
+        recentPost.once('value').then(snapshot => {
+          this.setState({profilePic: snapshot.val(), profilepiccheck: true})
+        }
+    
+        )
+      }
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
@@ -40,6 +50,9 @@ export default class Profile extends React.Component {
 
 
     render() {
+        if (this.state.userId && !this.state.profilepiccheck) {
+            this.fetchProfilePic()
+          }
         
         if(this.state.userId && !this.state.username){
             this.fetchData()
@@ -61,7 +74,7 @@ export default class Profile extends React.Component {
                         marginBottom: 20
                     }}
                 >
-                    <Text style={{ color: "white", fontSize: 28 }}>ProfilePic</Text>
+            {this.state.profilePic ? (<Image source={{ uri: 'https://i.imgur.com/dwH1H2M.jpg' }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
                 </View>
 
             </View>
