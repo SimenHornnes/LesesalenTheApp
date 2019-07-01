@@ -39,12 +39,29 @@ export default class SignUp extends React.Component {
             //This is not a User itself, but has a user property, which is a User object.
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredentials) => {
+                    firebase.database().ref(`allTime/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0
+                    })
+                    firebase.database().ref(`semester/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0
+                    })
+                    firebase.database().ref(`weekly/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0
+                    })
+                    //this.setState({ hours: snapshot.val() + 100 })
+
                     if (userCredentials.user) {
-                        userCredentials.user.updateProfile({
-                            displayName: this.state.displayName
-                        }).then((s) => {
-                            this.props.navigation.navigate('SignedIn')
-                        })
+                        userCredentials.user.sendEmailVerification()
+                        userCredentials.user.updateProfile({ displayName: this.state.displayName })
                     }
                 }).catch((_error) => {
                     console.log("Login Failed!", _error);

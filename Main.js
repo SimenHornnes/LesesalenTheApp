@@ -14,32 +14,36 @@ export default class Main extends React.Component {
     super(props)
     this.state = {
       signedIn: false,
-      checkedSignIn: false
+      checkedSignIn: false,
+      username: null,
+      emailVerified: false
     };
   }
-  /*ShowAlertWithDelay = () => {
-
-    setTimeout(function () {
-      console.log("Hellothere")
-
-      //Put All Your Code Here, Which You Want To Execute After Some Delay Time.
-      Alert.alert("Alert Shows After 5 Seconds of Delay.")
-    }, 3000);
-  }
-*/
+ 
 
 
   componentDidMount() {
-    //Det er en mulig feil her når vi loada appen, den blir berre aktivert viss man dobbelttrykke eller staten blir endra
     firebase.auth().onAuthStateChanged(user => {
       //console.log("Changed auth state")
-      //console.log(user)
+      console.log(user)
+      //if (user.displayName) {
       if (user) {
-        this.setState({ signedIn: true, checkedSignIn: true })
+        console.log(user.emailVerified)
+        if (user.emailVerified == true) {
+          console.log("hellofromauthstate")
+          this.setState({ signedIn: true, checkedSignIn: true, username: user.displayName, emailVerified: true })
+        }
+        else {
+          
+          this.setState({ signedIn: false, checkedSignIn: true, username: user.displayName, emailVerified: false })
+        }
       }
       else {
-        this.setState({ signedIn: false, checkedSignIn: true })
+        //if no user exist, viktig for signout
+        this.setState({ signedIn: false, checkedSignIn: true, username: null, emailVerified: false })
       }
+
+
     });
   }
 
@@ -52,7 +56,41 @@ export default class Main extends React.Component {
     YellowBox.ignoreWarnings(['Remote debugger']);
 
     const { checkedSignIn, signedIn } = this.state;
+    console.log(this.state.username)
+    console.log(this.state.emailVerified)
 
+    // If we haven't checked AsyncStorage yet, don't render anything (better ways to do this)
+    if (!checkedSignIn) {
+      return <Loading />;
+    }
+
+    if (this.state.username != null && this.state.emailVerified == true) {
+      console.log("Sign in")
+      const Temp = createRootNavigator(true);
+      const FinalApp = createAppContainer(Temp);
+      return <FinalApp />;
+    }
+    
+    else {
+      console.log("else")
+      const Temp = createRootNavigator(false);
+      const FinalApp = createAppContainer(Temp);
+      return <FinalApp />;
+    }
+  }
+}
+
+
+/*render() {
+    //console.log(this.state)
+    YellowBox.ignoreWarnings(['Warning: Async Storage has been extracted from react-native core']);
+    YellowBox.ignoreWarnings(['Warning: ViewPagerAndroid has been extracted from react-native core']);
+    YellowBox.ignoreWarnings(['Warning: Encountered two children with the same key']);
+    YellowBox.ignoreWarnings(['Setting a timer']);
+    YellowBox.ignoreWarnings(['Remote debugger']);
+
+    const { checkedSignIn, signedIn } = this.state;
+    console.log(this.state.username)
 
     // If we haven't checked AsyncStorage yet, don't render anything (better ways to do this)
     if (!checkedSignIn) {
@@ -62,6 +100,4 @@ export default class Main extends React.Component {
     const Temp = createRootNavigator(signedIn);
     const FinalApp = createAppContainer(Temp);
     return <FinalApp />;
-  }
-}
-
+  }*/

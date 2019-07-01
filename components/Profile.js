@@ -42,6 +42,9 @@ export default class Profile extends React.Component {
 
 
   setProfilePic() {
+    if(this.state.profilePic != null){
+
+    
     console.log("setting pic")
     
     if (this.state.userId) {
@@ -56,6 +59,8 @@ export default class Profile extends React.Component {
     }
     else{this.setState({buttonPressed: true})}
   }
+  else{this.setState({buttonPressed:false})}
+}
 
   fetchProfilePic() {
     const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);

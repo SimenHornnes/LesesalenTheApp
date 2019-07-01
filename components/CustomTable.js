@@ -62,8 +62,8 @@ export default class CustomTable extends Component {
                 </View>
                 <View style={styles.col5}>
                     {e4 > 15 ? (<View><Icon name='md-flame' color='orange' size={34} ></Icon></View>) :
-                        e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={28} ></Icon></View>) :
-                            e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={25} ></Icon></View>) :
+                        e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={30} ></Icon></View>) :
+                            e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={26} ></Icon></View>) :
                                 e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
                                     e4 > 3 ? (<View style={{}}><Icon name='md-flame' color='orange' size={18}></Icon></View>) :
                                         e4 > 2 ? (<Icon name='md-flame' color='orange' size={14}></Icon>) : (null)}
