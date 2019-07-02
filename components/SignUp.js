@@ -57,6 +57,9 @@ export default class SignUp extends React.Component {
                         haveBeenToSchool: false,
                         streak: 0
                     })
+                    firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
+                        photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
+                    })
                     //this.setState({ hours: snapshot.val() + 100 })
 
                     if (userCredentials.user) {

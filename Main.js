@@ -29,14 +29,14 @@ export default class Main extends React.Component {
       //if (user.displayName) {
       if (user) {
         console.log(user.emailVerified)
-        if (user.emailVerified == true) {
+        //if (user.emailVerified == true) {
           console.log("hellofromauthstate")
           this.setState({ signedIn: true, checkedSignIn: true, username: user.displayName, emailVerified: true })
-        }
-        else {
+        //}
+       // else {
           
-          this.setState({ signedIn: false, checkedSignIn: true, username: user.displayName, emailVerified: false })
-        }
+         // this.setState({ signedIn: false, checkedSignIn: true, username: user.displayName, emailVerified: false })
+       // }
       }
       else {
         //if no user exist, viktig for signout
@@ -64,12 +64,20 @@ export default class Main extends React.Component {
       return <Loading />;
     }
 
-    if (this.state.username != null && this.state.emailVerified == true) {
+   /* if (this.state.username != null && this.state.emailVerified == true) {
+      console.log("Sign in")
+      const Temp = createRootNavigator(true);
+      const FinalApp = createAppContainer(Temp);
+      return <FinalApp />;
+    }*/
+    
+    if (this.state.username != null) {
       console.log("Sign in")
       const Temp = createRootNavigator(true);
       const FinalApp = createAppContainer(Temp);
       return <FinalApp />;
     }
+    
     
     else {
       console.log("else")
@@ -79,6 +87,7 @@ export default class Main extends React.Component {
     }
   }
 }
+
 
 
 /*render() {

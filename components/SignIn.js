@@ -20,7 +20,9 @@ export default class SignUp extends React.Component {
       emailError: null,
       passwordError: null,
       resetPasswordError: null,
-      resetPasswordEmailSent: true
+      resetPasswordEmailSent: true,
+      emailVerified: false,
+      success: false
     }
   }
 
@@ -30,7 +32,8 @@ export default class SignUp extends React.Component {
       passwordError: null,
     })
     console.log("Pressed sign in button")
-    const { email, password } = this.state
+    const { email, password } = this.state    
+
     firebase.auth().signInWithEmailAndPassword(email, password)
       .catch((_error) => {
         console.log("Login Failed!", _error);
@@ -45,8 +48,19 @@ export default class SignUp extends React.Component {
           }
         }
 
-      })
+      })//.then(()=> this.warn()).catch((err)=>{console.log(err)})
+     
   }
+  warn(){
+    const curr = firebase.auth().currentUser
+    console.log(curr)
+    if((curr.emailVerified==false) && curr.email && !this.state.emailError && !this.state.passwordError){
+      this.dropDownAlertRef.alertWithType('warn', 'Warn', 'You need to verify your email (and reload the app)');
+    }
+  
+  }
+
+  
   handlePasswordReset = () => {
     this.setState({
       emailError: null,
@@ -72,7 +86,6 @@ export default class SignUp extends React.Component {
 
 
   render() {
-
     return (
       //Finnes bedre ting enn keyboardavoidingview
       <KeyboardAvoidingView

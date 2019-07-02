@@ -42,33 +42,36 @@ export default class Profile extends React.Component {
 
 
   setProfilePic() {
-    if(this.state.profilePic != null){
+    if (this.state.profilePic != null) {
 
-    
-    console.log("setting pic")
-    
-    if (this.state.userId) {
-      var input = ""
-      firebase.database().ref(`userPictures/${this.state.userId}`).update({
-        photoURL: this.state.profilePic //input denne
-      }).then(() => {
-        this.setState({ profilePic: this.state.profilePic, profilepiccheck: false, buttonPressed: false })
-      }).catch((err) => {
-        console.log(err)
-      })
+
+      console.log("setting pic")
+
+      if (this.state.userId) {
+        var input = ""
+        firebase.database().ref(`userPictures/${this.state.userId}`).update({
+          photoURL: this.state.profilePic //input denne
+        }).then(() => {
+          this.setState({ profilePic: this.state.profilePic, profilepiccheck: false, buttonPressed: false })
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
+      else { this.setState({ buttonPressed: true }) }
     }
-    else{this.setState({buttonPressed: true})}
+    else { this.setState({ buttonPressed: false }) }
   }
-  else{this.setState({buttonPressed:false})}
-}
 
   fetchProfilePic() {
     const recentPost = firebase.database().ref(`userPictures/${this.state.userId}`);
     recentPost.once('value').then(snapshot => {
-      this.setState({profilePic: snapshot.val().photoURL, profilepiccheck: true})
+      this.setState({ profilePic: snapshot.val().photoURL, profilepiccheck: true })
     }
 
-    )
+    ).catch(err => {
+      this.setState({ profilePic: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg", profilepiccheck: true })
+      console.log("no profilepic")
+    })
   }
 
 
@@ -93,68 +96,70 @@ export default class Profile extends React.Component {
       this.fetchProfilePic()
     }
 
-    return (
-      <KeyboardAvoidingView
-      keyboardVerticalOffset={Header.HEIGHT + 20}
-      style={{ paddingVertical: 20, backgroundColor: '#2D3245', flex:1, width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height, justifyContent: 'center' }}
-      behavior='padding'
-    >
-      <View>
-        <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
-        <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
-        <TouchableHighlight underlayColor='white' activeOpacity={0.9} onLongPress={() => { this.setState({buttonPressed: true}) }} style={{
-          borderColor: 'black',
-          borderWidth: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          width: 240,
-          height: 240,
-          borderRadius: 50,
-          alignSelf: "center",
-        }}>
+    if (this.state.userId && this.state.profilepiccheck && this.state.username) {
+      return (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={Header.HEIGHT + 20}
+          style={{
+            backgroundColor: '#2D3245', flex: 1, width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height, justifyContent: 'center'
+          }}
+          behavior='padding'
+        >
+          <View>
+            <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
+            <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
 
-          <View
-            style={{
+
+
+            <TouchableHighlight underlayColor='white' activeOpacity={0.9} onLongPress={() => { this.setState({ buttonPressed: true }) }} style={{
               alignItems: "center",
               justifyContent: "center",
-              width: 240,
-              height: 240,
-              borderRadius: 50,
-              alignSelf: "center",
-            }}
-          >
-            {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Long press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
+              alignSelf: "center", width: 340, height: 340, borderRadius: 50,
+            }}>
+
+
+              {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'contain', minWidth: 340, minHeight: 340, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Long press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
 
 
 
+
+            </TouchableHighlight>
+            {this.state.buttonPressed ? (<Input
+              placeholder=''
+              placeholderTextColor='grey'
+              onChangeText={profilePic => this.setState({
+                profilePic: profilePic
+              })}
+              value={this.state.profilePic}
+
+              inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+
+            />) : null}
+            {this.state.buttonPressed ? (<Button title="Accept change" onPress={() => { this.setProfilePic() }} />) : null}
+
+
+
+
+
+            <View >
+              <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
+
+                title="SIGN OUT"
+                onPress={() => (firebase.auth().signOut())}
+              />
+            </View>
           </View>
-        </TouchableHighlight>
-        {this.state.buttonPressed ? (<Input
-            placeholder=''
-            placeholderTextColor='grey'
-            onChangeText={profilePic => this.setState({
-              profilePic: profilePic
-            })}
-            value={this.state.profilePic}
-
-            inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
-            
-          />) : null}
-          {this.state.buttonPressed ? (<Button title= "Accept change" onPress = {() => {this.setProfilePic()}}/>): null }
-         
-
-
-        <View style={{ paddingTop: 30 }}>
-          <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
-
-            title="SIGN OUT"
-            onPress={() => (firebase.auth().signOut())}
-          />
+        </KeyboardAvoidingView>
+      )
+    }
+    else {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
+          <Text style={{ color: 'white' }}> Waiting for data...</Text>
         </View>
-      </View>
-      </KeyboardAvoidingView>
-    )
+      )
+    }
   }
 }
 const styles = StyleSheet.create({
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
     color: 'white',
     justifyContent: 'center',
     alignSelf: 'center',
-    paddingVertical: 15
+    paddingVertical: 10
   }
 });
 
