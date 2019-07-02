@@ -40,7 +40,6 @@ export default class Main extends React.Component {
       // Android options
       stopOnTerminate: false,
       startOnBoot: true,
-      forceReload: true,
       enableHeadless: true,
       requiredNetworkType: BackgroundFetch.NETWORK_TYPE_ANY, // Default
       requiresCharging: false,      // Default
@@ -121,9 +120,16 @@ export default class Main extends React.Component {
               console.log(snapshot.val())
               console.log(time)
               if (snapshot.val().isOnLesesalen) {
-                console.log("This is the difference in time", ((time.hours - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min)))
+                let timeDifference = ((time.hours - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min));
+                if (timeDifference > 60) {
+                  timeDifference = 60;
+                }
+                if (time.hours < snapshot.val().time.hours) {
+                  timeDifference = ((time.hours + 24 - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min))
+                }
+                console.log("This is the difference in time", timeDifference)
                 firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                  hours: snapshot.val().hours + ((time.hours - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min)),
+                  hours: snapshot.val().hours + timeDifference,
                   haveBeenToSchool: true,
                   isOnLesesalen: true,
                   time: time
@@ -174,6 +180,7 @@ export default class Main extends React.Component {
       }
     });
     //Det er en mulig feil her når vi loada appen, den blir berre aktivert viss man dobbelttrykke eller staten blir endra
+
     firebase.auth().onAuthStateChanged(user => {
       //console.log("Changed auth state")
       //console.log(user)

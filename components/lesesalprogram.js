@@ -16,8 +16,8 @@ export default class LesesalProgram extends Component {
         return (
             <View
                 style={{
-                    borderWidth: 1,
-                    borderColor: '#7FC3F5',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#7FC3F5',
                     height: 1,
                     width: "100%",
                     backgroundColor: "#000",
@@ -52,14 +52,14 @@ export default class LesesalProgram extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#2D3245'
+        backgroundColor: '#2D3245',
     },
     item: {
         //paddingTop: 13,
         paddingLeft: 15,
         fontSize: 16,
-        textAlignVertical: 'bottom',
-            height: 40,
+        textAlignVertical: 'center',
+        height: 75,
         color: 'white',
 
     },

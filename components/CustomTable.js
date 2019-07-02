@@ -119,15 +119,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white',textAlign: 'right', alignSelf: 'stretch'
     },
-
+ 
     places: {
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
         color: 'white'
     },
-
+ 
     col1: {
+        flex: 1,
         justifyContent: 'flex-start',
         flexDirection: 'row',
         marginLeft: 15,
@@ -158,3 +159,4 @@ const styles = StyleSheet.create({
         marginLeft:-5
     }
 });
+

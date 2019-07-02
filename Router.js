@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
@@ -51,6 +51,10 @@ class Homescreen extends React.Component {
   }
 
   componentWillMount() {
+    const { currentUser } = firebase.auth()
+    if (currentUser != null) {
+      this.setState({ userId: currentUser.uid, name: currentUser.displayName })
+    }
     this.displayGoogleCalendar()
     this.DidYouKnow()
   }
@@ -92,7 +96,7 @@ class Homescreen extends React.Component {
           lng: position.coords.longitude,
           lat: position.coords.latitude
         }
-        
+
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
@@ -177,25 +181,20 @@ class Homescreen extends React.Component {
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
     console.log(this.state.name)
-    if (this.state.name) {
-      return (
-        <View style={{ ...styles.HomescreenStyle }}>
+    return (
+      <View style={{ ...styles.HomescreenStyle }}>
+        <StatusBar backgroundColor='#D2922D' barStyle="light-content" />
 
-          <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-          <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+        <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+        <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
 
-          <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
-          {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
-          {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-          <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
-        </View>
-      );
-    }
-    else {
-      return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
-        <Text style={{ color: 'white' }}> Waiting for data...</Text>
-      </View>)
-    }
+        <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
+        {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
+        {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
+        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
+      </View>
+    );
+
   }
 }
 
@@ -204,7 +203,7 @@ class Homescreen extends React.Component {
 const sizeOfIcons = 32;
 
 const LeaderBoardWrapperView = createStackNavigator(
-  
+
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
@@ -240,13 +239,13 @@ const LeaderBoardWrapperView = createStackNavigator(
     },
     DetailScreen: {
       screen: DetailScreen,
-      
+
     },
   },
 
   {
     initialRouteName: 'Leaderboard',
-    
+
     defaultNavigationOptions: {
 
       gesturesEnabled: true,
@@ -336,7 +335,7 @@ export const SignedIn = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
-      
+
     }
     /*Leaderboard:  {
       screen: createMaterialTopTabNavigator({
