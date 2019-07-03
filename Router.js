@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
+import { Platform, StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
@@ -24,6 +24,24 @@ import DetailScreen from './components/DetailScreen'
 
 
 
+async function requestLocationPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Permission',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the camera');
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
 class Homescreen extends React.Component {
   constructor(props) {
     super(props);
@@ -40,21 +58,22 @@ class Homescreen extends React.Component {
 
     }
   }
+  
 
-  componentDidMount() {
+
+  
+  componentWillMount() {
+    
     const { currentUser } = firebase.auth()
-    //console.log(currentUser)
+    console.log("compdidmount")
     if (currentUser != null) {
       this.setState({ userId: currentUser.uid, name: currentUser.displayName })
     }
     console.log("THIS IS THE USERNAME: ", this.state.name)
   }
 
-  componentWillMount() {
-    const { currentUser } = firebase.auth()
-    if (currentUser != null) {
-      this.setState({ userId: currentUser.uid, name: currentUser.displayName })
-    }
+  componentDidMount() {
+    requestLocationPermission()
     this.displayGoogleCalendar()
     this.DidYouKnow()
   }
@@ -70,7 +89,6 @@ class Homescreen extends React.Component {
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.items)
         this.setState({
           pageToken: responseJson.nextPageToken,
           dataSource: [...this.state.dataSource, ...responseJson.items],
@@ -140,12 +158,10 @@ class Homescreen extends React.Component {
   isInside = radius => {
     const R = 6371000;
     if (!this.state.position) {
-      //console.log("No position!")
       return false;
     }
     const { lat, lng } = this.state.position;
-    //const lat = 60.382186;
-    //const lng = 5.332215;
+   
     const lesesalenLat = 60.381192;
     const lesesalenLng = 5.331556;
     const radians = Math.PI / 180.0;
@@ -155,12 +171,9 @@ class Homescreen extends React.Component {
     const triLong = Math.abs(lesesalenLng - lng) * radians;
 
     const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(lat * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-    //console.log(a)
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    //console.log(c)
     const answer = R * c
-    //console.log(answer)
     if (answer > radius) {
       return false;
     }
@@ -171,7 +184,6 @@ class Homescreen extends React.Component {
     const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
       "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
     const rand = Math.floor(Math.random() * didYouKnow.length);
-    console.log(didYouKnow[rand])
     this.setState({ funfact: didYouKnow[rand] })
 
   };
@@ -181,21 +193,22 @@ class Homescreen extends React.Component {
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
     console.log(this.state.name)
-    return (
-      <View style={{ ...styles.HomescreenStyle }}>
-        <StatusBar backgroundColor='#D2922D' barStyle="light-content" />
+    
+      return (
+        <View style={{ ...styles.HomescreenStyle }}>
 
-        <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+          <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+          <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
 
-        <ShowUserLocation title={"Send user location"} position={this.getUserCoord} />
-        {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
-        {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
-      </View>
-    );
-
-  }
+          {this.state.name ? (<ShowUserLocation title={"Send user location"} position={this.getUserCoord}/>) : null}
+          {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
+          {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
+          <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
+        </View>
+      );
+    }
+   
+  
 }
 
 
@@ -378,7 +391,7 @@ export const SignedIn = createBottomTabNavigator(
         Profile: () =>
           <Profile />,
         Achievements: () =>
-          <Achievements userId={this.state.userId} />,
+          <Achievements/>,
 
       }, {
           tabBarOptions: {

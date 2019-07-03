@@ -37,14 +37,77 @@ export default class SignUp extends React.Component {
         if (this.state.displayName.length > 4 && this.state.displayName.length < 16) {
             //The createUserWithEmailAndPassword method returns a UserCredential object. 
             //This is not a User itself, but has a user property, which is a User object.
+            const hourList = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree']
+            const hourNumList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            let date = new Date().getDate(); //Current Date
+            let month = new Date().getMonth() + 1; //Current Month
+            let year = new Date().getFullYear(); //Current Year
+            let hours = new Date().getHours(); //Current Hours
+            let min = new Date().getMinutes(); //Current Minutes
+
+
+            let time = {
+                date: date,
+                month: month,
+                year: year,
+                hours: hours,
+                min: min,
+            }
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredentials) => {
-                    if (userCredentials.user) {
-                        userCredentials.user.updateProfile({
-                            displayName: this.state.displayName
-                        }).then((s) => {
-                            this.props.navigation.navigate('SignedIn')
+
+                    firebase.database().ref(`allTime/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0,
+                        totalHoursToday: 0,
+                        time: time,
+                        isOnLesesalen: true,
+                        
+                    })
+                    firebase.database().ref(`semester/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0,
+                        totalHoursToday: 0, 
+                        time: time,
+                        isOnLesesalen: true,
+
+                    })
+                    firebase.database().ref(`weekly/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
+                        hours: 0,
+                        haveBeenToSchool: false,
+                        streak: 0,
+                        totalHoursToday: 0,
+                        time: time,
+                        isOnLesesalen: true,
+
+                    })
+                    hourNumList.forEach(num => {
+                        firebase.database().ref(`allTime/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
                         })
+                        firebase.database().ref(`semester/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
+                        })
+                        firebase.database().ref(`weekly/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
+                        })
+                    });
+                    firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
+                        photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
+                    })
+                    //this.setState({ hours: snapshot.val() + 100 })
+
+                    if (userCredentials.user) {
+                        userCredentials.user.sendEmailVerification()
+                        userCredentials.user.updateProfile({ displayName: this.state.displayName })
+                            .then(() => {
+                                firebase.auth().signOut()
+                            })
                     }
                 }).catch((_error) => {
                     console.log("Login Failed!", _error);

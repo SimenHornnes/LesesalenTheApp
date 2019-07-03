@@ -52,7 +52,6 @@ export default fetchData = async () => {
         let hours = new Date().getHours(); //Current Hours
         let min = new Date().getMinutes(); //Current Minutes
 
-        console.log(month)
 
         let time = {
             date: date,
