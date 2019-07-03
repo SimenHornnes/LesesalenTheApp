@@ -37,26 +37,45 @@ export default class SignUp extends React.Component {
         if (this.state.displayName.length > 4 && this.state.displayName.length < 16) {
             //The createUserWithEmailAndPassword method returns a UserCredential object. 
             //This is not a User itself, but has a user property, which is a User object.
+
+            const hourList = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree']
+            const hourNumList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+
+
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredentials) => {
                     firebase.database().ref(`allTime/${userCredentials.user.uid}`).set({
                         name: this.state.displayName,
                         hours: 0,
                         haveBeenToSchool: false,
-                        streak: 0
+                        streak: 0,
+                        totalHoursToday: 0
                     })
                     firebase.database().ref(`semester/${userCredentials.user.uid}`).set({
                         name: this.state.displayName,
                         hours: 0,
                         haveBeenToSchool: false,
-                        streak: 0
+                        streak: 0,
+                        totalHoursToday: 0
                     })
                     firebase.database().ref(`weekly/${userCredentials.user.uid}`).set({
                         name: this.state.displayName,
                         hours: 0,
                         haveBeenToSchool: false,
-                        streak: 0
+                        streak: 0,
+                        totalHoursToday: 0
                     })
+                    hourNumList.forEach(num => {
+                        firebase.database().ref(`allTime/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
+                        })
+                        firebase.database().ref(`semester/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
+                        })
+                        firebase.database().ref(`weekly/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                            thisHour: false
+                        })
+                    });
                     firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
                         photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
                     })
