@@ -9,6 +9,8 @@ import Loading from './Loading'
 //Blir ikke brukt i koden, men initialiserer firebasedatabasen
 import { Firebase } from './components/src/Config';
 import BackgroundFetch from "react-native-background-fetch";
+import fetchData from './components/BackgroundFetch'
+
 
 
 export default class Main extends React.Component {
@@ -51,115 +53,7 @@ export default class Main extends React.Component {
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
       // or assign battery-blame for consuming too much background-time
-      const { currentUser } = firebase.auth()
-
-      navigator.geolocation.getCurrentPosition(position => {
-
-
-
-
-        isInside = (radius = 9999999999) => {
-          const R = 6371000;
-          if (!position) {
-            //console.log("No position!")
-            return false;
-          }
-          const lat = position.coords.latitude
-          const lng = position.coords.longitude
-          console.log("This is the latitude: ", lat)
-          console.log("This is the longitude: ", lng)
-
-          //const lat = 60.382186;
-          //const lng = 5.332215;
-          const lesesalenLat = 60.4595623;
-          const lesesalenLng = 5.3279822;
-          const radians = Math.PI / 180.0;
-          const rlesesalenLat = lesesalenLat * radians;
-          const rlat = lat * radians;
-          const triLat = Math.abs(lat - lesesalenLat) * radians;
-          const triLong = Math.abs(lesesalenLng - lng) * radians;
-
-          const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(lat * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-          //console.log(a)
-
-          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          //console.log(c)
-          const answer = R * c
-          //console.log(answer)
-          if (answer > radius) {
-            return false;
-          }
-          console.log("Returned true")
-          return true;
-        }
-
-        let date = new Date().getDate(); //Current Date
-        let month = new Date().getMonth() + 1; //Current Month
-        let year = new Date().getFullYear(); //Current Year
-        let hours = new Date().getHours(); //Current Hours
-        let min = new Date().getMinutes(); //Current Minutes
-
-        console.log(month)
-
-        let time = {
-          date: date,
-          month: month,
-          year: year,
-          hours: hours,
-          min: min,
-        }
-
-        console.log(time)
-
-
-        if (currentUser) {
-          console.log('THERE IS A USER!')
-          const recentPost = firebase.database().ref(`allTime/${currentUser.uid}`);
-          if (isInside()) {
-            recentPost.once('value').then(snapshot => {
-              console.log(snapshot.val())
-              console.log(time)
-              if (snapshot.val().isOnLesesalen) {
-                let timeDifference = ((time.hours - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min));
-                if (timeDifference > 60) {
-                  timeDifference = 60;
-                }
-                if (time.hours < snapshot.val().time.hours) {
-                  timeDifference = ((time.hours + 24 - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min))
-                }
-                console.log("This is the difference in time", timeDifference)
-                firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                  hours: snapshot.val().hours + timeDifference,
-                  haveBeenToSchool: true,
-                  isOnLesesalen: true,
-                  time: time
-                })
-              }
-              else {
-                firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                  haveBeenToSchool: true,
-                  isOnLesesalen: true,
-                  time: time
-                })
-              }
-
-              //this.setState({ hours: snapshot.val() + 100 })
-            })
-          }
-          else {
-            recentPost.once('value').then(snapshot => {
-              firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                isOnLesesalen: false,
-                time: time
-              })
-              //this.setState({ hours: snapshot.val() + 100 })
-            })
-          }
-        }
-        else {
-          console.log('THERE IS NOT A USER!')
-        }
-      }, err => console.log(err));
+      fetchData()
       BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
     }, (error) => {
       console.log("[js] RNBackgroundFetch failed to start");

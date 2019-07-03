@@ -1,17 +1,8 @@
-
-/**
- * @format
- */
-import { AppRegistry } from 'react-native';
-import App from './App';
-import { name as appName } from './app.json';
 import BackgroundFetch from "react-native-background-fetch";
 import firebase from 'firebase/app';
-import fetchData from './components/BackgroundFetch'
 
 
-
-/*let fetchData = async () => {
+export default fetchData = async () => {
     const { currentUser } = await firebase.auth()
     console.log("This is the current user", currentUser)
 
@@ -133,37 +124,3 @@ import fetchData from './components/BackgroundFetch'
         }
     }, err => console.log(err));
 }
-*/
-
-let MyHeadlessTask = async () => {
-    console.log('[BackgroundFetch HeadlessTask] start');
-
-    firebase.auth().onAuthStateChanged(user => {
-        console.log("Changed auth state")
-        //console.log(user)
-        if (user) {
-            console.log("Changed auth state to logged in")
-            fetchData()
-
-        }
-        else {
-            console.log("Changed auth state to not logged in")
-
-        }
-    });
-
-
-
-    const { currentUser } = await firebase.auth()
-    if (currentUser) {
-        fetchData()
-    }
-    
-    BackgroundFetch.finish();
-}
-
-// Register your BackgroundFetch HeadlessTask
-AppRegistry.registerComponent(appName, () => App);
-
-BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
-
