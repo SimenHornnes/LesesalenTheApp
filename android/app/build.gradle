@@ -138,6 +138,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-background-fetch')
+    implementation project(':lottie-react-native')
     implementation project(':react-native-boundary')
     implementation project(':react-native-background-task')
     implementation project(':react-native-background-job')

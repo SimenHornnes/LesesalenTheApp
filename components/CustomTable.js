@@ -23,33 +23,33 @@ export default class CustomTable extends Component {
     }
 
     componentDidMount() {
-    const { currentUser } = firebase.auth()
-    this.setState({ userId: currentUser.uid })
+        const { currentUser } = firebase.auth()
+        this.setState({ userId: currentUser.uid })
 
     }
-    
-    renderRow (e1, e2, e3, e4, userId) {
-        return (
-            <TouchableHighlight onPress={() => { this.props.navigation.navigate("DetailScreen", {userId}) }} 
-            underlayColor="white">
 
-            <View style={styles.wrapper}>
-                <View style={styles.col1}>
-                    <Text style={styles.places}>{e1 + 1}. </Text>
-                    {e1 == 0 || e1 == 1 || e1 == 2 ? (
-                        e1 == 0 ? (
-                            <Icon name='md-trophy' color='gold' size={30}></Icon>
+    renderRow(e1, e2, e3, e4, userId) {
+        return (
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate("DetailScreen", { userId }) }}
+                underlayColor="white">
+
+                <View style={styles.wrapper}>
+                    <View style={styles.col1}>
+                        <Text style={styles.places}>{e1 + 1}. </Text>
+                        {e1 == 0 || e1 == 1 || e1 == 2 ? (
+                            e1 == 0 ? (
+                                <Icon name='md-trophy' color='gold' size={30}></Icon>
+                            ) : (
+                                    e1 == 1 ? (
+                                        <Icon name='md-trophy' color='silver' size={27.5}></Icon>
+                                    ) : (
+                                            <Icon name='md-trophy' color='#cd7f32' size={25}></Icon>
+                                        )
+                                )
                         ) : (
-                                e1 == 1 ? (
-                                    <Icon name='md-trophy' color='silver' size={27.5}></Icon>
-                                ) : (
-                                        <Icon name='md-trophy' color='#cd7f32' size={25}></Icon>
-                                    )
-                            )
-                    ) : (
-                            null
-                        )}
-                </View>
+                                null
+                            )}
+                    </View>
                     <View style={styles.col2}>
                         <Text style={[styles.text, userId == this.state.userId && { fontWeight: 'bold', color: '#7FC3F5' }]}>{e2}</Text>
                     </View>
@@ -69,7 +69,7 @@ export default class CustomTable extends Component {
                                         e4 > 2 ? (<Icon name='md-flame' color='orange' size={14}></Icon>) : (null)}
                 </View>
 
-            </View>
+                </View>
             </TouchableHighlight>
 
         );
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'grey',
         borderBottomWidth: 1,
         backgroundColor: '#2D3245',
-        height: 61.8,
+        height: 75,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -119,14 +119,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white',textAlign: 'right', alignSelf: 'stretch'
     },
-
+ 
     places: {
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
         color: 'white'
     },
-
+ 
     col1: {
         flex: 1,
         justifyContent: 'flex-start',
@@ -159,3 +159,4 @@ const styles = StyleSheet.create({
         marginLeft:-5
     }
 });
+

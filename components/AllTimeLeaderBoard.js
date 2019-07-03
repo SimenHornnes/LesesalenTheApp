@@ -27,6 +27,15 @@ export default class Leaderboard extends React.Component {
     
   }
 
+
+
+  componentWillMount() {
+    const { currentUser } = firebase.auth()
+    //console.log(currentUser)
+    this.setState({ username: currentUser.displayName })
+  }
+
+
   componentDidMount() {
     this.fetchData().done()
 
@@ -38,8 +47,10 @@ export default class Leaderboard extends React.Component {
   }
 
   async fetchData() {
+    const { currentUser } = firebase.auth()
     await this.setState({
-      highScoreList: []
+      highScoreList: [],
+      username: currentUser.displayName
     })
     const ref = firebase.database().ref(this.props.path)
 
@@ -72,6 +83,8 @@ export default class Leaderboard extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
+              progressBackgroundColor="orange"
+              colors= {['white']}
             />
           }>
             <CustomTable navigation={this.props.navigation} list={this.state.highScoreList} name={this.state.username}></CustomTable>

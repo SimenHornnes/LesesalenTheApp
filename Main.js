@@ -8,6 +8,10 @@ import { YellowBox } from 'react-native';
 import Loading from './Loading'
 //Blir ikke brukt i koden, men initialiserer firebasedatabasen
 import { Firebase } from './components/src/Config';
+import BackgroundFetch from "react-native-background-fetch";
+import fetchData from './components/BackgroundFetch'
+
+
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -15,14 +19,64 @@ export default class Main extends React.Component {
     this.state = {
       signedIn: false,
       checkedSignIn: false,
+      isOnLesesalen: false,
+      time: undefined,
       username: null,
       emailVerified: false
     };
   }
+  /*ShowAlertWithDelay = () => {
  
+    setTimeout(function () {
+      console.log("Hellothere")
+ 
+      //Put All Your Code Here, Which You Want To Execute After Some Delay Time.
+      Alert.alert("Alert Shows After 5 Seconds of Delay.")
+    }, 3000);
+  }
+*/
 
 
   componentDidMount() {
+    // Configure it.
+    BackgroundFetch.configure({
+      minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
+      // Android options
+      stopOnTerminate: false,
+      startOnBoot: true,
+      enableHeadless: true,
+      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_ANY, // Default
+      requiresCharging: false,      // Default
+      requiresDeviceIdle: false,    // Default
+      requiresBatteryNotLow: false, // Default
+      requiresStorageNotLow: false  // Default
+    }, () => {
+      console.log("[js] Received background-fetch event");
+      // Required: Signal completion of your task to native code
+      // If you fail to do this, the OS can terminate your app
+      // or assign battery-blame for consuming too much background-time
+      fetchData()
+      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+    }, (error) => {
+      console.log("[js] RNBackgroundFetch failed to start");
+    });
+
+    // Optional: Query the authorization status.
+    BackgroundFetch.status((status) => {
+      switch (status) {
+        case BackgroundFetch.STATUS_RESTRICTED:
+          console.log("BackgroundFetch restricted");
+          break;
+        case BackgroundFetch.STATUS_DENIED:
+          console.log("BackgroundFetch denied");
+          break;
+        case BackgroundFetch.STATUS_AVAILABLE:
+          console.log("BackgroundFetch is enabled");
+          break;
+      }
+    });
+    //Det er en mulig feil her når vi loada appen, den blir berre aktivert viss man dobbelttrykke eller staten blir endra
+
     firebase.auth().onAuthStateChanged(user => {
       //console.log("Changed auth state")
       console.log(user)
@@ -109,4 +163,6 @@ export default class Main extends React.Component {
     const Temp = createRootNavigator(signedIn);
     const FinalApp = createAppContainer(Temp);
     return <FinalApp />;
+  }
+}
   }*/

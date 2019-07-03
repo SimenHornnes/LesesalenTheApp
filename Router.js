@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
 import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
@@ -24,6 +24,24 @@ import DetailScreen from './components/DetailScreen'
 
 
 
+async function requestLocationPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Permission',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the camera');
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
 class Homescreen extends React.Component {
   constructor(props) {
     super(props);
@@ -42,15 +60,20 @@ class Homescreen extends React.Component {
   }
   
 
+
+  
   componentWillMount() {
+    
     const { currentUser } = firebase.auth()
     console.log("compdidmount")
     if (currentUser != null) {
       this.setState({ userId: currentUser.uid, name: currentUser.displayName })
     }
+    console.log("THIS IS THE USERNAME: ", this.state.name)
   }
 
   componentDidMount() {
+    requestLocationPermission()
     this.displayGoogleCalendar()
     this.DidYouKnow()
   }
@@ -91,6 +114,7 @@ class Homescreen extends React.Component {
           lng: position.coords.longitude,
           lat: position.coords.latitude
         }
+
       });
       if (this.isInside(999999999999999.9)) {
         if (this.state.userId) {
@@ -192,6 +216,7 @@ class Homescreen extends React.Component {
 const sizeOfIcons = 32;
 
 const LeaderBoardWrapperView = createStackNavigator(
+
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
@@ -227,13 +252,13 @@ const LeaderBoardWrapperView = createStackNavigator(
     },
     DetailScreen: {
       screen: DetailScreen,
-      
+
     },
   },
 
   {
     initialRouteName: 'Leaderboard',
-    
+
     defaultNavigationOptions: {
 
       gesturesEnabled: true,
@@ -309,6 +334,7 @@ export const SignedOut = createStackNavigator(
       },
     }
   });
+
 export const SignedIn = createBottomTabNavigator(
   {
     Homescreen: {
@@ -322,7 +348,7 @@ export const SignedIn = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
-      
+
     }
     /*Leaderboard:  {
       screen: createMaterialTopTabNavigator({
@@ -334,12 +360,13 @@ export const SignedIn = createBottomTabNavigator(
           <AllTimeLeaderBoard path="weekly" />,
 
 
-      }, {
+      },
+      {
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
               fontSize: 16,
-              fontWeight: '300'
+              fontWeight: '300',
             },
             indicatorStyle: { backgroundColor: 'transparent' },
             activeTintColor: 'white',
@@ -347,6 +374,11 @@ export const SignedIn = createBottomTabNavigator(
             style: {
               backgroundColor: 'orange'
             }
+          }
+        },
+        {
+          navigationOptions: {
+            headerTitle: 'Leaderboard'
           }
         }
       ),
