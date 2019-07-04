@@ -31,7 +31,6 @@ export default class SignUp extends React.Component {
       emailError: null,
       passwordError: null,
     })
-    console.log("Pressed sign in button")
     const { email, password } = this.state    
 
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -53,7 +52,6 @@ export default class SignUp extends React.Component {
   }
   warn(){
     const curr = firebase.auth().currentUser
-    console.log(curr)
     if((curr.emailVerified==false) && curr.email && !this.state.emailError && !this.state.passwordError){
       this.dropDownAlertRef.alertWithType('warn', 'Warn', 'You need to verify your email (and reload the app)');
     }

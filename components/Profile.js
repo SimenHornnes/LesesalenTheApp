@@ -37,15 +37,26 @@ export default class Profile extends React.Component {
       }
       )
 
+
+
     }
+  }
+
+  componentDidMount() {
+    const { currentUser } = firebase.auth()
+    const ref = firebase.database().ref(`allTime/${currentUser.uid}`);
+    ref.on('child_changed', (snapshot) => {
+      if (snapshot.key === 'hours') {
+        this.setState({
+          hours: snapshot.val()
+        })
+      }
+    })
   }
 
 
   setProfilePic() {
     if (this.state.profilePic != null) {
-
-
-      console.log("setting pic")
 
       if (this.state.userId) {
         var input = ""
@@ -81,7 +92,6 @@ export default class Profile extends React.Component {
 
 
   /*fetchingHours() {
-    console.log("henter hours")
     const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
     recentPost.once('value').then(snapshot => {
       this.setState({ hours: snapshot.val() })
@@ -90,8 +100,6 @@ export default class Profile extends React.Component {
 
 
   render() {
-    console.log(this.state)
-    console.log(this.state.profilePic)
     if (this.state.userId && !this.state.profilepiccheck) {
       this.fetchProfilePic()
     }

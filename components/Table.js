@@ -13,10 +13,7 @@ export default class ExampleThree extends Component {
  
   render() {
     const state = this.state;
-    //const tableData = [[1,2,3,4],[1,2,'Torjus Schaathun',4],[2,3,4,5],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
     const tableData = this.props.list
-    console.log(tableData)
-
  
     return (
       <View style={styles.container}>

@@ -21,7 +21,6 @@ export default class Profile extends React.Component {
 
     componentWillMount() {
         const { navigation } = this.props;
-        //console.log(navigation)
         const uid = navigation.getParam('userId', 'NO-ID');
         if (!this.state.userId) {
             this.setState({ userId: uid })

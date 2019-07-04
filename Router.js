@@ -58,12 +58,12 @@ class Homescreen extends React.Component {
 
     }
   }
-  
 
 
-  
+
+
   componentWillMount() {
-    
+
     const { currentUser } = firebase.auth()
     console.log("compdidmount")
     if (currentUser != null) {
@@ -107,7 +107,6 @@ class Homescreen extends React.Component {
 
 
   getUserCoord = () => {
-    //console.log("pressed")
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         position: {
@@ -161,7 +160,7 @@ class Homescreen extends React.Component {
       return false;
     }
     const { lat, lng } = this.state.position;
-   
+
     const lesesalenLat = 60.381192;
     const lesesalenLng = 5.331556;
     const radians = Math.PI / 180.0;
@@ -192,23 +191,23 @@ class Homescreen extends React.Component {
   render() {
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
-    console.log(this.state.name)
-    
-      return (
-        <View style={{ ...styles.HomescreenStyle }}>
 
-          <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-          <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+    return (
+      <View style={{ ...styles.HomescreenStyle }}>
+        <StatusBar backgroundColor="#D2922D" />
 
-          {this.state.name ? (<ShowUserLocation title={"Send user location"} position={this.getUserCoord}/>) : null}
-          {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
-          {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-          <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
-        </View>
-      );
-    }
-   
-  
+        <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
+        <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+
+        {this.state.name ? (<ShowUserLocation title={"Send user location"} position={this.getUserCoord} />) : null}
+        {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
+        {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
+        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
+      </View>
+    );
+  }
+
+
 }
 
 
@@ -233,21 +232,22 @@ const LeaderBoardWrapperView = createStackNavigator(
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: '300'
             },
-            indicatorStyle: { backgroundColor: 'transparent' },
+
+            indicatorStyle: { backgroundColor: 'white' },
             activeTintColor: 'white',
             inactiveTintColor: '#2D3245',
             style: {
-              backgroundColor: 'orange'
+              borderTopColor: 'transparent',
+              backgroundColor: 'orange',
             }
           }
         }
       ),
       navigationOptions: {
-        header: null,
-        headerMode: 'none'
+        header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}> Leaderboard </Text>,
       }
     },
     DetailScreen: {
@@ -269,6 +269,60 @@ const LeaderBoardWrapperView = createStackNavigator(
     }
   })
 
+
+
+
+
+const profileWrapperView = createStackNavigator(
+
+  {
+    Profile: {
+      screen: createMaterialTopTabNavigator({
+        Profile: () =>
+          <Profile />,
+        Achievements: () =>
+          <Achievements />,
+
+      }, {
+          tabBarOptions: {
+            pressColor: 'white',
+            labelStyle: {
+              fontSize: 16,
+              fontWeight: '300'
+            },
+            indicatorStyle: { backgroundColor: 'white' },
+            activeTintColor: 'white',
+            inactiveTintColor: '#2D3245',
+            style: {
+              backgroundColor: 'orange'
+            }
+          }
+
+        }
+      ),
+      navigationOptions: {
+        header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '3%', paddingTop: '3%' }}>Profile </Text>,
+      }
+    },
+
+    DetailScreen: {
+      screen: DetailScreen,
+
+    },
+  },
+
+  {
+    initialRouteName: 'Profile',
+
+    defaultNavigationOptions: {
+
+      gesturesEnabled: true,
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'orange',
+      },
+    }
+  })
 
 
 /*const Leaderboard = createMaterialTopTabNavigator({
@@ -349,6 +403,13 @@ export const SignedIn = createBottomTabNavigator(
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
 
+    },
+    Profile: {
+      screen: profileWrapperView,
+      navigationOptions: {
+        tabBarIcon: () => { return (<Icon name='md-person' size={sizeOfIcons} color='#2D3245' />) }
+
+      }
     }
     /*Leaderboard:  {
       screen: createMaterialTopTabNavigator({
@@ -386,33 +447,7 @@ export const SignedIn = createBottomTabNavigator(
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
     }*/,
-    Profile: {
-      screen: createMaterialTopTabNavigator({
-        Profile: () =>
-          <Profile />,
-        Achievements: () =>
-          <Achievements/>,
 
-      }, {
-          tabBarOptions: {
-            pressColor: 'white',
-            labelStyle: {
-              fontSize: 16,
-              fontWeight: '300'
-            },
-            indicatorStyle: { backgroundColor: 'transparent' },
-            activeTintColor: 'white',
-            inactiveTintColor: '#2D3245',
-            style: {
-              backgroundColor: 'orange'
-            }
-          }
-        }
-      ),
-      navigationOptions: {
-        tabBarIcon: () => { return (<Icon name='md-person' size={sizeOfIcons} color='#2D3245' />) }
-      }
-    },
   },
   {
 

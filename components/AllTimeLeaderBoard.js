@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, Dimensions, ScrollView, RefreshContro
 import firebase from 'firebase/app';
 import { Table, TableWrapper, Row } from 'react-native-table-component';
 import CustomTable from './CustomTable'
+import fetchData from './BackgroundFetch'
 
 
 
@@ -24,14 +25,13 @@ export default class Leaderboard extends React.Component {
     this.fetchData().then(() => {
       this.setState({ refreshing: false });
     });
-    
+
   }
 
 
 
   componentWillMount() {
     const { currentUser } = firebase.auth()
-    //console.log(currentUser)
     this.setState({ username: currentUser.displayName })
   }
 
@@ -41,21 +41,32 @@ export default class Leaderboard extends React.Component {
 
     //For å displaye currentuser i tabellen
     const { currentUser } = firebase.auth()
-    //console.log(currentUser)
     this.setState({ username: currentUser.displayName })
 
   }
 
   async fetchData() {
+    fetchData()
     const { currentUser } = firebase.auth()
     await this.setState({
       highScoreList: [],
       username: currentUser.displayName
     })
     const ref = firebase.database().ref(this.props.path)
+    ref.orderByChild('hours').on('child_changed', async (snapshot) => {
+      let lista = ({
+        id: await (snapshot.key),
+        hours: await (snapshot.val().hours),
+        name: await (snapshot.val().name),
+        streak: await (snapshot.val().streak)
+      });
+
+      const newList = this.state.highScoreList.map(el => el.id === lista.id ? lista : el).sort((a, b) => a.hours - b.hours)
+
+      this.setState({ highScoreList: newList })
+    })
 
     ref.orderByChild('hours').on('child_added', async (snapshot) => {
-      //console.log(snapshot.key + " " + snapshot.val().hours)
       const lista = this.state.highScoreList
 
       lista.push({
@@ -67,13 +78,15 @@ export default class Leaderboard extends React.Component {
 
       this.setState({ highScoreList: lista })
     });
+
+
   }
 
 
 
   render() {
-  
-    
+
+
     if (this.state.highScoreList.length) {
 
       return (
@@ -84,7 +97,7 @@ export default class Leaderboard extends React.Component {
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
               progressBackgroundColor="orange"
-              colors= {['white']}
+              colors={['white']}
             />
           }>
             <CustomTable navigation={this.props.navigation} list={this.state.highScoreList} name={this.state.username}></CustomTable>

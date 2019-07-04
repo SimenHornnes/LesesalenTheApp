@@ -130,10 +130,6 @@ export default class SignUp extends React.Component {
     }
 
     displayCheckMark = () => {
-        console.log(this.state.email)
-        console.log(this.state.password)
-        console.log(this.state.displayName)
-        console.log("entered")
         if (!(this.state.emailError && this.state.passwordError && this.state.usernameError) && (this.state.displayName.length > 4 && this.state.email.length && this.state.password.length > 5)) {
             this.setState({ displayCheckMark: true })
         } else {
