@@ -5,7 +5,6 @@ import UsersMap from './components/UsersMap';
 import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
-import List from './components/List';
 import firebase from 'firebase/app';
 import "firebase/database";
 import { Button } from 'react-native-elements';
@@ -99,86 +98,6 @@ class Homescreen extends React.Component {
         this.setState({ error });
       });
   }
-
-
-
-
-
-
-
-  getUserCoord = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      this.setState({
-        position: {
-          lng: position.coords.longitude,
-          lat: position.coords.latitude
-        }
-
-      });
-      if (this.isInside(999999999999999.9)) {
-        if (this.state.userId) {
-
-          const recentPost = firebase.database().ref(`allTime/${this.state.userId}/hours`);
-          recentPost.once('value').then(snapshot => {
-            firebase.database().ref(`allTime/${this.state.userId}`).update({
-              name: this.state.name,
-              hours: 100 + snapshot.val(),
-              haveBeenToSchool: true
-            })
-            //this.setState({ hours: snapshot.val() + 100 })
-          })
-          const recentPost2 = firebase.database().ref(`semester/${this.state.userId}/hours`);
-          recentPost2.once('value').then(snapshot => {
-            firebase.database().ref(`semester/${this.state.userId}`).update({
-              name: this.state.name,
-              hours: 100 + snapshot.val(),
-              haveBeenToSchool: true
-            })
-            //this.setState({ hours: snapshot.val() + 100 })
-          })
-          const recentPost3 = firebase.database().ref(`weekly/${this.state.userId}/hours`);
-          recentPost3.once('value').then(snapshot => {
-            firebase.database().ref(`weekly/${this.state.userId}`).update({
-              name: this.state.name,
-              hours: 100 + snapshot.val(),
-              haveBeenToSchool: true
-            })
-            //this.setState({ hours: snapshot.val() + 100 })
-          })
-        }
-      }
-      else {
-        console.log("Ingen userId")
-      }
-
-    }, err => console.log(err));
-  }
-
-  isInside = radius => {
-    const R = 6371000;
-    if (!this.state.position) {
-      return false;
-    }
-    const { lat, lng } = this.state.position;
-
-    const lesesalenLat = 60.381192;
-    const lesesalenLng = 5.331556;
-    const radians = Math.PI / 180.0;
-    const rlesesalenLat = lesesalenLat * radians;
-    const rlat = lat * radians;
-    const triLat = Math.abs(lat - lesesalenLat) * radians;
-    const triLong = Math.abs(lesesalenLng - lng) * radians;
-
-    const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(lat * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const answer = R * c
-    if (answer > radius) {
-      return false;
-    }
-    return true;
-  }
-
   DidYouKnow = () => {
     const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
       "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
@@ -191,24 +110,21 @@ class Homescreen extends React.Component {
   render() {
 
     const isDataSourceLoaded = this.state.dataSource.length > 0
+    console.log(this.state.name)
 
     return (
       <View style={{ ...styles.HomescreenStyle }}>
-        <StatusBar backgroundColor="#D2922D" />
 
         <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '75%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
 
-        {this.state.name ? (<ShowUserLocation title={"Send user location"} position={this.getUserCoord} />) : null}
-        {this.state.position ? <Text> {this.state.position.lng} {this.state.position.lat} </Text> : null}
-        {this.isInside(9999999999999.0) ? <Text> Inside </Text> : <Text> Not inside </Text>}
-        <Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
       </View>
     );
   }
 
 
 }
+//<Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
 
 
 
@@ -247,7 +163,18 @@ const LeaderBoardWrapperView = createStackNavigator(
         }
       ),
       navigationOptions: {
-        header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}> Leaderboard </Text>,
+        //header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}> Leaderboard </Text>,
+        headerTitle: <View ><Text style={{fontSize: 25, color: 'white', paddingLeft: '4%', paddingTop: '3%'}}>Leaderboard</Text></View>,
+
+        headerStyle: {
+          elevation: 0, // remove shadow on Android,
+          backgroundColor: 'orange',
+          shadowOpacity: 0, // remove shadow on iOS
+
+        },
+
+        //header: null,
+        //headerMode: 'none'
       }
     },
     DetailScreen: {
@@ -301,9 +228,15 @@ const profileWrapperView = createStackNavigator(
             if (routes && routes[0].params && routes[0].params.username) {
               username = routes[0].params.username
             }
-          
+
             return {
-              header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}>  { username } </Text>,
+              headerTitle: <View ><Text style={{fontSize: 25, color: 'white', paddingLeft: '4%', paddingTop: '3%'}}>{username}</Text></View>,
+              headerStyle: {
+                elevation: 0, // remove shadow on Android,
+                backgroundColor: 'orange',
+                shadowOpacity: 0, // remove shadow on iOS
+
+              },
             }
           }
 

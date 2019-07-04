@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Dimensions } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import { onSignIn } from '../Auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
-import { Dimensions } from 'react-native';
 import firebase from 'firebase/app';
 import { TextField } from 'react-native-material-textfield';
 import { TextInput } from 'react-native-gesture-handler';
@@ -173,6 +172,7 @@ export default class SignUp extends React.Component {
         if (this.state.displayCheckMark == true) {
             console.log("Displayit")
         }
+        const borderradi = 15
         return (
             <View style={styles.fullsize} >
                 <View
@@ -194,6 +194,7 @@ export default class SignUp extends React.Component {
 
                     }}>
                     <Input
+                        containerStyle={styles.inputStyling}
                         placeholder='USERNAME'
                         placeholderTextColor='grey'
 
@@ -208,7 +209,7 @@ export default class SignUp extends React.Component {
                         errorMessage={this.state.usernameError}
                         errorStyle={{ color: 'orange' }}
                         //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
-                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
 
                         leftIcon={
                             <Icon
@@ -219,8 +220,13 @@ export default class SignUp extends React.Component {
                         }
                     />
                     <Input
+                        containerStyle={styles.inputStyling}
                         placeholder='E-MAIL'
                         placeholderTextColor='grey'
+                        keyboardType='email-address'
+                        autoCapitalize= 'none'
+                        importantForAutofill='no'              
+
                         //label = 'Email'
                         //labelStyle = {{color: 'white'}}
                         onChangeText={email => this.setState({
@@ -233,7 +239,7 @@ export default class SignUp extends React.Component {
                         errorStyle={{ color: 'orange' }}
                         //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
 
-                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
                         leftIcon={
                             <Icon
                                 name='envelope'
@@ -243,6 +249,7 @@ export default class SignUp extends React.Component {
                         }
                     />
                     <Input
+                        containerStyle={styles.inputStyling}
                         placeholder='PASSWORD' secureTextEntry={true}
                         placeholderTextColor='grey'
                         onChangeText={password => this.setState({
@@ -255,7 +262,7 @@ export default class SignUp extends React.Component {
                         errorStyle={{ color: 'orange' }}
                         shake={true}
 
-                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+                        inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
                         //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
                         leftIcon={
                             <Icon
@@ -267,7 +274,7 @@ export default class SignUp extends React.Component {
                     />
 
                     <Button
-                        buttonStyle={{ marginTop: 28, borderRadius: 40, backgroundColor: 'orange', minWidth: 340, maxWidth: 340 }}
+                        buttonStyle={{ marginTop: 28, borderRadius: borderradi, backgroundColor: 'orange', width: ((Dimensions.get('window').width)/100)*85 }}
 
                         /*icon={
                             <Icon
@@ -289,6 +296,10 @@ export default class SignUp extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    inputStyling: {
+        paddingBottom:6,
+        width: ((Dimensions.get('window').width)/100)*90
+    },
     fullsize: {
         backgroundColor: '#2D3245',
         //flex: 1,
