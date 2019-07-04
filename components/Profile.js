@@ -29,7 +29,7 @@ export default class Profile extends React.Component {
 
     const { currentUser } = firebase.auth()
     if (currentUser != null) {
-      const recentPost = firebase.database().ref(`allTime/${currentUser.uid}/hours`);
+      const recentPost = firebase.database().ref(`users/${currentUser.uid}/hoursAllTime`);
       recentPost.once('value').then(snapshot => {
         this.setState({ userId: currentUser.uid, username: currentUser.displayName, hours: snapshot.val() })
       }
@@ -43,9 +43,9 @@ export default class Profile extends React.Component {
 
   componentDidMount() {
     const { currentUser } = firebase.auth()
-    const ref = firebase.database().ref(`allTime/${currentUser.uid}`);
+    const ref = firebase.database().ref(`users/${currentUser.uid}`);
     ref.on('child_changed', (snapshot) => {
-      if (snapshot.key === 'hours') {
+      if (snapshot.key === 'hoursAllTime') {
         this.setState({
           hours: snapshot.val()
         })

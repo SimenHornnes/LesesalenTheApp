@@ -22,10 +22,7 @@ export default class Leaderboard extends React.Component {
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
-    this.fetchData().then(() => {
-      this.setState({ refreshing: false });
-    });
-
+    fetchData().then(() => this.setState({ refreshing: false }))
   }
 
 
@@ -37,7 +34,7 @@ export default class Leaderboard extends React.Component {
 
 
   componentDidMount() {
-    this.fetchData().done()
+    this.fetchData()
 
     //For å displaye currentuser i tabellen
     const { currentUser } = firebase.auth()
@@ -45,38 +42,38 @@ export default class Leaderboard extends React.Component {
 
   }
 
-  async fetchData() {
-    fetchData()
+  fetchData() {
     const { currentUser } = firebase.auth()
-    await this.setState({
+    this.setState({
       highScoreList: [],
       username: currentUser.displayName
     })
-    const ref = firebase.database().ref(this.props.path)
-    ref.orderByChild('hours').on('child_changed', async (snapshot) => {
+    const ref = firebase.database().ref("users/")
+    ref.orderByChild(this.props.path).on('child_changed',  (snapshot) => {
+
       let lista = ({
-        id: await (snapshot.key),
-        hours: await (snapshot.val().hours),
-        name: await (snapshot.val().name),
-        streak: await (snapshot.val().streak)
+        id:  (snapshot.key),
+        hours:  (snapshot.val()[this.props.path]),
+        name:  (snapshot.val().name),
+        streak:  (snapshot.val().streak)
       });
 
-      const newList = this.state.highScoreList.map(el => el.id === lista.id ? lista : el).sort((a, b) => a.hours - b.hours)
+      const newList = this.state.highScoreList.map(el => el.id === lista.id ? lista : el).sort((a,b) => a.hours - b.hours)
 
       this.setState({ highScoreList: newList })
     })
 
-    ref.orderByChild('hours').on('child_added', async (snapshot) => {
+    ref.orderByChild(this.props.path).on('child_added',  (snapshot) => {
       const lista = this.state.highScoreList
 
       lista.push({
-        id: await (snapshot.key),
-        hours: await (snapshot.val().hours),
-        name: await (snapshot.val().name),
-        streak: await (snapshot.val().streak)
+        id:  (snapshot.key),
+        hours:  (snapshot.val()[this.props.path]),
+        name:  (snapshot.val().name),
+        streak:  (snapshot.val().streak)
       });
 
-      this.setState({ highScoreList: lista })
+      this.setState({ highScoreList: lista.sort((a, b) => a.hours - b.hours) })
     });
 
 

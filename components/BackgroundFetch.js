@@ -59,7 +59,7 @@ export default fetchData = async () => {
 
 
         if (currentUser) {
-            const recentPost = firebase.database().ref(`allTime/${currentUser.uid}`);
+            const recentPost = firebase.database().ref(`users/${currentUser.uid}`);
             if (isInside()) {
                 recentPost.once('value').then(snapshot => {
                     if (snapshot.val().isOnLesesalen) {
@@ -71,21 +71,23 @@ export default fetchData = async () => {
                             timeDifference = ((time.hours + 24 - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min))
                         }
                         console.log("This is the difference in time", timeDifference)
-                        firebase.database().ref(`allTime/${currentUser.uid}`).update({
-                            hours: snapshot.val().hours + timeDifference,
+                        firebase.database().ref(`users/${currentUser.uid}`).update({
+                            hoursAllTime: snapshot.val().hoursAllTime + timeDifference,
+                            hoursSemester: snapshot.val().hoursSemester + timeDifference,
+                            hoursWeekly: snapshot.val().hoursWeekly + timeDifference,
                             haveBeenToSchool: true,
                             isOnLesesalen: true,
                             time: time,
 
                         })
                         let hourPos = parseInt(time.hours)
-                        firebase.database().ref(`allTime/${currentUser.uid}/hourOfTheDay/${hourList[hourPos]}`).set({
+                        firebase.database().ref(`users/${currentUser.uid}/hourOfTheDay/${hourList[hourPos]}`).set({
                             thisHour: true
                         })
 
                     }
                     else {
-                        firebase.database().ref(`allTime/${currentUser.uid}`).update({
+                        firebase.database().ref(`users/${currentUser.uid}`).update({
                             haveBeenToSchool: true,
                             isOnLesesalen: true,
                             time: time
@@ -97,7 +99,7 @@ export default fetchData = async () => {
             }
             else {
                 recentPost.once('value').then(snapshot => {
-                    firebase.database().ref(`allTime/${currentUser.uid}`).update({
+                    firebase.database().ref(`users/${currentUser.uid}`).update({
                         isOnLesesalen: false,
                         time: time
                     })

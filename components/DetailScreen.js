@@ -49,9 +49,9 @@ export default class Profile extends React.Component {
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
     fetchData() {
         if (this.state.userId) {
-            const recentPost = firebase.database().ref(`allTime/${this.state.userId}`);
+            const recentPost = firebase.database().ref(`users/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
-                this.setState({ username: snapshot.val().name, hours: snapshot.val().hours })
+                this.setState({ username: snapshot.val().name, hours: snapshot.val().hoursAllTime })
             })
         }
     }

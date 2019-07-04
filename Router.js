@@ -6,9 +6,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import firebase from 'firebase/app';
 import "firebase/database";
 import { Button } from 'react-native-elements';
-//import ApiCalendar from 'react-google-calendar-api';
-//import GetEvents from './components/Lesesalprogram2'
-
 import Achievements from './components/Achievements';
 import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
@@ -18,21 +15,14 @@ import LesesalProgram from './components/lesesalprogram'
 import DetailScreen from './components/DetailScreen'
 
 
-
-
 async function requestLocationPermission() {
   try {
-    const granted = await PermissionsAndroid.request(
+    await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       {
         title: 'Location Permission',
       },
     );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use the camera');
-    } else {
-      console.log('Location permission denied');
-    }
   } catch (err) {
     console.warn(err);
   }
@@ -46,7 +36,6 @@ class Homescreen extends React.Component {
       inside: false,
       userId: undefined,
       name: undefined,
-      // hours: undefined,
       funfact: undefined,
       dataSource: [], //for google calender
       pageToken: '',
@@ -54,9 +43,6 @@ class Homescreen extends React.Component {
 
     }
   }
-
-
-
 
   componentWillMount() {
 
@@ -95,52 +81,41 @@ class Homescreen extends React.Component {
         this.setState({ error });
       });
   }
+
   DidYouKnow = () => {
     const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
       "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
     const rand = Math.floor(Math.random() * didYouKnow.length);
     this.setState({ funfact: didYouKnow[rand] })
-
   };
 
 
   render() {
-
     const isDataSourceLoaded = this.state.dataSource.length > 0
-    console.log(this.state.name)
-
     return (
       <View style={{ ...styles.HomescreenStyle }}>
-
+        <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
         <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
         <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
-
       </View>
     );
   }
-
-
 }
-//<Text style={{ color: 'white', alignSelf: 'center' }}>{this.state.funfact}</Text>
-
 
 
 const sizeOfIcons = 32;
 
 const LeaderBoardWrapperView = createStackNavigator(
-
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
         //THANK YOU SAEED
         Alltime: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="allTime" />,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursAllTime" />,
         Semester: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="semester" />,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursSemester" />,
         Weekly: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="weekly" />,
-
-
+          <AllTimeLeaderBoard navigation={navigation} path="hoursWeekly" />,
       }, {
           tabBarOptions: {
             pressColor: 'white',
@@ -148,7 +123,6 @@ const LeaderBoardWrapperView = createStackNavigator(
               fontSize: 14,
               fontWeight: '300'
             },
-
             indicatorStyle: { backgroundColor: 'white' },
             activeTintColor: 'white',
             inactiveTintColor: '#2D3245',
@@ -160,18 +134,13 @@ const LeaderBoardWrapperView = createStackNavigator(
         }
       ),
       navigationOptions: {
-        //header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}> Leaderboard </Text>,
-        headerTitle: <View ><Text style={{fontSize: 25, color: 'white', paddingLeft: '4%', paddingTop: '3%'}}>Leaderboard</Text></View>,
-
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white', paddingLeft: '4%', paddingTop: '3%' }}>Leaderboard</Text></View>,
         headerStyle: {
           elevation: 0, // remove shadow on Android,
           backgroundColor: 'orange',
           shadowOpacity: 0, // remove shadow on iOS
 
         },
-
-        //header: null,
-        //headerMode: 'none'
       }
     },
     DetailScreen: {
@@ -182,9 +151,7 @@ const LeaderBoardWrapperView = createStackNavigator(
 
   {
     initialRouteName: 'Leaderboard',
-
     defaultNavigationOptions: {
-
       gesturesEnabled: true,
       headerTintColor: '#fff',
       headerStyle: {
@@ -192,8 +159,6 @@ const LeaderBoardWrapperView = createStackNavigator(
       },
     }
   })
-
-
 
 
 const profileWrapperView = createStackNavigator(
@@ -227,7 +192,7 @@ const profileWrapperView = createStackNavigator(
             }
 
             return {
-              headerTitle: <View ><Text style={{fontSize: 25, color: 'white', paddingLeft: '4%', paddingTop: '3%'}}>{username}</Text></View>,
+              headerTitle: <View ><Text style={{ fontSize: 20, color: 'white', paddingLeft: '4%', paddingTop: '3%' }}>{username}</Text></View>,
               headerStyle: {
                 elevation: 0, // remove shadow on Android,
                 backgroundColor: 'orange',
@@ -236,22 +201,17 @@ const profileWrapperView = createStackNavigator(
               },
             }
           }
-
         }
       ),
     },
 
     DetailScreen: {
       screen: DetailScreen,
-
     },
   },
-
   {
     initialRouteName: 'Profile',
-
     defaultNavigationOptions: {
-
       gesturesEnabled: true,
       headerTintColor: '#fff',
       headerStyle: {
@@ -260,41 +220,11 @@ const profileWrapperView = createStackNavigator(
     }
   })
 
-
-/*const Leaderboard = createMaterialTopTabNavigator({
-  Alltime: () =>
-    <AllTimeLeaderBoard path="allTime" />,
-  Semester: () =>
-    <AllTimeLeaderBoard path="semester" />,
-  Weekly: () =>
-    <AllTimeLeaderBoard path="weekly" />,
-
-
-}, {
-    tabBarOptions: {
-      pressColor: 'white',
-      labelStyle: {
-        fontSize: 16,
-        fontWeight: '300'
-      },
-      indicatorStyle: { backgroundColor: 'transparent' },
-      activeTintColor: 'white',
-      inactiveTintColor: '#2D3245',
-      style: {
-        backgroundColor: 'orange'
-      }
-    }
-  }
-)*/
-
-
-
 export const SignedOut = createStackNavigator(
   {
     SignIn: {
       screen: SignIn,
       navigationOptions: {
-        //title: "Sign In",
         header: null,
         headerMode: 'none',
         navigationOptions: {
@@ -306,13 +236,6 @@ export const SignedOut = createStackNavigator(
       screen: SignUp,
       navigationOptions: {
         title: "Sign Up",
-        /*headerStyle: {
-          backgroundColor: 'orange',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },*/
       }
     },
   },
@@ -338,62 +261,21 @@ export const SignedIn = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
       }
-
     },
     Profile: {
       screen: profileWrapperView,
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name='md-person' size={sizeOfIcons} color='#2D3245' />) }
-
       }
-    }
-    /*Leaderboard:  {
-      screen: createMaterialTopTabNavigator({
-        Alltime: () =>
-          <AllTimeLeaderBoard path="allTime" />,
-        Semester: () =>
-          <AllTimeLeaderBoard path="semester" />,
-        Weekly: () =>
-          <AllTimeLeaderBoard path="weekly" />,
-
-
-      },
-      {
-          tabBarOptions: {
-            pressColor: 'white',
-            labelStyle: {
-              fontSize: 16,
-              fontWeight: '300',
-            },
-            indicatorStyle: { backgroundColor: 'transparent' },
-            activeTintColor: 'white',
-            inactiveTintColor: '#2D3245',
-            style: {
-              backgroundColor: 'orange'
-            }
-          }
-        },
-        {
-          navigationOptions: {
-            headerTitle: 'Leaderboard'
-          }
-        }
-      ),
-      navigationOptions: {
-        tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color='#2D3245' />) },
-      }
-    }*/,
-
+    },
   },
   {
-
     tabBarOptions: {
       showLabel: false,
       activeTintColor: '#2D3245',
       activeBackgroundColor: 'orange',
       style: {
         backgroundColor: 'white',
-        //backgroundColor: '#2D3245'
       },
       initialRouteName: 'Homescreen',
     }
@@ -423,7 +305,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20
-    //backgroundColor: '#F5FCFF',
   },
   fontsize: {
     fontSize: 100
@@ -449,6 +330,5 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     fontSize: 27,
     color: '#2D3245',
-
   }
 });
