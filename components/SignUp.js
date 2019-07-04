@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform, Dimensions } from 'react-native';
 import { Card, Button } from 'react-native-elements';
-import { onSignIn } from '../Auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import firebase from 'firebase/app';
@@ -55,9 +54,11 @@ export default class SignUp extends React.Component {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredentials) => {
 
-                    firebase.database().ref(`allTime/${userCredentials.user.uid}`).set({
+                    firebase.database().ref(`users/${userCredentials.user.uid}`).set({
                         name: this.state.displayName,
-                        hours: 0,
+                        hoursAllTime: 0, 
+                        hoursSemester: 0,
+                        hoursWeekly: 0,
                         haveBeenToSchool: false,
                         streak: 0,
                         totalHoursToday: 0,
@@ -65,36 +66,12 @@ export default class SignUp extends React.Component {
                         isOnLesesalen: true,
                         
                     })
-                    firebase.database().ref(`semester/${userCredentials.user.uid}`).set({
-                        name: this.state.displayName,
-                        hours: 0,
-                        haveBeenToSchool: false,
-                        streak: 0,
-                        totalHoursToday: 0, 
-                        time: time,
-                        isOnLesesalen: true,
-
-                    })
-                    firebase.database().ref(`weekly/${userCredentials.user.uid}`).set({
-                        name: this.state.displayName,
-                        hours: 0,
-                        haveBeenToSchool: false,
-                        streak: 0,
-                        totalHoursToday: 0,
-                        time: time,
-                        isOnLesesalen: true,
-
-                    })
+                    
                     hourNumList.forEach(num => {
-                        firebase.database().ref(`allTime/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
+                        firebase.database().ref(`users/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
                             thisHour: false
                         })
-                        firebase.database().ref(`semester/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
-                            thisHour: false
-                        })
-                        firebase.database().ref(`weekly/${userCredentials.user.uid}/hourOfTheDay/${hourList[num]}`).set({
-                            thisHour: false
-                        })
+                       
                     });
                     firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
                         photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
@@ -140,42 +117,10 @@ export default class SignUp extends React.Component {
         }
     }
 
-    /* backfaceVisibility?: "visible" | "hidden";
-        backgroundColor?: string;
-        borderBottomColor?: string;
-        borderBottomEndRadius?: number;
-        borderBottomLeftRadius?: number;
-        borderBottomRightRadius?: number;
-        borderBottomStartRadius?: number;
-        borderBottomWidth?: number;
-        borderColor?: string;
-        borderEndColor?: string;
-        borderLeftColor?: string;
-        borderLeftWidth?: number;
-        borderRadius?: number;
-        borderRightColor?: string;
-        borderRightWidth?: number;
-        borderStartColor?: string;
-        borderStyle?: "solid" | "dotted" | "dashed";
-        borderTopColor?: string;
-        borderTopEndRadius?: number;
-        borderTopLeftRadius?: number;
-        borderTopRightRadius?: number;
-        borderTopStartRadius?: number;
-        borderTopWidth?: number;
-        borderWidth?: number;
-        opacity?: number;
-        testID?: string;
-        */
 
 
     render() {
-        //console.log(this.state)
-        //console.log(this.state.password)
-
-        if (this.state.displayCheckMark == true) {
-            console.log("Displayit")
-        }
+        //how boxy the buttons are
         const borderradi = 15
         return (
             <View style={styles.fullsize} >

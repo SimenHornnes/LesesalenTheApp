@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
-import UsersMap from './components/UsersMap';
-import ShowUserLocation from './components/ShowUserLocation';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import firebase from 'firebase/app';
@@ -16,7 +14,6 @@ import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-import DidYouKnow from './components/DidYouKnow'
 import LesesalProgram from './components/lesesalprogram'
 import DetailScreen from './components/DetailScreen'
 
