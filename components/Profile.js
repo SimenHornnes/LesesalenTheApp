@@ -28,17 +28,16 @@ export default class Profile extends React.Component {
   componentWillMount() {
 
     const { currentUser } = firebase.auth()
-    console.log(currentUser)
     if (currentUser != null) {
       const recentPost = firebase.database().ref(`allTime/${currentUser.uid}/hours`);
       recentPost.once('value').then(snapshot => {
         this.setState({ userId: currentUser.uid, username: currentUser.displayName, hours: snapshot.val() })
-
       }
       )
 
-
-
+      this.props.navigation.setParams({
+        username: currentUser.displayName
+      })
     }
   }
 

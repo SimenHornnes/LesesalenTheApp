@@ -272,18 +272,16 @@ const LeaderBoardWrapperView = createStackNavigator(
 
 
 
-
 const profileWrapperView = createStackNavigator(
-
   {
     Profile: {
       screen: createMaterialTopTabNavigator({
-        Profile: () =>
-          <Profile />,
+        Profile: (props) =>
+          <Profile {...props} />,
         Achievements: () =>
           <Achievements />,
-
       }, {
+
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
@@ -296,13 +294,21 @@ const profileWrapperView = createStackNavigator(
             style: {
               backgroundColor: 'orange'
             }
+          },
+          navigationOptions: ({ navigation }) => {
+            const { routes = [] } = navigation.state;
+            let username = ''
+            if (routes && routes[0].params && routes[0].params.username) {
+              username = routes[0].params.username
+            }
+          
+            return {
+              header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '2%', paddingTop: '3%' }}>  { username } </Text>,
+            }
           }
 
         }
       ),
-      navigationOptions: {
-        header: () => <Text style={{ backgroundColor: 'orange', fontSize: 25, color: 'white', paddingLeft: '3%', paddingTop: '3%' }}>Profile </Text>,
-      }
     },
 
     DetailScreen: {

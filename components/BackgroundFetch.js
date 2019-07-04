@@ -4,7 +4,6 @@ import firebase from 'firebase/app';
 
 export default fetchData = async () => {
     const { currentUser } = await firebase.auth()
-    console.log("This is the current user", currentUser)
 
     navigator.geolocation.getCurrentPosition(position => {
 
@@ -14,16 +13,10 @@ export default fetchData = async () => {
         isInside = (radius = 9999999999) => {
             const R = 6371000;
             if (!position) {
-                //console.log("No position!")
                 return false;
             }
             const lat = position.coords.latitude
             const lng = position.coords.longitude
-            console.log("This is the latitude: ", lat)
-            console.log("This is the longitude: ", lng)
-
-            //const lat = 60.382186;
-            //const lng = 5.332215;
             const lesesalenLat = 60.4595623;
             const lesesalenLng = 5.3279822;
             const radians = Math.PI / 180.0;
@@ -42,7 +35,6 @@ export default fetchData = async () => {
             if (answer > radius) {
                 return false;
             }
-            console.log("Returned true")
             return true;
         }
 
@@ -67,12 +59,9 @@ export default fetchData = async () => {
 
 
         if (currentUser) {
-            console.log('THERE IS A USER!')
             const recentPost = firebase.database().ref(`allTime/${currentUser.uid}`);
             if (isInside()) {
                 recentPost.once('value').then(snapshot => {
-                    console.log(snapshot.val())
-                    console.log(time)
                     if (snapshot.val().isOnLesesalen) {
                         let timeDifference = ((time.hours - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min));
                         if (timeDifference > 60) {
@@ -89,8 +78,6 @@ export default fetchData = async () => {
                             time: time,
 
                         })
-                        console.log("Hours: ", time.hours)
-                        console.log("Hourlist: ", hourList[time.hours])
                         let hourPos = parseInt(time.hours)
                         firebase.database().ref(`allTime/${currentUser.uid}/hourOfTheDay/${hourList[hourPos]}`).set({
                             thisHour: true
@@ -117,9 +104,6 @@ export default fetchData = async () => {
                     //this.setState({ hours: snapshot.val() + 100 })
                 })
             }
-        }
-        else {
-            console.log('THERE IS NOT A USER!!!!!')
         }
     }, err => console.log(err));
 }
