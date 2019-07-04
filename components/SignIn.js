@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, Image, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, Platform, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
@@ -32,7 +32,7 @@ export default class SignUp extends React.Component {
       passwordError: null,
     })
     console.log("Pressed sign in button")
-    const { email, password } = this.state    
+    const { email, password } = this.state
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .catch((_error) => {
@@ -49,18 +49,18 @@ export default class SignUp extends React.Component {
         }
 
       })//.then(()=> this.warn()).catch((err)=>{console.log(err)})
-     
+
   }
-  warn(){
+  warn() {
     const curr = firebase.auth().currentUser
     console.log(curr)
-    if((curr.emailVerified==false) && curr.email && !this.state.emailError && !this.state.passwordError){
+    if ((curr.emailVerified == false) && curr.email && !this.state.emailError && !this.state.passwordError) {
       this.dropDownAlertRef.alertWithType('warn', 'Warn', 'You need to verify your email (and reload the app)');
     }
-  
+
   }
 
-  
+
   handlePasswordReset = () => {
     this.setState({
       emailError: null,
@@ -86,119 +86,131 @@ export default class SignUp extends React.Component {
 
 
   render() {
+    const borderradi = 15
     return (
-      //Finnes bedre ting enn keyboardavoidingview
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={Header.HEIGHT + 20}
-        style={styles.fullsize}
-        behavior='padding'
-      >
-        <DropdownAlert
-          ref={ref => this.dropDownAlertRef = ref}
-          successColor='orange' />
-        <View>
-          <Image source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ resizeMode: 'contain', marginTop: 25, height: 250, padding: 10 }}
-          //https://i.imgur.com/efkEvWV.png logo + tekst height: 250,
-          //https://i.imgur.com/7iYvirQ.png berre logoen
-          //https://i.imgur.com/JZygUiH.png logo + tekst sidelengds
-          />
+      
+
+        //Finnes bedre ting enn keyboardavoidingview
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={Header.HEIGHT + 20}
+          style={styles.fullsize}
+          behavior='padding'
+        >
+          <DropdownAlert
+            ref={ref => this.dropDownAlertRef = ref}
+            successColor='orange' />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View>
+            <Image source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ resizeMode: 'contain', marginTop: 25, height: 250, padding: 10 }}
+            //https://i.imgur.com/efkEvWV.png logo + tekst height: 250,
+            //https://i.imgur.com/7iYvirQ.png berre logoen
+            //https://i.imgur.com/JZygUiH.png logo + tekst sidelengds
+            />
 
 
-          <Text style={styles.title}>Join the competition!</Text>
+            <Text style={styles.title}>Join the competition!</Text>
 
-          <Input
-            placeholder='E-MAIL'
-            placeholderTextColor='grey'
-            //label = 'Email'
-            //labelStyle = {{color: 'white'}}
-            /*onChangeText={email => this.setState({
-              email: email
-            }, () => {
-              this.displayCheckMark();
-            })}*/
-            onChangeText={email => this.setState({
-              email: email
-            })}
-            value={this.state.email}
-            errorMessage={this.state.emailError}
-            errorStyle={{ color: 'orange' }}
-            //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+            <Input
+              containerStyle={styles.inputStyling}
+              placeholder='E-MAIL'
+              placeholderTextColor='grey'
+              keyboardType='email-address'
+              autoCapitalize='none'
+              importantForAutofill='no'              
 
-            inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
-            leftIcon={
-              <Icon
-                name='envelope'
-                size={24}
-                color='black'
-              />
-            }
-          />
-          <Input
-            placeholder='PASSWORD' secureTextEntry={true}
-            placeholderTextColor='grey'
-            /*onChangeText={password => this.setState({
-              password: password
-            }, () => {
-              this.displayCheckMark();
-            })}*/
-            onChangeText={password => this.setState({
-              password: password
-            })}
-            value={this.state.password}
-            errorMessage={this.state.passwordError}
-            errorStyle={{ color: 'orange' }}
-            shake={true}
+              //label = 'Email'
+              //labelStyle = {{color: 'white'}}
+              /*onChangeText={email => this.setState({
+                email: email
+              }, () => {
+                this.displayCheckMark();
+              })}*/
+              onChangeText={email => this.setState({
+                email: email
+              })}
+              value={this.state.email}
+              errorMessage={this.state.emailError}
+              errorStyle={{ color: 'orange' }}
+              //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
 
-            inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
-            //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
-            leftIcon={
-              <Icon
-                name='lock'
-                size={32}
-                color='black'
-              />
-            }
-          />
-
-          <Button
-            buttonStyle={{ marginTop: 28, marginBottom: 10, alignSelf: "center", borderRadius: 40, backgroundColor: 'orange', minWidth: 340, maxWidth: 340 }}
-            /*icon={
+              inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
+              leftIcon={
                 <Icon
-                    name="check"
-                    size={30}
-                    color="green"
+                  name='envelope'
+                  size={18}
+                  color='black'
                 />
-            }
-            iconRight*/
-            title="SIGN IN"
-            titleStyle={{ fontSize: 22, }}
-            onPress={this.handleLogin}
-          />
-          <Button
-            buttonStyle={{ marginTop: 5, maxWidth: 100, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center' }}
-            /*icon={
+              }
+            />
+            <Input
+              containerStyle={styles.inputStyling}
+              placeholder='PASSWORD' secureTextEntry={true}
+              placeholderTextColor='grey'
+              
+              /*onChangeText={password => this.setState({
+                password: password
+              }, () => {
+                this.displayCheckMark();
+              })}*/
+              onChangeText={password => this.setState({
+                password: password
+              })}
+              value={this.state.password}
+              errorMessage={this.state.passwordError}
+              errorStyle={{ color: 'orange' }}
+              shake={true}
+
+              inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
+              //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+              leftIcon={
                 <Icon
-                    name="check"
-                    size={30}
-                    color="green"
+                  name='lock'
+                  size={22}
+                  color='black'
                 />
-            }
-            iconRight*/
-            title="SIGN UP"
-            titleStyle={{ fontSize: 17, fontStyle: 'normal' }}
-            onPress={() => { this.props.navigation.navigate("SignUp") }}
-          />
-          <Button
-            buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', marginBottom: 15 }}
+              }
+            />
 
-            title="Reset Password"
-            titleStyle={{ fontSize: 14, fontStyle: 'italic' }}
-            onPress={this.handlePasswordReset}
-          />
+            <Button
+              buttonStyle={{ marginTop: 28, marginBottom: 10, alignSelf: "center", borderRadius: borderradi, backgroundColor: 'orange', width: ((Dimensions.get('window').width)/100)*85  }}
+              /*icon={
+                  <Icon
+                      name="check"
+                      size={30}
+                      color="green"
+                  />
+              }
+              iconRight*/
+              title="SIGN IN"
+              titleStyle={{ fontSize: 22, }}
+              onPress={this.handleLogin}
+            />
+            <Button
+              buttonStyle={{ marginTop: 5, maxWidth: 100, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center' }}
+              /*icon={
+                  <Icon
+                      name="check"
+                      size={30}
+                      color="green"
+                  />
+              }
+              iconRight*/
+              title="SIGN UP"
+              titleStyle={{ fontSize: 17, fontStyle: 'normal' }}
+              onPress={() => { this.props.navigation.navigate("SignUp") }}
+            />
+            <Button
+              buttonStyle={{ marginTop: 5, maxWidth: 120, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center', marginBottom: 15 }}
+
+              title="Reset Password"
+              titleStyle={{ fontSize: 14, fontStyle: 'italic' }}
+              onPress={this.handlePasswordReset}
+            />
 
 
-        </View>
-      </KeyboardAvoidingView>
+          </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
   }
 
@@ -206,6 +218,10 @@ export default class SignUp extends React.Component {
 
 
 const styles = StyleSheet.create({
+  inputStyling: {
+    paddingBottom:6,
+    width: ((Dimensions.get('window').width)/100)*90
+},
   fullsize: {
     backgroundColor: '#2D3245',
     flex: 1,
@@ -213,6 +229,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     paddingHorizontal: 24,
     justifyContent: 'center',
+    alignItems: "center",
   },
   title: {
     color: 'white',
