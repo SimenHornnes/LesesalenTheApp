@@ -86,7 +86,7 @@ export default class SignUp extends React.Component {
                             })
                     }
                 }).catch((_error) => {
-                    console.log("Login Failed!", _error);
+                    console.error("Login Failed!", _error);
                     if (this.state.email.length == 0) {
                         this.setState({ emailError: "The email address is empty" })
                     } else {
@@ -101,7 +101,6 @@ export default class SignUp extends React.Component {
         }
         else {
             this.setState({ usernameError: "Username must be between 5 and 15 characters long" })
-            console.log("For kort brukernavn")
         }
     }
 

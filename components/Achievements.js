@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 
 
 export default class Achievements extends React.Component {
+    _isMounted = false
     constructor(props) {
         super(props)
         this.state = {
@@ -17,15 +18,18 @@ export default class Achievements extends React.Component {
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
-    async componentWillMount() {
-        const { currentUser } = await firebase.auth()
+    componentDidMount() {
+        this._isMounted = true
+        const { currentUser } = firebase.auth()
 
-        //console.log(currentUser)
-        if (currentUser != null) {
+        if (currentUser != null && this._isMounted) {
             this.setState({ userId: currentUser.uid })
         }
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
     /*componentDidMount() {
         if (this.state.userId != null) {
             this.fetchAchievements()
@@ -42,46 +46,17 @@ export default class Achievements extends React.Component {
     }
 
 
-   /* sendAchievements() {
-        
-        console.log("entered send")
-        if (this.state.userId != null) {
-            const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
-            recentPost.once('value').then(snapshot => {
-                firebase.database().ref(`achievements/${this.state.userId}`).set({
-                    thousandhours: 1,
-                    semesterwinner: 5,
-                    weeklywinner: 19
-                })
-            })
-        }
-}
-
-<View style={{ paddingTop: 10 }}>
-                        <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
-
-                            title="Send achievements"
-                            onPress={isDataloaded ? (this.streaksetter.bind(this)) : null}
-                        />
-                    </View>
-*/
 
 
 
     render() {
-        if(this.state.userId && !this.state.achievementsObject){
+        if (this.state.userId && !this.state.achievementsObject) {
             this.fetchAchievements()
         }
         isDataloaded = this.state.userId != null
-       // console.log(this.state.userId)
         isAchievementObjectLoaded = this.state.achievementsObject != null
-        if (isAchievementObjectLoaded) {
-            // console.log(this.state.achievementsObject["semesterwinner"])
-        }
-        //  console.log(isDataloaded)
-        //console.log(this.state.userId)
 
-        //{this.state.achievementsObject[achievement] vil displaye achievement x0
+
         if (isDataloaded) {
             return (
                 <View style={{ paddingVertical: 20, backgroundColor: '#2D3245', height: '100%' }}>
@@ -90,12 +65,11 @@ export default class Achievements extends React.Component {
                         style={{ alignItems: 'center' }}>
 
                         {isAchievementObjectLoaded ? (Object.keys(this.state.achievementsObject).map(achievement =>
-                        
-                            <Text style={{ color: "white", fontSize: 28 }}>{achievement}{this.state.achievementsObject[achievement] === true ? (null) : " x"+(this.state.achievementsObject[achievement])}</Text>)) : (<Text>You have no achievements</Text>)}
+                            <Text key={achievement} style={{ color: "white", fontSize: 28 }}>{achievement}{this.state.achievementsObject[achievement] ? (null) : " x" + (this.state.achievementsObject[achievement])}</Text>)) : (<Text style={{ color: 'white' }}>You have no achievements</Text>)}
 
 
                     </View>
-                    
+
                 </View>
             )
         }
@@ -116,3 +90,19 @@ const styles = StyleSheet.create({
         paddingVertical: 25
     }
 });
+
+
+
+const lol = () => {
+    const ref = firebase.database().ref(`achievements/${this.state.userId}`);
+    ref.forEach(achievementType => {
+        <View><Text>{achievementType.name}</Text></View>
+        achievementType.forEach(achievement => {
+            <View>
+                <Image link={achievement.image}></Image>
+                <Text>{achievement.name}</Text>
+            </View>
+        })
+
+    })
+}

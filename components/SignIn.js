@@ -31,13 +31,11 @@ export default class SignUp extends React.Component {
       emailError: null,
       passwordError: null,
     })
-    console.log("Pressed sign in button")
     const { email, password } = this.state
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .catch((_error) => {
-        console.log("Login Failed!", _error);
-        console.log(_error.message)
+        console.error("Login Failed!", _error);
         if (this.state.email.length == 0) {
           this.setState({ emailError: "The email address is empty" })
         } else {
@@ -47,13 +45,10 @@ export default class SignUp extends React.Component {
             this.setState({ passwordError: "The password is invalid or the user does not exist" })
           }
         }
-
-      })//.then(()=> this.warn()).catch((err)=>{console.log(err)})
-
+      })
   }
   warn() {
     const curr = firebase.auth().currentUser
-    console.log(curr)
     if ((curr.emailVerified == false) && curr.email && !this.state.emailError && !this.state.passwordError) {
       this.dropDownAlertRef.alertWithType('warn', 'Warn', 'You need to verify your email (and reload the app)');
     }
@@ -71,11 +66,10 @@ export default class SignUp extends React.Component {
         .then(() => {
           this.dropDownAlertRef.alertWithType('success', 'Success', 'Email sent');
           this.setState({ resetPasswordEmailSent: true })
-          console.log("Sent password reset mail")
 
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
           this.setState({ emailError: "There is no user record corresponding to this email." })
         })
     }

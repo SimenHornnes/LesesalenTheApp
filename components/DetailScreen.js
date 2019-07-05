@@ -40,7 +40,7 @@ export default class Profile extends React.Component {
 
         ).catch((err) => {
             this.setState({profilepiccheck: true})
-            console.log(err)
+            console.error(err)
         })
     }
 

@@ -58,13 +58,12 @@ export default class Profile extends React.Component {
     if (this.state.profilePic != null) {
 
       if (this.state.userId) {
-        var input = ""
         firebase.database().ref(`userPictures/${this.state.userId}`).update({
           photoURL: this.state.profilePic //input denne
         }).then(() => {
           this.setState({ profilePic: this.state.profilePic, profilepiccheck: false, buttonPressed: false })
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
         })
       }
       else { this.setState({ buttonPressed: true }) }
@@ -80,7 +79,6 @@ export default class Profile extends React.Component {
 
     ).catch(err => {
       this.setState({ profilePic: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg", profilepiccheck: true })
-      console.log("no profilepic")
     })
   }
 

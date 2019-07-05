@@ -6,10 +6,6 @@ export default fetchData = async () => {
     const { currentUser } = await firebase.auth()
 
     navigator.geolocation.getCurrentPosition(position => {
-
-
-
-
         isInside = (radius = 9999999999) => {
             const R = 6371000;
             if (!position) {
@@ -26,16 +22,10 @@ export default fetchData = async () => {
             const triLong = Math.abs(lesesalenLng - lng) * radians;
 
             const a = (Math.sin(triLat / 2) * Math.sin(triLat / 2)) + (Math.cos(lesesalenLat * radians) * Math.cos(lat * radians) * Math.sin(triLong / 2.0) * Math.sin(triLong / 2.0));
-            //console.log(a)
-
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            //console.log(c)
             const answer = R * c
-            //console.log(answer)
-            if (answer > radius) {
-                return false;
-            }
-            return true;
+
+            return answer <= radius;
         }
 
         let date = new Date().getDate(); //Current Date
@@ -55,9 +45,6 @@ export default fetchData = async () => {
 
         const hourList = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree']
 
-        console.log(time)
-
-
         if (currentUser) {
             const recentPost = firebase.database().ref(`users/${currentUser.uid}`);
             if (isInside()) {
@@ -70,7 +57,6 @@ export default fetchData = async () => {
                         if (time.hours < snapshot.val().time.hours) {
                             timeDifference = ((time.hours + 24 - snapshot.val().time.hours) * 60 + (time.min - snapshot.val().time.min))
                         }
-                        console.log("This is the difference in time", timeDifference)
                         firebase.database().ref(`users/${currentUser.uid}`).update({
                             hoursAllTime: snapshot.val().hoursAllTime + timeDifference,
                             hoursSemester: snapshot.val().hoursSemester + timeDifference,
@@ -93,8 +79,6 @@ export default fetchData = async () => {
                             time: time
                         })
                     }
-
-                    //this.setState({ hours: snapshot.val() + 100 })
                 })
             }
             else {
@@ -103,9 +87,8 @@ export default fetchData = async () => {
                         isOnLesesalen: false,
                         time: time
                     })
-                    //this.setState({ hours: snapshot.val() + 100 })
                 })
             }
         }
-    }, err => console.log(err));
+    }, err => console.error(err));
 }

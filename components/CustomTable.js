@@ -30,7 +30,7 @@ export default class CustomTable extends Component {
 
     renderRow(e1, e2, e3, e4, userId) {
         return (
-            <TouchableHighlight onPress={() => { this.props.navigation.navigate("DetailScreen", { userId }) }}
+            <TouchableHighlight key={userId} onPress={() => { this.props.navigation.navigate("DetailScreen", { userId }) }}
                 underlayColor="white">
 
                 <View style={styles.wrapper}>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'grey',
         borderBottomWidth: 1,
         backgroundColor: '#2D3245',
-        height: 75,
+        height: 70,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'

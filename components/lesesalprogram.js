@@ -31,13 +31,11 @@ export default class LesesalProgram extends Component {
     }
 
     render() {
-        //console.log(this.props.data)
-
         return (
             <View style={styles.container}>
                 <FlatList
                     data={this.props.data}
-
+                    keyExtractor={item => item.id }
                     renderItem={({ item }) =>
                         <Text style={styles.item}
                             onPress={this.getListViewItem.bind(this, item)}>
