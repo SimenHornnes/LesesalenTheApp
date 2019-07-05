@@ -59,11 +59,7 @@ export default class SignUp extends Component {
                         totalHoursToday: 0,
                         time: time,
                         isOnLesesalen: true,
-<<<<<<< HEAD
-
-=======
                         totalDaysAtSchool: 0
->>>>>>> 9470aa225f7d9e18aced15d86b53c19a69b8afd4
                     })
 
                     hourNumList.forEach(num => {
@@ -75,8 +71,6 @@ export default class SignUp extends Component {
                     firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
                         photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
                     })
-<<<<<<< HEAD
-=======
 
                     firebase.database().ref(`achievements/${userCredentials.user.uid}`).set({
                         weeklywinner: 0,
@@ -84,7 +78,6 @@ export default class SignUp extends Component {
                         before8: 0
                                         })
                     //this.setState({ hours: snapshot.val() + 100 })
->>>>>>> 9470aa225f7d9e18aced15d86b53c19a69b8afd4
 
                     if (userCredentials.user) {
                         userCredentials.user.sendEmailVerification()
