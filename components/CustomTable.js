@@ -70,7 +70,7 @@ export default class CustomTable extends Component {
                 </View>
 
                 </View>
-            </TouchableHighlight>
+                </TouchableHighlight>
 
         );
     }

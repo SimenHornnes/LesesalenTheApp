@@ -5,7 +5,6 @@ import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNav
 import Icon from 'react-native-vector-icons/Ionicons';
 import firebase from 'firebase/app';
 import "firebase/database";
-import { Button } from 'react-native-elements';
 import Achievements from './components/Achievements';
 import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
@@ -96,7 +95,7 @@ class Homescreen extends React.Component {
       <View style={{ ...styles.HomescreenStyle }}>
         <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
         <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
+        <View style={{ height: '100%' }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
       </View>
     );
   }

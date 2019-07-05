@@ -64,7 +64,7 @@ export default class SignUp extends React.Component {
                         totalHoursToday: 0,
                         time: time,
                         isOnLesesalen: true,
-                        
+                        totalDaysAtSchool: 0
                     })
                     
                     hourNumList.forEach(num => {
@@ -76,6 +76,12 @@ export default class SignUp extends React.Component {
                     firebase.database().ref(`userPictures/${userCredentials.user.uid}`).set({
                         photoURL: "https://cdn.pixabay.com/photo/2018/04/22/22/57/hacker-3342696_1280.jpg"
                     })
+
+                    firebase.database().ref(`achievements/${userCredentials.user.uid}`).set({
+                        weeklywinner: 0,
+                        semesterwinner: 0,
+                        before8: 0
+                                        })
                     //this.setState({ hours: snapshot.val() + 100 })
 
                     if (userCredentials.user) {
