@@ -5,7 +5,6 @@ import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNav
 import Icon from 'react-native-vector-icons/Ionicons';
 import firebase from 'firebase/app';
 import "firebase/database";
-import { Button } from 'react-native-elements';
 import Achievements from './components/Achievements';
 import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';

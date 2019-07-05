@@ -41,6 +41,7 @@ export default class LesesalProgram extends Component {
                             onPress={this.getListViewItem.bind(this, item)}>
                             {item.start.date ? (item.summary + " " + item.start.date.substring(8, 10) + "." + item.start.date.substring(5, 7) + "." + item.start.date.substring(0, 4)) : (item.summary + " " + item.start.dateTime.substring(8, 10) + "." + item.start.dateTime.substring(5, 7) + "." + item.start.dateTime.substring(0, 4))}
                         </Text>}
+                        
                     ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
