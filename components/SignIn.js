@@ -9,8 +9,7 @@ import { Header } from 'react-navigation';
 import DropdownAlert from 'react-native-dropdownalert';
 
 
-//Evt add epost, og confirm password.
-export default class SignUp extends React.Component {
+export default class SignUp extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,7 +34,6 @@ export default class SignUp extends React.Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .catch((_error) => {
-        console.error("Login Failed!", _error);
         if (this.state.email.length == 0) {
           this.setState({ emailError: "The email address is empty" })
         } else {
@@ -69,7 +67,6 @@ export default class SignUp extends React.Component {
 
         })
         .catch((err) => {
-          console.error(err)
           this.setState({ emailError: "There is no user record corresponding to this email." })
         })
     }
@@ -82,9 +79,6 @@ export default class SignUp extends React.Component {
   render() {
     const borderradi = 15
     return (
-      
-
-        //Finnes bedre ting enn keyboardavoidingview
         <KeyboardAvoidingView
           keyboardVerticalOffset={Header.HEIGHT + 20}
           style={styles.fullsize}
@@ -96,9 +90,6 @@ export default class SignUp extends React.Component {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View>
             <Image source={{ uri: 'https://i.imgur.com/efkEvWV.png' }} style={{ resizeMode: 'contain', marginTop: 25, height: 250, padding: 10 }}
-            //https://i.imgur.com/efkEvWV.png logo + tekst height: 250,
-            //https://i.imgur.com/7iYvirQ.png berre logoen
-            //https://i.imgur.com/JZygUiH.png logo + tekst sidelengds
             />
 
 
@@ -111,21 +102,12 @@ export default class SignUp extends React.Component {
               keyboardType='email-address'
               autoCapitalize='none'
               importantForAutofill='no'              
-
-              //label = 'Email'
-              //labelStyle = {{color: 'white'}}
-              /*onChangeText={email => this.setState({
-                email: email
-              }, () => {
-                this.displayCheckMark();
-              })}*/
               onChangeText={email => this.setState({
                 email: email
               })}
               value={this.state.email}
               errorMessage={this.state.emailError}
               errorStyle={{ color: 'orange' }}
-              //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
 
               inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
               leftIcon={
@@ -141,11 +123,6 @@ export default class SignUp extends React.Component {
               placeholder='PASSWORD' secureTextEntry={true}
               placeholderTextColor='grey'
               
-              /*onChangeText={password => this.setState({
-                password: password
-              }, () => {
-                this.displayCheckMark();
-              })}*/
               onChangeText={password => this.setState({
                 password: password
               })}
@@ -155,7 +132,6 @@ export default class SignUp extends React.Component {
               shake={true}
 
               inputContainerStyle={{ backgroundColor: 'white', borderRadius: borderradi }}
-              //containerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
               leftIcon={
                 <Icon
                   name='lock'
@@ -167,28 +143,12 @@ export default class SignUp extends React.Component {
 
             <Button
               buttonStyle={{ marginTop: 28, marginBottom: 10, alignSelf: "center", borderRadius: borderradi, backgroundColor: 'orange', width: ((Dimensions.get('window').width)/100)*85  }}
-              /*icon={
-                  <Icon
-                      name="check"
-                      size={30}
-                      color="green"
-                  />
-              }
-              iconRight*/
               title="SIGN IN"
               titleStyle={{ fontSize: 22, }}
               onPress={this.handleLogin}
             />
             <Button
               buttonStyle={{ marginTop: 5, maxWidth: 100, maxHeight: 50, backgroundColor: '#2D3245', alignSelf: 'center' }}
-              /*icon={
-                  <Icon
-                      name="check"
-                      size={30}
-                      color="green"
-                  />
-              }
-              iconRight*/
               title="SIGN UP"
               titleStyle={{ fontSize: 17, fontStyle: 'normal' }}
               onPress={() => { this.props.navigation.navigate("SignUp") }}

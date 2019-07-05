@@ -59,7 +59,7 @@ export default class Profile extends React.Component {
 
       if (this.state.userId) {
         firebase.database().ref(`userPictures/${this.state.userId}`).update({
-          photoURL: this.state.profilePic //input denne
+          photoURL: this.state.profilePic
         }).then(() => {
           this.setState({ profilePic: this.state.profilePic, profilepiccheck: false, buttonPressed: false })
         }).catch((err) => {

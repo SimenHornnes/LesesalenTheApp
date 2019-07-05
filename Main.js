@@ -79,9 +79,8 @@ export default class Main extends React.Component {
 
     dataModel.fetchUsers(s => this.setState(s));
 
-
     firebase.auth().onAuthStateChanged(user => {
-      if (user && user.displayName) {
+      if (user) {
         this.setState({ signedIn: true, checkedSignIn: true, username: user.displayName, emailVerified: true })
       }
       else {
@@ -91,7 +90,7 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const { checkedSignIn } = this.state;
+    const { checkedSignIn, allUsers } = this.state;
 
     // If we haven't checked AsyncStorage yet, don't render anything (better ways to do this)
     if (!checkedSignIn) {
@@ -99,7 +98,7 @@ export default class Main extends React.Component {
     }
 
     if (this.state.username != null) {
-      return <SignedInComponent />;
+      return <SignedInComponent allUsers={allUsers} />;
     }
     else {
       return <SignedOutComponent />;

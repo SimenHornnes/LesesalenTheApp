@@ -11,7 +11,6 @@ import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-import LesesalProgram from './components/lesesalprogram'
 import DetailScreen from './components/DetailScreen'
 import Homescreen from './components/HomeScreen'
 
@@ -51,13 +50,11 @@ const LeaderBoardWrapperView = createStackNavigator(
           elevation: 0, // remove shadow on Android,
           backgroundColor: 'orange',
           shadowOpacity: 0, // remove shadow on iOS
-
         },
       }
     },
     DetailScreen: {
       screen: DetailScreen,
-
     },
   },
 
@@ -77,12 +74,9 @@ const profileWrapperView = createStackNavigator(
   {
     Profile: {
       screen: createMaterialTopTabNavigator({
-        Profile: (props) =>
-          <Profile {...props} />,
-        Achievements: () =>
-          <Achievements />,
+        Profile: (props) => <Profile {...props} />,
+        Achievements: () => <Achievements />,
       }, {
-
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
@@ -163,7 +157,7 @@ export const SignedOut = createStackNavigator(
 export const SignedIn = createBottomTabNavigator(
   {
     Homescreen: {
-      screen: Homescreen,
+      screen: (props) => <Homescreen {...props} />,
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color='#2D3245' />) },
       }
@@ -197,14 +191,9 @@ export const SignedIn = createBottomTabNavigator(
 
 export const createRootNavigator = (signedIn = false) => {
   return createSwitchNavigator(
-    {
-      SignedIn: {
-        screen: SignedIn
-      },
-      SignedOut: {
-        screen: SignedOut,
-
-      }
+    { 
+      SignedIn: SignedIn,
+      SignedOut: SignedOut,
     },
     {
       initialRouteName: signedIn ? "SignedIn" : "SignedOut"

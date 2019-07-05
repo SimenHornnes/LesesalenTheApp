@@ -31,8 +31,9 @@ export default class Homescreen extends React.Component {
         dataSource: [], //for google calender
         pageToken: '',
         error: null,
-  
       }
+
+      console.log(this.props.allUsers)
     }
   
     componentWillMount() {
