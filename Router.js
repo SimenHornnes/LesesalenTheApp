@@ -12,10 +12,9 @@ import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import DetailScreen from './components/DetailScreen'
 import Homescreen from './components/HomeScreen'
-
 const sizeOfIcons = 32;
 
-const LeaderBoardWrapperView = createStackNavigator(
+const LeaderBoardWrapperView = createStackNavigator(  
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
@@ -190,8 +189,11 @@ export const SignedIn = createBottomTabNavigator(
 
 export const createRootNavigator = (signedIn = false) => {
   return createSwitchNavigator(
-    { 
-      SignedIn: SignedIn,
+    {
+      SignedIn: {
+        screen: SignedIn,
+        params: { allUsers: 'fuck yes' }
+      },
       SignedOut: SignedOut,
     },
     {

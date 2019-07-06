@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import { StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
 import "firebase/database";
 import LesesalProgram from './lesesalprogram'
-import React, { Component } from 'react';
+import React  from 'react';
 
 
 async function requestLocationPermission() {
@@ -32,8 +32,6 @@ export default class Homescreen extends React.Component {
         pageToken: '',
         error: null,
       }
-
-      console.log(this.props.allUsers)
     }
   
     componentWillMount() {

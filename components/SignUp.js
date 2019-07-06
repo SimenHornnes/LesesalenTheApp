@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import firebase from 'firebase/app';
+import Loading from '../Loading'
 
 //Evt add epost, og confirm password.
 export default class SignUp extends Component {
@@ -46,7 +47,7 @@ export default class SignUp extends Component {
                 hours: hours,
                 min: min,
             }
-
+            this.setState({ loading: true })
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredentials) => {
                     firebase.database().ref(`users/${userCredentials.user.uid}`).set({
@@ -76,7 +77,7 @@ export default class SignUp extends Component {
                         weeklywinner: 0,
                         semesterwinner: 0,
                         before8: 0
-                                        })
+                    })
                     //this.setState({ hours: snapshot.val() + 100 })
 
                     if (userCredentials.user) {
@@ -84,10 +85,11 @@ export default class SignUp extends Component {
                         userCredentials.user.updateProfile({ displayName: this.state.displayName })
                             .then(() => {
                                 firebase.auth().signOut()
-                                this.props.navigation.navigate("SignIn")
+                                this.props.navigation.navigate('SignIn')
                             })
                     }
                 }).catch((_error) => {
+                    this.setState({ loading: false })
                     if (this.state.email.length == 0) {
                         this.setState({ emailError: "The email address is empty" })
                     } else {
@@ -115,6 +117,11 @@ export default class SignUp extends Component {
 
     render() {
         const borderradi = 15
+
+        if (this.state.loading) {
+            return <Loading />
+        }
+
         return (
             <View style={styles.fullsize} >
                 <View

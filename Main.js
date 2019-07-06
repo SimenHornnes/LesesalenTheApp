@@ -76,7 +76,6 @@ export default class Main extends React.Component {
       }
     });
     //Det er en mulig feil her når vi loada appen, den blir berre aktivert viss man dobbelttrykke eller staten blir endra
-
     dataModel.fetchUsers(s => this.setState(s));
 
     firebase.auth().onAuthStateChanged(user => {
@@ -98,7 +97,7 @@ export default class Main extends React.Component {
     }
 
     if (this.state.username != null) {
-      return <SignedInComponent allUsers={allUsers} />;
+      return <SignedInComponent />;
     }
     else {
       return <SignedOutComponent />;

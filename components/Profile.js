@@ -15,7 +15,9 @@ export default class Profile extends React.Component {
     this.state = {
       username: undefined,
       profilePic: undefined,
-      hours: 0,
+      hoursAllTime: 0,
+      hoursSemester: 0,
+      hoursWeekly: 0,
       userId: undefined,
       buttonPressed: false,
       acceptButton: false,
@@ -29,9 +31,9 @@ export default class Profile extends React.Component {
 
     const { currentUser } = firebase.auth()
     if (currentUser != null) {
-      const recentPost = firebase.database().ref(`users/${currentUser.uid}/hoursAllTime`);
+      const recentPost = firebase.database().ref(`users/${currentUser.uid}`);
       recentPost.once('value').then(snapshot => {
-        this.setState({ userId: currentUser.uid, username: currentUser.displayName, hours: snapshot.val() })
+        this.setState({ userId: currentUser.uid, username: currentUser.displayName, hoursAllTime: snapshot.val().hoursAllTime, hoursSemester: snapshot.val().hoursSemester, hoursWeekly: snapshot.val().hoursWeekly })
       }
       )
 
@@ -45,10 +47,11 @@ export default class Profile extends React.Component {
     const { currentUser } = firebase.auth()
     const ref = firebase.database().ref(`users/${currentUser.uid}`);
     ref.on('child_changed', (snapshot) => {
-      if (snapshot.key === 'hoursAllTime') {
-        this.setState({
-          hours: snapshot.val()
-        })
+      const key = snapshot.key;
+      if (key === 'hoursAllTime' || key === 'hoursSemester' || key === 'hoursWeekly') {
+        const obj = {}
+        obj[key] = snapshot.val();
+        this.setState(obj);
       }
     })
   }
@@ -82,20 +85,6 @@ export default class Profile extends React.Component {
     })
   }
 
-
-
-
-
-
-
-  /*fetchingHours() {
-    const recentPost = firebase.database().ref(`users/${this.state.userId}/hours`);
-    recentPost.once('value').then(snapshot => {
-      this.setState({ hours: snapshot.val() })
-    })
-  }*/
-
-
   render() {
     if (this.state.userId && !this.state.profilepiccheck) {
       this.fetchProfilePic()
@@ -112,9 +101,36 @@ export default class Profile extends React.Component {
           behavior='padding'
         >
           <View>
-            <Text style={styles.textStyleHomescreen}>{this.state.username}</Text>
-            <Text style={styles.textStyleHomescreen}>{this.state.hours}</Text>
+            <View style={styles.hourStyles}>
+              <View style={{ width: '33%' }}>
+                <Text style={[styles.textStyleHomescreen, { fontSize: 20 }]}>Alltime:</Text>
+                <View style={styles.hStyle}>
+                  <Text style={styles.textStyleHomescreen}>{Math.trunc(this.state.hoursAllTime / 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}>h </Text>
+                  <Text style={styles.textStyleHomescreen}> {(this.state.hoursAllTime % 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}> min</Text>
+                </View>
+              </View>
+              <View style={{ width: '33%' }}>
+                <Text style={[styles.textStyleHomescreen, { fontSize: 20 }]}>Semester:</Text>
+                <View style={styles.hStyle}>
+                  <Text style={styles.textStyleHomescreen}>{Math.trunc(this.state.hoursSemester / 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}>h </Text>
+                  <Text style={styles.textStyleHomescreen}> {(this.state.hoursSemester % 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}> min</Text>
 
+                </View>
+              </View>
+              <View style={{ width: '33%' }}>
+                <Text style={[styles.textStyleHomescreen, { fontSize: 20 }]}>Weekly:</Text>
+                <View style={styles.hStyle}>
+                  <Text style={styles.textStyleHomescreen}>{Math.trunc(this.state.hoursWeekly / 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}>h </Text>
+                  <Text style={styles.textStyleHomescreen}> {(this.state.hoursWeekly % 60)}</Text>
+                  <Text style={[styles.textStyleHomescreen2, { fontSize: 10 }]}> min</Text>
+                </View>
+              </View>
+            </View>
 
 
             <TouchableHighlight underlayColor='white' activeOpacity={0.9} onLongPress={() => { this.setState({ buttonPressed: true }) }} style={{
@@ -169,11 +185,27 @@ export default class Profile extends React.Component {
 }
 const styles = StyleSheet.create({
   textStyleHomescreen: {
-    fontSize: 30,
+    fontSize: 17,
     color: 'white',
     justifyContent: 'center',
     alignSelf: 'center',
-    paddingVertical: 10
-  }
+  },
+  hourStyles: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  hStyle: {
+    flexWrap: 'wrap',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  textStyleHomescreen2: {
+    fontSize: 17,
+    color: 'white',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: '1%'
+  },
 });
-
