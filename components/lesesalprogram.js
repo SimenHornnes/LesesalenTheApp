@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry, FlatList,
-    StyleSheet, Text, View, Alert, Dimensions
+    FlatList,
+    StyleSheet, Text, View, Alert,
 } from 'react-native';
 
 export default class LesesalProgram extends Component {

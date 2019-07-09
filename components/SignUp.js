@@ -78,6 +78,7 @@ export default class SignUp extends Component {
                         semesterwinner: 0,
                         before8: 0
                     })
+                   
                     //this.setState({ hours: snapshot.val() + 100 })
 
                     if (userCredentials.user) {

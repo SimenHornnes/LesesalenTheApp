@@ -12,6 +12,7 @@ export default class Achievements extends React.Component {
             username: null,
             userId: null,
             achievementsObject: null,
+            achievementsurl: [],
         }
     }
 
@@ -36,11 +37,36 @@ export default class Achievements extends React.Component {
         }
     }*/
 
+
     fetchAchievements() {
-        if (this.state.userId != null) {
+        firebase.database().ref('/achievementsurl').once('value', snapshot => {
+            let temparr = {}
+
+            snapshot.forEach(userSnapshot => {
+                var key = userSnapshot.key;
+                temparr[key] = userSnapshot.val()
+
+
+            })
+            this.setState({ achievementsurl: temparr })
+
+        })
+
+
+        if (this.state.userId != null && this.state.achievementsurl) {
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
-                this.setState({ achievementsObject: snapshot.val() })
+                let urllist = []
+                snapshot.forEach(userSnapshot => {
+                    urllist.push({
+                        name: userSnapshot.key,
+                        value : userSnapshot.val(),
+                        link : this.state.achievementsurl[userSnapshot.key]
+                    })
+                  //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
+                })
+
+                this.setState({ achievementsObject: urllist })
             })
         }
     }
@@ -64,39 +90,41 @@ export default class Achievements extends React.Component {
 
 
     render() {
+       // console.log(this.state.achievementsurl)
         if (this.state.userId && !this.state.achievementsObject) {
             this.fetchAchievements()
         }
         isDataloaded = this.state.userId != null
         isAchievementObjectLoaded = this.state.achievementsObject != null
 
-        if(this.state.achievementsObject){
-        Object.keys(this.state.achievementsObject).forEach(val => {console.log(val), console.log(this.state.achievementsObject[val])})
+        if (this.state.achievementsObject) {
+            // Object.keys(this.state.achievementsObject).forEach(val => {console.log(val), console.log(this.state.achievementsObject[val])})
         }
 
 
-        if (isDataloaded) {
+        if (isDataloaded && isAchievementObjectLoaded) {
             return (
                 <View style={{ backgroundColor: '#2D3245', height: '100%', }}>
                     <ScrollView style={styles.dataWrapper}>
                         {this.state.achievementsObject ? <FlatList
-                                data={Object.keys(this.state.achievementsObject)}
-                                numColumns={3}
-                                renderItem={({ item }) =>
-                                <View style={{paddingVertical: 20, width: '33.333333%', flexDirection: 'column', justifyContent:'center', alignContent:'center', alignItems: 'center' }}>
-                                    {(this.state.achievementsObject[item] !== true) && (this.state.achievementsObject[item] !== false) ? <Text style = {styles.numTimesWon}>x{this.state.achievementsObject[item]}</Text> : <Text style = {styles.numTimesWon}></Text>}
-                                    <Image source={require('../assets/' +'before8' + '.png')} style={{ resizeMode: 'contain', minWidth: 90, minHeight: 90, maxWidth: 90, maxHeight: 90, borderRadius: 100 }} />
+                            data={Object.keys(this.state.achievementsObject)}
+                            numColumns={3}
+                            renderItem={({ item }) =>
+                                <View style={{ paddingVertical: 20, width: '33.333333%', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                    {(this.state.achievementsObject[item].value !== true) && (this.state.achievementsObject[item].value !== false) ? <Text style={styles.numTimesWon}>x{this.state.achievementsObject[item].value}</Text> 
+                                    : <Text style={styles.numTimesWon}></Text>}
+                                    <Image source={{ uri: this.state.achievementsObject[item].link }} style={{ resizeMode: 'contain', minWidth: 90, minHeight: 90, maxWidth: 90, maxHeight: 90, borderRadius: 100 }} />
                                     <Text style={styles.item}>
-                                        {item}
-                                        
+                                        {this.state.achievementsObject[item].name}
+
                                     </Text>
-                                    </View>}
+                                </View>}
 
-                                ItemSeparatorComponent={this.renderSeparator}
-                            /> : null}
+                            ItemSeparatorComponent={this.renderSeparator}
+                        /> : null}
 
-                        
-                           
+
+
                     </ScrollView>
                 </View>
             )
@@ -124,7 +152,7 @@ const styles = StyleSheet.create({
     },
     dataWrapper: { marginTop: -1 },
     item: {
-        flex:1,
+        flex: 1,
         paddingTop: 12,
         fontSize: 12,
         //textAlignVertical: 'center',
@@ -132,7 +160,7 @@ const styles = StyleSheet.create({
         color: 'white',
 
     },
-    numTimesWon:{
+    numTimesWon: {
         paddingRight: 10,
         textAlign: 'right',
         alignSelf: 'stretch',
