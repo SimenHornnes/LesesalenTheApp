@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { createBottomTabNavigator, createMaterialTopTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import firebase from 'firebase/app';
@@ -55,7 +55,10 @@ const LeaderBoardWrapperView = createStackNavigator(
     },
     DetailScreen: {
       screen: DetailScreen,
-    },
+      navigationOptions:({navigation}) => ({
+          title: navigation.getParam('e2', 'NO-ID')+"'s profile"
+      })
+    }, 
   },
 
   {
