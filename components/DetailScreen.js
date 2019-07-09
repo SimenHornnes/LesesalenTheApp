@@ -96,7 +96,7 @@ export default class Profile extends React.Component {
                             marginBottom: 20
                         }}
                     >
-                        {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'stretch', width: 240, height: 240, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
+                        {doesUserHavePicture ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'contain', minWidth: 340, minHeight: 340, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
                     </View>
 
                     <Text style={styles.textStyleHomescreen}>Achievements</Text>
@@ -132,5 +132,5 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 25
     },
-    dataWrapper: { marginTop: -1 },
+    dataWrapper: { marginTop: -1, },
 });
