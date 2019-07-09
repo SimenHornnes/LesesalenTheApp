@@ -164,7 +164,7 @@ export default class Profile extends React.Component {
 
 
             <View >
-              <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
+              <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 8, minWidth: '90%', alignSelf: 'center' }}
 
                 title="SIGN OUT"
                 onPress={() => (firebase.auth().signOut())}

@@ -59,16 +59,16 @@ export default class CustomTable extends Component {
                         <Text style={[styles.textHours, {fontSize: 13, alignSelf: 'flex-end', marginBottom: '1%'}]}>h</Text>
                     </View>
                     <View style={styles.col4}>
-                        <Text style={styles.text1}>  {e4}  </Text>
+                        {e4 > 2 && <Text style={styles.text1}>  {e4}  </Text>}
 
                     </View>
                     <View style={styles.col5}>
-                        {e4 > 15 ? (<View><Icon name='md-flame' color='orange' size={34} ></Icon></View>) :
-                            e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={30} ></Icon></View>) :
-                                e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={26} ></Icon></View>) :
-                                    e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
-                                        e4 > 3 ? (<View style={{}}><Icon name='md-flame' color='orange' size={18}></Icon></View>) :
-                                            e4 > 2 ? (<Icon name='md-flame' color='orange' size={14}></Icon>) : (null)}
+                        {e4 > 15 ? (<View><Icon name='md-flame' color='orange' size={30} ></Icon></View>) :
+                            e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={26} ></Icon></View>) :
+                                e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
+                                    e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={18} ></Icon></View>) :
+                                        e4 > 3 ? (<View style={{}}><Icon name='md-flame' color='orange' size={14}></Icon></View>) :
+                                            e4 > 2 ? (<Icon name='md-flame' color='orange' size={10}></Icon>) : (null)}
                     </View>
 
                 </View>
@@ -116,14 +116,16 @@ const styles = StyleSheet.create({
         color: 'black',
         alignItems: 'center',
         color: 'white',
-        textAlign: 'right', alignSelf: 'stretch'
+        textAlign: 'right', 
+        alignSelf: 'stretch'
     },
     text1: {
         display: 'flex',
-        fontSize: 15,
-        color: 'black',
+        fontSize: 11,
         alignItems: 'center',
-        color: 'white', textAlign: 'right', alignSelf: 'stretch'
+        color: 'white', 
+        textAlign: 'right', 
+        alignSelf: 'stretch'
     },
 
     places: {

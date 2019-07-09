@@ -12,6 +12,8 @@ import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import DetailScreen from './components/DetailScreen'
 import Homescreen from './components/HomeScreen'
+import SettingsScreen from './components/SettingsScreen'
+import ChangeUsername from './components/ChangeUsername'
 const sizeOfIcons = 32;
 
 const LeaderBoardWrapperView = createStackNavigator(  
@@ -78,7 +80,7 @@ const profileWrapperView = createStackNavigator(
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: '300'
             },
             indicatorStyle: { backgroundColor: 'white' },
@@ -103,14 +105,26 @@ const profileWrapperView = createStackNavigator(
                 shadowOpacity: 0, // remove shadow on iOS
 
               },
+              headerRight: <Icon name='md-settings' size= {sizeOfIcons-3} style={{color: 'white', paddingRight: 14}} onPress={() => {navigation.navigate('SettingsScreen'), {navigation}}} />
             }
           }
         }
       ),
     },
 
-    DetailScreen: {
-      screen: DetailScreen,
+    SettingsScreen: {
+      screen: SettingsScreen,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white'}}>Settings</Text></View>,
+        
+      }
+    },
+    ChangeUsername: {
+      screen: ChangeUsername,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white'}}>Change Username</Text></View>,
+        
+      }
     },
   },
   {
