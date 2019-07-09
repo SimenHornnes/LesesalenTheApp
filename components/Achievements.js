@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 
 
 export default class Achievements extends React.Component {
+    _isMounted = false
     constructor(props) {
         super(props)
         this.state = {
@@ -17,15 +18,18 @@ export default class Achievements extends React.Component {
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
-    async componentWillMount() {
-        const { currentUser } = await firebase.auth()
+    componentDidMount() {
+        this._isMounted = true
+        const { currentUser } = firebase.auth()
 
-        //console.log(currentUser)
-        if (currentUser != null) {
+        if (currentUser != null && this._isMounted) {
             this.setState({ userId: currentUser.uid })
         }
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
     /*componentDidMount() {
         if (this.state.userId != null) {
             this.fetchAchievements()
@@ -70,7 +74,7 @@ export default class Achievements extends React.Component {
         Object.keys(this.state.achievementsObject).forEach(val => {console.log(val), console.log(this.state.achievementsObject[val])})
         }
 
-        //{this.state.achievementsObject[achievement] vil displaye achievement x0
+
         if (isDataloaded) {
             return (
                 <View style={{ backgroundColor: '#2D3245', height: '100%', }}>
@@ -137,3 +141,21 @@ const styles = StyleSheet.create({
     }
 
 });
+
+
+
+/*
+const lol = () => {
+    const ref = firebase.database().ref(`achievements/${this.state.userId}`);
+    ref.forEach(achievementType => {
+        <View><Text>{achievementType.name}</Text></View>
+        achievementType.forEach(achievement => {
+            <View>
+                <Image link={achievement.image}></Image>
+                <Text>{achievement.name}</Text>
+            </View>
+        })
+
+    })
+}
+*/

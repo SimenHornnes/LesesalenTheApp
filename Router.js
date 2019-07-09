@@ -10,101 +10,11 @@ import AllTimeLeaderBoard from './components/AllTimeLeaderBoard';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
-import LesesalProgram from './components/lesesalprogram'
 import DetailScreen from './components/DetailScreen'
-
-
-async function requestLocationPermission() {
-  try {
-    await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-      },
-    );
-  } catch (err) {
-    console.warn(err);
-  }
-}
-
-class Homescreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      position: undefined,
-      inside: false,
-      userId: undefined,
-      name: undefined,
-      funfact: undefined,
-      dataSource: [], //for google calender
-      pageToken: '',
-      error: null,
-
-    }
-  }
-
-  componentWillMount() {
-
-    const { currentUser } = firebase.auth()
-    console.log("compdidmount")
-    if (currentUser != null) {
-      this.setState({ userId: currentUser.uid, name: currentUser.displayName })
-    }
-    console.log("THIS IS THE USERNAME: ", this.state.name)
-  }
-
-  componentDidMount() {
-    requestLocationPermission()
-    this.displayGoogleCalendar()
-    this.DidYouKnow()
-  }
-
-
-  displayGoogleCalendar = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var currentTime = `${year}-${month}-${date}T00:00:00Z`;
-    const API_KEY = 'AIzaSyDX56itpFfR3zfjfJK0nUesbFLBo4pYfVc';
-    let url = `https://www.googleapis.com/calendar/v3/calendars/t3rc186t378bvsv4mjpie6l1ic@group.calendar.google.com/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=50&singleEvents=true&orderBy=startTime&pageToken=${this.state.pageToken}`;
-    fetch(url)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          pageToken: responseJson.nextPageToken,
-          dataSource: [...this.state.dataSource, ...responseJson.items],
-          error: responseJson.error || null,
-        });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-  }
-
-  DidYouKnow = () => {
-    const didYouKnow = ["Did you know?", "Did you know that 2", "Did you know 3", "Did you know that cashews come from a fruit",
-      "Did you know that 5", "Did you know 6", "Did you know 7", "Did you know 8"]
-    const rand = Math.floor(Math.random() * didYouKnow.length);
-    this.setState({ funfact: didYouKnow[rand] })
-  };
-
-
-  render() {
-    const isDataSourceLoaded = this.state.dataSource.length > 0
-    return (
-      <View style={{ ...styles.HomescreenStyle }}>
-        <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
-        <View style={{ borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'orange' }}><Text style={styles.textStyleHomescreen}>Kalender for Lesesalen</Text></View>
-        <View style={{ height: '100%' }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : (<Text>Loading</Text>)}</View>
-      </View>
-    );
-  }
-}
-
-
+import Homescreen from './components/HomeScreen'
 const sizeOfIcons = 32;
 
-const LeaderBoardWrapperView = createStackNavigator(
+const LeaderBoardWrapperView = createStackNavigator(  
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
@@ -138,14 +48,15 @@ const LeaderBoardWrapperView = createStackNavigator(
           elevation: 0, // remove shadow on Android,
           backgroundColor: 'orange',
           shadowOpacity: 0, // remove shadow on iOS
-
         },
       }
     },
     DetailScreen: {
       screen: DetailScreen,
-
-    },
+      navigationOptions:({navigation}) => ({
+          title: navigation.getParam('e2', 'NO-ID')+"'s profile"
+      })
+    }, 
   },
 
   {
@@ -164,12 +75,9 @@ const profileWrapperView = createStackNavigator(
   {
     Profile: {
       screen: createMaterialTopTabNavigator({
-        Profile: (props) =>
-          <Profile {...props} />,
-        Achievements: () =>
-          <Achievements />,
+        Profile: (props) => <Profile {...props} />,
+        Achievements: () => <Achievements />,
       }, {
-
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
@@ -250,7 +158,7 @@ export const SignedOut = createStackNavigator(
 export const SignedIn = createBottomTabNavigator(
   {
     Homescreen: {
-      screen: Homescreen,
+      screen: (props) => <Homescreen {...props} />,
       navigationOptions: {
         tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color='#2D3245' />) },
       }
@@ -286,48 +194,13 @@ export const createRootNavigator = (signedIn = false) => {
   return createSwitchNavigator(
     {
       SignedIn: {
-        screen: SignedIn
+        screen: SignedIn,
+        params: { allUsers: 'fuck yes' }
       },
-      SignedOut: {
-        screen: SignedOut,
-
-      }
+      SignedOut: SignedOut,
     },
     {
       initialRouteName: signedIn ? "SignedIn" : "SignedOut"
     }
   );
 };
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20
-  },
-  fontsize: {
-    fontSize: 100
-  },
-  welcome: {
-    fontSize: 50,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  HomescreenStyle: {
-    flex: 1,
-    padding: 0,
-    backgroundColor: '#2D3245'
-  },
-  textStyleHomescreen: {
-    paddingTop: 8,
-    paddingLeft: 15,
-    paddingBottom: 8,
-    fontSize: 27,
-    color: '#2D3245',
-  }
-});

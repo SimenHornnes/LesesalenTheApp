@@ -16,7 +16,6 @@ export default class Leaderboard extends React.Component {
       widthArr: [Dimensions.get('window').width / 6, Dimensions.get('window').width / 2, Dimensions.get('window').width / 6, Dimensions.get('window').width / 6],
       username: undefined,
       refreshing: false,
-      //isDataLoaded: false
     }
   }
 
@@ -35,8 +34,6 @@ export default class Leaderboard extends React.Component {
 
   componentDidMount() {
     this.fetchData()
-
-    //For å displaye currentuser i tabellen
     const { currentUser } = firebase.auth()
     this.setState({ username: currentUser.displayName })
 
