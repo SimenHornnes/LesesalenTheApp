@@ -21,6 +21,7 @@ export default class Profile extends React.Component {
       userId: undefined,
       buttonPressed: false,
       acceptButton: false,
+      time: null
     }
   }
 
@@ -33,7 +34,7 @@ export default class Profile extends React.Component {
     if (currentUser != null) {
       const recentPost = firebase.database().ref(`users/${currentUser.uid}`);
       recentPost.once('value').then(snapshot => {
-        this.setState({ userId: currentUser.uid, username: currentUser.displayName, hoursAllTime: snapshot.val().hoursAllTime, hoursSemester: snapshot.val().hoursSemester, hoursWeekly: snapshot.val().hoursWeekly })
+        this.setState({ userId: currentUser.uid, username: currentUser.displayName, hoursAllTime: snapshot.val().hoursAllTime, hoursSemester: snapshot.val().hoursSemester, hoursWeekly: snapshot.val().hoursWeekly, time: snapshot.val().time })
       }
       )
 
@@ -48,7 +49,7 @@ export default class Profile extends React.Component {
     const ref = firebase.database().ref(`users/${currentUser.uid}`);
     ref.on('child_changed', (snapshot) => {
       const key = snapshot.key;
-      if (key === 'hoursAllTime' || key === 'hoursSemester' || key === 'hoursWeekly') {
+      if (key === 'hoursAllTime' || key === 'hoursSemester' || key === 'hoursWeekly' || key === 'time') {
         const obj = {}
         obj[key] = snapshot.val();
         this.setState(obj);
@@ -96,10 +97,12 @@ export default class Profile extends React.Component {
           keyboardVerticalOffset={Header.HEIGHT + 20}
           style={{
             backgroundColor: '#2D3245', flex: 1, width: Dimensions.get('window').width,
-            height: Dimensions.get('window').height, justifyContent: 'center'
+            height: Dimensions.get('window').height, 
           }}
           behavior='padding'
         >
+          <Text style={{ textAlign: 'right', textAlignVertical: 'top', marginTop: 10, marginRight: 10, color: 'white' }}>{`Last updated: ${this.state.time.date}.${this.state.time.month} ${this.state.time.hours}:${this.state.time.min}`}</Text>
+
           <View>
             <View style={styles.hourStyles}>
               <View style={{ width: '33%' }}>
@@ -192,7 +195,8 @@ const styles = StyleSheet.create({
   },
   hourStyles: {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 12
   },
   hStyle: {
     flexWrap: 'wrap',

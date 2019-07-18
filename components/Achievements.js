@@ -26,16 +26,14 @@ export default class Achievements extends React.Component {
         if (currentUser != null && this._isMounted) {
             this.setState({ userId: currentUser.uid })
         }
+      
+        
     }
 
     componentWillUnmount() {
         this._isMounted = false
     }
-    /*componentDidMount() {
-        if (this.state.userId != null) {
-            this.fetchAchievements()
-        }
-    }*/
+
 
 
     fetchAchievements() {
@@ -52,7 +50,6 @@ export default class Achievements extends React.Component {
 
         })
 
-
         if (this.state.userId != null && this.state.achievementsurl) {
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
@@ -60,10 +57,10 @@ export default class Achievements extends React.Component {
                 snapshot.forEach(userSnapshot => {
                     urllist.push({
                         name: userSnapshot.key,
-                        value : userSnapshot.val(),
-                        link : this.state.achievementsurl[userSnapshot.key]
+                        value: userSnapshot.val(),
+                        link: this.state.achievementsurl[userSnapshot.key]
                     })
-                  //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
+                    //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
                 })
 
                 this.setState({ achievementsObject: urllist })
@@ -90,7 +87,7 @@ export default class Achievements extends React.Component {
 
 
     render() {
-       // console.log(this.state.achievementsurl)
+        // console.log(this.state.achievementsurl)
         if (this.state.userId && !this.state.achievementsObject) {
             this.fetchAchievements()
         }
@@ -111,8 +108,8 @@ export default class Achievements extends React.Component {
                             numColumns={3}
                             renderItem={({ item }) =>
                                 <View style={{ paddingVertical: 20, width: '33.333333%', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                                    {(this.state.achievementsObject[item].value !== true) && (this.state.achievementsObject[item].value !== false) ? <Text style={styles.numTimesWon}>x{this.state.achievementsObject[item].value}</Text> 
-                                    : <Text style={styles.numTimesWon}></Text>}
+                                    {(this.state.achievementsObject[item].value !== true) && (this.state.achievementsObject[item].value !== false) ? <Text style={styles.numTimesWon}>x{this.state.achievementsObject[item].value}</Text>
+                                        : <Text style={styles.numTimesWon}></Text>}
                                     <Image source={{ uri: this.state.achievementsObject[item].link }} style={{ resizeMode: 'contain', minWidth: 90, minHeight: 90, maxWidth: 90, maxHeight: 90, borderRadius: 100 }} />
                                     <Text style={styles.item}>
                                         {this.state.achievementsObject[item].name}

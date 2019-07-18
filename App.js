@@ -7,6 +7,7 @@
  * 21. Achievement for høgste streak alltime. 
  * 22. Link til badge i databasen
  * 24. update username, email verificiation,  delete account, profile description,
+ * 25. Trekk detail screen og achievement screen ut i egen comp
  */
 
 
