@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
 
-export default class ChangeUsername extends React.Component {
+export default class ChangePassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

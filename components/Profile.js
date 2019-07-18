@@ -92,14 +92,8 @@ export default class Profile extends React.Component {
 
     if (this.state.userId && this.state.profilepiccheck && this.state.username) {
       return (
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={Header.HEIGHT + 20}
-          style={{
-            backgroundColor: '#2D3245', flex: 1, width: Dimensions.get('window').width,
-            height: Dimensions.get('window').height, justifyContent: 'center'
-          }}
-          behavior='padding'
-        >
+          <View style={{
+            backgroundColor: '#2D3245', flex: 1, justifyContent: 'center' }}>
           <View>
             <View style={styles.hourStyles}>
               <View style={{ width: '33%' }}>
@@ -171,7 +165,7 @@ export default class Profile extends React.Component {
               />
             </View>
           </View>
-        </KeyboardAvoidingView>
+          </View>
       )
     }
     else {

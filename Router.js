@@ -14,6 +14,7 @@ import DetailScreen from './components/DetailScreen'
 import Homescreen from './components/HomeScreen'
 import SettingsScreen from './components/SettingsScreen'
 import ChangeUsername from './components/ChangeUsername'
+import ChangePassword from './components/ChangePassword'
 const sizeOfIcons = 32;
 
 const LeaderBoardWrapperView = createStackNavigator(  
@@ -129,6 +130,13 @@ const profileWrapperView = createStackNavigator(
         
       }
     },
+    ChangePassword: {
+      screen: ChangePassword,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white'}}>Change Password</Text></View>,
+        
+      }
+    },
   },
   {
     initialRouteName: 'Profile',
@@ -192,6 +200,7 @@ export const SignedIn = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
+      keyboardHidesTabBar: true,
       showLabel: false,
       activeTintColor: '#2D3245',
       activeBackgroundColor: 'orange',
