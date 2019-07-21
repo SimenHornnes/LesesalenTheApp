@@ -55,11 +55,12 @@ export default class Achievements extends React.Component {
             recentPost.once('value').then(snapshot => {
                 let urllist = []
                 snapshot.forEach(userSnapshot => {
-                    urllist.push({
+                    if(userSnapshot.key !== 'name' && userSnapshot.val() !== 0 && userSnapshot.key !== 'before8Weekly'&& userSnapshot.key !== 'before8Semester'&& userSnapshot.key !== 'before8AllTime'&& userSnapshot.key !== 'weeklywinnerAllTime'){
+                        urllist.push({
                         name: userSnapshot.key,
                         value: userSnapshot.val(),
                         link: this.state.achievementsurl[userSnapshot.key]
-                    })
+                    })}
                     //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
                 })
 

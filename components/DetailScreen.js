@@ -78,11 +78,12 @@ export default class Profile extends React.Component {
             recentPost.once('value').then(snapshot => {
                 let urllist = []
                 snapshot.forEach(userSnapshot => {
+                    if(userSnapshot.key !== 'name' && userSnapshot.val() !== 0 && userSnapshot.key !== 'before8Weekly'&& userSnapshot.key !== 'before8Semester'&& userSnapshot.key !== 'before8AllTime'&& userSnapshot.key !== 'weeklywinnerAllTime'){
                     urllist.push({
                         name: userSnapshot.key,
                         value: userSnapshot.val(),
                         link: this.state.achievementsurl[userSnapshot.key]
-                    })
+                    })}
                     //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
                 })
 
@@ -111,7 +112,7 @@ export default class Profile extends React.Component {
 
                     <View style={{ paddingVertical: 20, backgroundColor: '#2D3245' }}>
                         <View style={styles.hourStyles}>
-                            <View style={{ width: '33%' }}>
+                            <View style={{ width: '33%', backgroundColor: '#2D3245', }}>
                                 <Text style={[styles.textStyleHomescreen, { fontSize: 20 }]}>Alltime:</Text>
                                 <View style={styles.hStyle}>
                                     <Text style={styles.textStyleHomescreen}>{Math.trunc(this.state.hoursAllTime / 60)}</Text>
@@ -191,7 +192,7 @@ export default class Profile extends React.Component {
 
                         </View> */
 const styles = StyleSheet.create({
-    dataWrapper: { marginTop: -1, },
+    dataWrapper: { marginTop: -1, backgroundColor: '#2D3245', },
     textStyleHomescreen: {
         fontSize: 17,
         color: 'white',
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     },
     hourStyles: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     hStyle: {
         flexWrap: 'wrap',

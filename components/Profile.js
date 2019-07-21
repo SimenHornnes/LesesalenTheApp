@@ -93,14 +93,10 @@ export default class Profile extends React.Component {
 
     if (this.state.userId && this.state.profilepiccheck && this.state.username) {
       return (
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={Header.HEIGHT + 20}
-          style={{
-            backgroundColor: '#2D3245', flex: 1, width: Dimensions.get('window').width,
-            height: Dimensions.get('window').height, 
-          }}
-          behavior='padding'
-        >
+
+        <View style={{
+          backgroundColor: '#2D3245', flex: 1
+        }}>
           <Text style={{ textAlign: 'right', textAlignVertical: 'top', marginTop: 10, marginRight: 10, color: 'white' }}>{`Last updated: ${this.state.time.date}.${this.state.time.month} ${this.state.time.hours}:${this.state.time.min}`}</Text>
 
           <View>
@@ -166,15 +162,8 @@ export default class Profile extends React.Component {
 
 
 
-            <View >
-              <Button buttonStyle={{ backgroundColor: "orange", borderRadius: 40, minWidth: '90%', alignSelf: 'center' }}
-
-                title="SIGN OUT"
-                onPress={() => (firebase.auth().signOut())}
-              />
-            </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       )
     }
     else {

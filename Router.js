@@ -12,19 +12,37 @@ import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import DetailScreen from './components/DetailScreen'
 import Homescreen from './components/HomeScreen'
+import SettingsScreen from './components/SettingsScreen'
+import ChangeUsername from './components/ChangeUsername'
+import ChangePassword from './components/ChangePassword'
+import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 const sizeOfIcons = 32;
 
-const LeaderBoardWrapperView = createStackNavigator(  
+
+_menu = null;
+
+setMenuRef = ref => {
+  _menu = ref;
+};
+
+hideMenu = () => {
+  _menu.hide();
+};
+
+showMenu = () => {
+  _menu.show();
+};
+
+const LeaderBoardWrapperView = createStackNavigator(
   {
     Leaderboard: {
       screen: Leaderboard = createMaterialTopTabNavigator({
-        //THANK YOU SAEED
         Alltime: ({ navigation }) =>
           <AllTimeLeaderBoard navigation={navigation} path="hoursAllTime" />,
         Semester: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="hoursSemester" />,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursSemester"/>,
         Weekly: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="hoursWeekly" />,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursWeekly"/>,
       }, {
           tabBarOptions: {
             pressColor: 'white',
@@ -39,24 +57,49 @@ const LeaderBoardWrapperView = createStackNavigator(
               borderTopColor: 'transparent',
               backgroundColor: 'orange',
             }
+          },
+          navigationOptions: ({ navigation }) => {
+            
           }
+
         }
       ),
-      navigationOptions: {
-        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white', paddingLeft: '4%', paddingTop: '3%' }}>Leaderboard</Text></View>,
-        headerStyle: {
-          elevation: 0, // remove shadow on Android,
-          backgroundColor: 'orange',
-          shadowOpacity: 0, // remove shadow on iOS
-        },
+
+      navigationOptions: ({ navigation }) => {
+        return {
+          headerTitle: <View ><Text style={{ fontSize: 20, color: 'white', paddingLeft: '4%', paddingTop: '3%' }}>Leaderboard</Text></View>,
+          headerStyle: {
+            elevation: 0, // remove shadow on Android,
+            backgroundColor: 'orange',
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerRight: (<View style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            width: 120
+          }}>
+            <Icon name='md-search' size={sizeOfIcons - 3} style={{ color: 'white', paddingRight: 14 }} onPress={() => { navigation.navigate('SettingsScreen'), { navigation } }} />
+
+            <Menu
+              ref={this.setMenuRef}
+              button={<Text onPress={this.showMenu}><Icon name='md-menu' size={sizeOfIcons - 3} style={{ color: 'white' }} /></Text>}
+            >
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'hoursSemester', section: 'users/'}); navigation.navigate('Weekly', {sortpath: 'hoursWeekly', section: 'users/'}); navigation.navigate('Alltime', {sortpath: 'hoursAllTime', section: 'users/'});  }}>Hours</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'before8Semester', section: 'achievements/'}); navigation.navigate('Weekly', {sortpath: 'before8Weekly', section: 'achievements/'}); navigation.navigate('Alltime', {sortpath: 'before8AllTime', section: 'achievements/'}); }}>Before8</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'streakSemester', section: 'users/'}); navigation.navigate('Weekly', {sortpath: 'streakWeekly', section: 'users/'}); navigation.navigate('Alltime', {sortpath: 'streakAllTime', section: 'users/'});  }}>Streak</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'weeklywinnerSemester', section: 'achievements/'}); navigation.navigate('Weekly', {sortpath: 'weeklywinner', section: 'achievements/'}); navigation.navigate('Alltime', {sortpath: 'weeklywinnerAllTime', section: 'achievements/'}); }}>WeeklyWinner</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'semesterwinner'}); navigation.navigate('Weekly', {sortpath: 'semesterwinner'}); navigation.navigate('Alltime', {sortpath: 'semesterwinner'});  }}>SemesterWinner</MenuItem>
+            </Menu>
+          </View>)
+        }
       }
     },
     DetailScreen: {
       screen: DetailScreen,
-      navigationOptions:({navigation}) => ({
-          title: navigation.getParam('e2', 'NO-ID')+"'s profile"
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.getParam('e2', 'NO-ID') + "'s profile"
       })
-    }, 
+    },
   },
 
   {
@@ -81,7 +124,7 @@ const profileWrapperView = createStackNavigator(
           tabBarOptions: {
             pressColor: 'white',
             labelStyle: {
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: '300'
             },
             indicatorStyle: { backgroundColor: 'white' },
@@ -106,14 +149,33 @@ const profileWrapperView = createStackNavigator(
                 shadowOpacity: 0, // remove shadow on iOS
 
               },
+              headerRight: <Icon name='md-settings' size={sizeOfIcons - 3} style={{ color: 'white', paddingRight: 14 }} onPress={() => { navigation.navigate('SettingsScreen'), { navigation } }} />
             }
           }
         }
       ),
     },
 
-    DetailScreen: {
-      screen: DetailScreen,
+    SettingsScreen: {
+      screen: SettingsScreen,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white' }}>Settings</Text></View>,
+
+      }
+    },
+    ChangeUsername: {
+      screen: ChangeUsername,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white' }}>Change Username</Text></View>,
+
+      }
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+      navigationOptions: {
+        headerTitle: <View ><Text style={{ fontSize: 20, color: 'white' }}>Change Password</Text></View>,
+
+      }
     },
   },
   {
@@ -178,6 +240,7 @@ export const SignedIn = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
+      keyboardHidesTabBar: true,
       showLabel: false,
       activeTintColor: '#2D3245',
       activeBackgroundColor: 'orange',
