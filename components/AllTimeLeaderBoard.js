@@ -5,6 +5,8 @@ import { Table, TableWrapper, Row } from 'react-native-table-component';
 import CustomTable from './CustomTable'
 import AchievementsCustomTable from './AchievementsCustomTable'
 import fetchData from './BackgroundFetch'
+import {colorObject} from './ColorConfig'
+
 
 
 
@@ -89,7 +91,6 @@ export default class Leaderboard extends React.Component {
 
         const newList = this.state.highScoreList.map(el => el.id === lista.id ? lista : el).sort((a, b) => a.hours - b.hours)
         if (this.state.sortpath === 'NO-ID' && this.state.section === 'NO-ID') {
-          console.log('ups2')
 
           this.setState({ highScoreList: newList })
         }
@@ -116,20 +117,15 @@ export default class Leaderboard extends React.Component {
     else if ((this.state.section === 'achievements/' && this.state.sortpath.startsWith('before8')) || (this.state.section === 'users/' && this.state.sortpath.startsWith('streak'))) {
       const ref = firebase.database().ref(this.state.section)
       ref.orderByChild(this.state.sortpath).on('child_changed', (snapshot) => {
-        console.log(snapshot)
         let lista = ({
           id: (snapshot.key),
           numwon: (snapshot.val()[this.state.sortpath]),
           name: (snapshot.val().name),
         });
-        console.log(snapshot.index_.indexPath_.pieces_)
 
         const newList = this.state.highScoreList.map(el => el.id === lista.id ? lista : el).sort((a, b) => a.numwon - b.numwon)
         if (snapshot.index_.indexPath_.pieces_[0] === this.state.sortpath) {
           if ((this.state.section === 'users/' && this.state.sortpath.startsWith('streak')) || (this.state.section === 'achievements/' && this.state.sortpath.startsWith('before8'))) {
-            console.log('ups2')
-            console.log(this.state.section)
-            console.log(this.state.sortpath)
             this.setState({ highScoreList: newList })
           }
         }
@@ -146,8 +142,6 @@ export default class Leaderboard extends React.Component {
           name: (snapshot.val().name),
         });
         if ((this.state.section === 'users/' && this.state.sortpath.startsWith('streak')) || (this.state.section === 'achievements/' && this.state.sortpath.startsWith('before8'))) {
-          console.log('ups2')
-
           this.setState({ highScoreList: lista.sort((a, b) => a.numwon - b.numwon) })
         }
       });
@@ -204,8 +198,8 @@ export default class Leaderboard extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
-              progressBackgroundColor="orange"
-              colors={['white']}
+              progressBackgroundColor={colorObject.SecondaryColor}
+              colors={[colorObject.TertiaryColor]}
             />
           }>
             <AchievementsCustomTable navigation={this.props.navigation} list={this.state.highScoreList} name={this.state.username}></AchievementsCustomTable>
@@ -221,8 +215,8 @@ export default class Leaderboard extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
-              progressBackgroundColor="orange"
-              colors={['white']}
+              progressBackgroundColor={colorObject.SecondaryColor}
+              colors={[colorObject.TertiaryColor]}
             />
           }>
             <CustomTable navigation={this.props.navigation} list={this.state.highScoreList} name={this.state.username}></CustomTable>
@@ -230,8 +224,8 @@ export default class Leaderboard extends React.Component {
         </View>
       )
     } else {
-      return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
-        <Text style={{ color: 'white' }}> Waiting for data...</Text>
+      return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
+        <Text style={{ color: colorObject.TertiaryColor }}> Waiting for data...</Text>
       </View>)
     }
   }
@@ -241,10 +235,10 @@ export default class Leaderboard extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: '#2D3245' },
-  header: { height: 35, backgroundColor: '#2D3245' },
-  headerText: { textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 20 },
+  container: { flex: 1, padding: 0, paddingTop: 0, backgroundColor: colorObject.PrimaryColor },
+  header: { height: 35, backgroundColor: colorObject.PrimaryColor },
+  headerText: { textAlign: 'center', color: colorObject.TertiaryColor, fontWeight: 'bold', fontSize: 20 },
   text: { textAlign: 'center', fontWeight: '200', fontSize: 18, color: "black", },
   dataWrapper: { marginTop: -1 },
-  row: { height: 30, backgroundColor: 'white' }
+  row: { height: 30, backgroundColor: colorObject.TertiaryColor}
 });

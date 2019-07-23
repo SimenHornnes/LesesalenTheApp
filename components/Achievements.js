@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Dimensions, StyleSheet, Image, ScrollView, FlatList } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import firebase from 'firebase/app';
+import {colorObject} from './ColorConfig'
+
 
 
 export default class Achievements extends React.Component {
@@ -102,7 +104,7 @@ export default class Achievements extends React.Component {
 
         if (isDataloaded && isAchievementObjectLoaded) {
             return (
-                <View style={{ backgroundColor: '#2D3245', height: '100%', }}>
+                <View style={{ backgroundColor: colorObject.PrimaryColor, height: '100%', }}>
                     <ScrollView style={styles.dataWrapper}>
                         {this.state.achievementsObject ? <FlatList
                             data={Object.keys(this.state.achievementsObject)}
@@ -143,7 +145,7 @@ export default class Achievements extends React.Component {
 const styles = StyleSheet.create({
     textStyleHomescreen: {
         fontSize: 30,
-        color: 'white',
+        color: colorObject.TertiaryColor,
         marginBottom: 20,
         justifyContent: 'center',
         alignSelf: 'center',
@@ -155,14 +157,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         //textAlignVertical: 'center',
         textAlign: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
 
     },
     numTimesWon: {
         paddingRight: 10,
         textAlign: 'right',
         alignSelf: 'stretch',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         fontSize: 12,
     }
 

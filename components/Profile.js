@@ -6,6 +6,8 @@ import firebase from 'firebase/app';
 import { withNavigation } from 'react-navigation';
 import { Input } from 'react-native-elements';
 import { Header } from 'react-navigation';
+import {colorObject} from './ColorConfig'
+
 
 
 
@@ -95,9 +97,9 @@ export default class Profile extends React.Component {
       return (
 
         <View style={{
-          backgroundColor: '#2D3245', flex: 1
+          backgroundColor: colorObject.PrimaryColor, flex: 1
         }}>
-          <Text style={{ textAlign: 'right', textAlignVertical: 'top', marginTop: 10, marginRight: 10, color: 'white' }}>{`Last updated: ${this.state.time.date}.${this.state.time.month} ${this.state.time.hours}:${this.state.time.min}`}</Text>
+          <Text style={{ textAlign: 'right', textAlignVertical: 'top', marginTop: 10, marginRight: 10, color: colorObject.TertiaryColor }}>{`Last updated: ${this.state.time.date}.${this.state.time.month} ${this.state.time.hours}:${this.state.time.min}`}</Text>
 
           <View>
             <View style={styles.hourStyles}>
@@ -139,7 +141,7 @@ export default class Profile extends React.Component {
             }}>
 
 
-              {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'contain', minWidth: 340, minHeight: 340, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Long press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
+              {this.state.profilePic ? (<Image source={{ uri: this.state.profilePic }} style={{ resizeMode: 'contain', minWidth: 340, minHeight: 340, padding: 10, borderRadius: 50, }} />) : (<Text style={{ color: colorObject.TertiaryColor, fontSize: 12 }}>Long press to add picture, must be on the format 'https://i.imgur.com/dwH1H2M.jpg'</Text>)}
 
 
 
@@ -153,7 +155,7 @@ export default class Profile extends React.Component {
               })}
               value={this.state.profilePic}
 
-              inputContainerStyle={{ backgroundColor: 'white', borderRadius: 40 }}
+              inputContainerStyle={{ backgroundColor: colorObject.TertiaryColor, borderRadius: 40 }}
 
             />) : null}
             {this.state.buttonPressed ? (<Button title="Accept change" onPress={() => { this.setProfilePic() }} />) : null}
@@ -168,8 +170,8 @@ export default class Profile extends React.Component {
     }
     else {
       return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
-          <Text style={{ color: 'white' }}> Waiting for data...</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
+          <Text style={{ color: colorObject.TertiaryColor }}> Waiting for data...</Text>
         </View>
       )
     }
@@ -178,7 +180,7 @@ export default class Profile extends React.Component {
 const styles = StyleSheet.create({
   textStyleHomescreen: {
     fontSize: 17,
-    color: 'white',
+    color: colorObject.TertiaryColor,
     justifyContent: 'center',
     alignSelf: 'center',
   },
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
   },
   textStyleHomescreen2: {
     fontSize: 17,
-    color: 'white',
+    color: colorObject.TertiaryColor,
     justifyContent: 'center',
     alignSelf: 'flex-end',
     marginBottom: '1%'

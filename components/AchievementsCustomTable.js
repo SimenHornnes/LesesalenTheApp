@@ -4,8 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DetailScreen from './DetailScreen'
 import { createStackNavigator } from 'react-navigation';
 import firebase from 'firebase/app';
-
-
+import {colorObject} from './ColorConfig'
 
 
 
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         borderBottomColor: '#373d54',
         borderBottomWidth: 1,
-        backgroundColor: '#2D3245',
+        backgroundColor: colorObject.PrimaryColor,
         height: 70,
         flex: 1,
         justifyContent: 'center',
@@ -103,14 +102,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         alignItems: 'center',
-        color: 'white'
+        color: colorObject.TertiaryColor
     },
     textHours: {
         display: 'flex',
         fontSize: 16,
         color: 'black',
         alignItems: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         textAlign: 'right',
         alignSelf: 'stretch'
     },
@@ -118,7 +117,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         fontSize: 11,
         alignItems: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         textAlign: 'right',
         alignSelf: 'stretch'
     },
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
-        color: 'white'
+        color: colorObject.TertiaryColor
     },
 
     col1: {

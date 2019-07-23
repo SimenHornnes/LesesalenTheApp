@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DetailScreen from './DetailScreen'
 import { createStackNavigator } from 'react-navigation';
 import firebase from 'firebase/app';
-
+import {colorObject} from './ColorConfig'
 
 
 
@@ -64,12 +64,12 @@ export default class CustomTable extends Component {
 
                     </View>
                     <View style={styles.col5}>
-                        {e4 > 15 ? (<View><Icon name='md-flame' color='orange' size={30} ></Icon></View>) :
-                            e4 > 10 ? (<View><Icon name='md-flame' color='orange' size={26} ></Icon></View>) :
-                                e4 > 6 ? (<View><Icon name='md-flame' color='orange' size={22} ></Icon></View>) :
-                                    e4 > 4 ? (<View style={{}}><Icon name='md-flame' color='orange' size={18} ></Icon></View>) :
-                                        e4 > 3 ? (<View style={{}}><Icon name='md-flame' color='orange' size={14}></Icon></View>) :
-                                            e4 > 2 ? (<Icon name='md-flame' color='orange' size={10}></Icon>) : (null)}
+                        {e4 > 15 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={30} ></Icon></View>) :
+                            e4 > 10 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={26} ></Icon></View>) :
+                                e4 > 6 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={22} ></Icon></View>) :
+                                    e4 > 4 ? (<View style={{}}><Icon name='md-flame' color={colorObject.FlameColor} size={18} ></Icon></View>) :
+                                        e4 > 3 ? (<View style={{}}><Icon name='md-flame' color={colorObject.FlameColor} size={14}></Icon></View>) :
+                                            e4 > 2 ? (<Icon name='md-flame' color={colorObject.FlameColor} size={10}></Icon>) : (null)}
                     </View>
 
                 </View>
@@ -80,7 +80,6 @@ export default class CustomTable extends Component {
 
 
     render() {
-        console.log(this.props.list)
         return (
             <View>
                 {
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         borderBottomColor: '#373d54',
         borderBottomWidth: 1,
-        backgroundColor: '#2D3245',
+        backgroundColor: colorObject.PrimaryColor,
         height: 70,
         flex: 1,
         justifyContent: 'center',
@@ -110,14 +109,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         alignItems: 'center',
-        color: 'white'
+        color: colorObject.TertiaryColor
     },
     textHours: {
         display: 'flex',
         fontSize: 16,
         color: 'black',
         alignItems: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         textAlign: 'right', 
         alignSelf: 'stretch'
     },
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         fontSize: 11,
         alignItems: 'center',
-        color: 'white', 
+        color: colorObject.TertiaryColor, 
         textAlign: 'right', 
         alignSelf: 'stretch'
     },
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
-        color: 'white'
+        color: colorObject.TertiaryColor
     },
 
     col1: {

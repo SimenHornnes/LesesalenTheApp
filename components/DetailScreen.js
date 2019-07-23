@@ -3,6 +3,7 @@ import { View, Dimensions, StyleSheet, Image, ScrollView, FlatList } from 'react
 import { Card, Button, Text } from 'react-native-elements';
 import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
+import {colorObject} from './ColorConfig'
 import { withNavigation } from 'react-navigation';
 
 
@@ -110,7 +111,7 @@ export default class Profile extends React.Component {
             return (
                 <ScrollView style={styles.dataWrapper} >
 
-                    <View style={{ paddingVertical: 20, backgroundColor: '#2D3245' }}>
+                    <View style={{ paddingVertical: 20, backgroundColor: colorObject.PrimaryColor }}>
                         <View style={styles.hourStyles}>
                             <View style={{ width: '33%', backgroundColor: '#2D3245', }}>
                                 <Text style={[styles.textStyleHomescreen, { fontSize: 20 }]}>Alltime:</Text>
@@ -148,7 +149,7 @@ export default class Profile extends React.Component {
                             width: 340, height: 340, borderRadius: 50, padding: 10, alignItems: "center",
                             justifyContent: "center",
                             alignSelf: "center",
-                        }} />) : (<Text style={{ color: "white", fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
+                        }} />) : (<Text style={{ color: colorObject.TertiaryColor, fontSize: 12 }}>Tell this user to get a profile picture</Text>)}
 
 
                         <Text style={styles.textStyleHomescreen}>Achievements</Text>
@@ -175,8 +176,8 @@ export default class Profile extends React.Component {
         }
         else {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
-                    <Text style={{ color: 'white' }}> Waiting for data...</Text>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
+                    <Text style={{ color: colorObject.TertiaryColor }}> Waiting for data...</Text>
                 </View>
             )
         }
@@ -192,10 +193,10 @@ export default class Profile extends React.Component {
 
                         </View> */
 const styles = StyleSheet.create({
-    dataWrapper: { marginTop: -1, backgroundColor: '#2D3245', },
+    dataWrapper: { marginTop: -1, backgroundColor: colorObject.PrimaryColor, },
     textStyleHomescreen: {
         fontSize: 17,
-        color: 'white',
+        color: colorObject.TertiaryColor,
         justifyContent: 'center',
         alignSelf: 'center',
     },
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     },
     textStyleHomescreen2: {
         fontSize: 17,
-        color: 'white',
+        color: colorObject.TertiaryColor,
         justifyContent: 'center',
         alignSelf: 'flex-end',
         marginBottom: '1%'
@@ -223,14 +224,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         //textAlignVertical: 'center',
         textAlign: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
 
     },
     numTimesWon: {
         paddingRight: 10,
         textAlign: 'right',
         alignSelf: 'stretch',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         fontSize: 12,
     }
 });
