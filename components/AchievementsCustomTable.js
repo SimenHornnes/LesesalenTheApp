@@ -72,7 +72,6 @@ export default class AchievementsCustomTable extends Component {
 
 
     render() {
-        console.log(this.props.list)
         return (
             <View>
                 {
