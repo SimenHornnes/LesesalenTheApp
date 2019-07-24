@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Dimensions, StyleSheet, Image, ScrollView, FlatList } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import firebase from 'firebase/app';
+import {colorObject} from './ColorConfig'
+
 
 
 export default class Achievements extends React.Component {
@@ -26,16 +28,14 @@ export default class Achievements extends React.Component {
         if (currentUser != null && this._isMounted) {
             this.setState({ userId: currentUser.uid })
         }
+      
+        
     }
 
     componentWillUnmount() {
         this._isMounted = false
     }
-    /*componentDidMount() {
-        if (this.state.userId != null) {
-            this.fetchAchievements()
-        }
-    }*/
+
 
 
     fetchAchievements() {
@@ -52,18 +52,18 @@ export default class Achievements extends React.Component {
 
         })
 
-
         if (this.state.userId != null && this.state.achievementsurl) {
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
                 let urllist = []
                 snapshot.forEach(userSnapshot => {
-                    urllist.push({
+                    if(userSnapshot.key !== 'name' && userSnapshot.val() !== 0 && userSnapshot.key !== 'before8Weekly'&& userSnapshot.key !== 'before8Semester'&& userSnapshot.key !== 'before8AllTime'&& userSnapshot.key !== 'weeklywinnerAllTime'){
+                        urllist.push({
                         name: userSnapshot.key,
-                        value : userSnapshot.val(),
-                        link : this.state.achievementsurl[userSnapshot.key]
-                    })
-                  //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
+                        value: userSnapshot.val(),
+                        link: this.state.achievementsurl[userSnapshot.key]
+                    })}
+                    //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
                 })
 
                 this.setState({ achievementsObject: urllist })
@@ -90,7 +90,7 @@ export default class Achievements extends React.Component {
 
 
     render() {
-       // console.log(this.state.achievementsurl)
+        // console.log(this.state.achievementsurl)
         if (this.state.userId && !this.state.achievementsObject) {
             this.fetchAchievements()
         }
@@ -104,15 +104,15 @@ export default class Achievements extends React.Component {
 
         if (isDataloaded && isAchievementObjectLoaded) {
             return (
-                <View style={{ backgroundColor: '#2D3245', height: '100%', }}>
+                <View style={{ backgroundColor: colorObject.PrimaryColor, height: '100%', }}>
                     <ScrollView style={styles.dataWrapper}>
                         {this.state.achievementsObject ? <FlatList
                             data={Object.keys(this.state.achievementsObject)}
                             numColumns={3}
                             renderItem={({ item }) =>
                                 <View style={{ paddingVertical: 20, width: '33.333333%', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                                    {(this.state.achievementsObject[item].value !== true) && (this.state.achievementsObject[item].value !== false) ? <Text style={styles.numTimesWon}>x{this.state.achievementsObject[item].value}</Text> 
-                                    : <Text style={styles.numTimesWon}></Text>}
+                                    {(this.state.achievementsObject[item].value !== true) && (this.state.achievementsObject[item].value !== false) ? <Text style={styles.numTimesWon}>x{this.state.achievementsObject[item].value}</Text>
+                                        : <Text style={styles.numTimesWon}></Text>}
                                     <Image source={{ uri: this.state.achievementsObject[item].link }} style={{ resizeMode: 'contain', minWidth: 90, minHeight: 90, maxWidth: 90, maxHeight: 90, borderRadius: 100 }} />
                                     <Text style={styles.item}>
                                         {this.state.achievementsObject[item].name}
@@ -145,7 +145,7 @@ export default class Achievements extends React.Component {
 const styles = StyleSheet.create({
     textStyleHomescreen: {
         fontSize: 30,
-        color: 'white',
+        color: colorObject.TertiaryColor,
         marginBottom: 20,
         justifyContent: 'center',
         alignSelf: 'center',
@@ -157,14 +157,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         //textAlignVertical: 'center',
         textAlign: 'center',
-        color: 'white',
+        color: colorObject.TertiaryColor,
 
     },
     numTimesWon: {
         paddingRight: 10,
         textAlign: 'right',
         alignSelf: 'stretch',
-        color: 'white',
+        color: colorObject.TertiaryColor,
         fontSize: 12,
     }
 

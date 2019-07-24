@@ -57,6 +57,9 @@ export default class SignUp extends Component {
                         hoursWeekly: 0,
                         haveBeenToSchool: false,
                         streak: 0,
+                        streakAllTime: 0,
+                        streakSemester: 0,
+                        streakWeekly: 0,
                         totalHoursToday: 0,
                         time: time,
                         isOnLesesalen: true,
@@ -74,9 +77,15 @@ export default class SignUp extends Component {
                     })
 
                     firebase.database().ref(`achievements/${userCredentials.user.uid}`).set({
+                        name: this.state.displayName,
                         weeklywinner: 0,
+                        weeklywinnerSemester: 0,
+                        weeklywinnerAllTime: 0,
                         semesterwinner: 0,
-                        before8: 0
+                        before8: 0,
+                        before8AllTime: 0,
+                        before8Semester: 0,
+                        before8Weekly: 0,
                     })
                    
                     //this.setState({ hours: snapshot.val() + 100 })

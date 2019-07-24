@@ -11,20 +11,23 @@ import {colorObject} from './ColorConfig'
 
 
 
-
 //-fire
 
-export default class CustomTable extends Component {
+export default class AchievementsCustomTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userId: undefined,
+            sortpath: undefined
         }
     }
 
     componentDidMount() {
         const { currentUser } = firebase.auth()
-        this.setState({ userId: currentUser.uid })
+        const { navigation } = this.props;
+    const sortpath = navigation.getParam('sortpath', 'NO-ID');
+        this.setState({ userId: currentUser.uid, sortpath: sortpath })
+        
 
     }
 
@@ -56,22 +59,11 @@ export default class CustomTable extends Component {
                         </View>
                     </View>
                     <View style={styles.col3}>
-                        <Text style={styles.textHours}>{Math.trunc(e3 / 60)}</Text>
-                        <Text style={[styles.textHours, {fontSize: 13, alignSelf: 'flex-end', marginBottom: '1%'}]}>h</Text>
+                        <Text style={styles.textHours}>{e3}</Text>
                     </View>
                     <View style={styles.col4}>
-                        {e4 > 2 && <Text style={styles.text1}>  {e4}  </Text>}
-
+                        <Text style={styles.text1}>  {e4} {this.state.sortpath} </Text>
                     </View>
-                    <View style={styles.col5}>
-                        {e4 > 15 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={30} ></Icon></View>) :
-                            e4 > 10 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={26} ></Icon></View>) :
-                                e4 > 6 ? (<View><Icon name='md-flame' color={colorObject.FlameColor} size={22} ></Icon></View>) :
-                                    e4 > 4 ? (<View style={{}}><Icon name='md-flame' color={colorObject.FlameColor} size={18} ></Icon></View>) :
-                                        e4 > 3 ? (<View style={{}}><Icon name='md-flame' color={colorObject.FlameColor} size={14}></Icon></View>) :
-                                            e4 > 2 ? (<Icon name='md-flame' color={colorObject.FlameColor} size={10}></Icon>) : (null)}
-                    </View>
-
                 </View>
             </TouchableHighlight>
 
@@ -80,11 +72,12 @@ export default class CustomTable extends Component {
 
 
     render() {
+        console.log(this.props.list)
         return (
             <View>
                 {
                     this.props.list.slice(0).reverse().map((rowData, index) =>  // This will render a row for each data element.
-                        this.renderRow(index, rowData.name, rowData.hours, rowData.streak == null ? ('0') : (rowData.streak), rowData.id)
+                        this.renderRow(index, rowData.name, rowData.numwon, '', rowData.id)
                     )
                 }
             </View>
@@ -117,15 +110,15 @@ const styles = StyleSheet.create({
         color: 'black',
         alignItems: 'center',
         color: colorObject.TertiaryColor,
-        textAlign: 'right', 
+        textAlign: 'right',
         alignSelf: 'stretch'
     },
     text1: {
         display: 'flex',
         fontSize: 11,
         alignItems: 'center',
-        color: colorObject.TertiaryColor, 
-        textAlign: 'right', 
+        color: colorObject.TertiaryColor,
+        textAlign: 'right',
         alignSelf: 'stretch'
     },
 

@@ -3,6 +3,8 @@ import {
     FlatList,
     StyleSheet, Text, View, Alert,
 } from 'react-native';
+import {colorObject} from './ColorConfig'
+
 
 export default class LesesalProgram extends Component {
     constructor(props) {
@@ -48,14 +50,14 @@ export default class LesesalProgram extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#2D3245',
+        backgroundColor: colorObject.PrimaryColor,
     },
     item: {
         paddingLeft: '3%',
         fontSize: 16,
         textAlignVertical: 'center',
         height: 75,
-        color: 'white',
+        color: colorObject.TertiaryColor,
     },
     wrapper: {
         flex: 1,
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#373d54',
     },
     date: {
-        color: 'white',
+        color: colorObject.TertiaryColor,
         fontSize: 16,
         textAlign: 'center',
         fontWeight: 'bold'

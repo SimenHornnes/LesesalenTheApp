@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-nat
 import "firebase/database";
 import LesesalProgram from './lesesalprogram'
 import React from 'react';
+import {colorObject} from './ColorConfig'
+
 
 
 async function requestLocationPermission() {
@@ -83,9 +85,9 @@ export default class Homescreen extends React.Component {
     return (
       <View style={styles.HomescreenStyle }>
         <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
-        <View style={{ backgroundColor: 'orange', paddingTop: '3%', paddingBottom: '2%' }}><Text style={styles.textStyleHomescreen}>Calendar</Text></View>
-        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : ((<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2D3245' }}>
-          <Text style={{ color: 'white' }}> Waiting for data...</Text>
+        <View style={{ backgroundColor: colorObject.TopBarColor, paddingTop: '3%', paddingBottom: '2%' }}><Text style={styles.textStyleHomescreen}>Calendar</Text></View>
+        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : ((<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
+          <Text style={{ color: colorObject.TertiaryColor }}> Waiting for data...</Text>
         </View>))}</View>
       </View>
     );
@@ -96,7 +98,7 @@ export default class Homescreen extends React.Component {
 const styles = StyleSheet.create({
   HomescreenStyle: {
     flex: 1,
-    backgroundColor: '#2D3245'
+    backgroundColor: colorObject.PrimaryColor
   },
   textStyleHomescreen: {
     paddingTop: 8,
@@ -104,6 +106,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     padding: 20,
     fontSize: 20,
-    color: 'white',
+    color: colorObject.TopBarIconsAndTextColor,
   }
 });

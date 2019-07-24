@@ -40,6 +40,9 @@ export default class ChangeUsername extends React.Component {
         firebase.database().ref(`users/${currentUser.uid}`).update({
             name: this.state.newUsername
         })
+        firebase.database().ref(`achievements/${currentUser.uid}`).update({
+            name: this.state.newUsername
+        })
         this.setState({ visible: false })
     }
 
