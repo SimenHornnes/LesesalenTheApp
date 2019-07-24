@@ -18,6 +18,7 @@ export default class Leaderboard extends React.Component {
       refreshing: false,
     }
   }
+  
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
@@ -32,7 +33,7 @@ export default class Leaderboard extends React.Component {
   }
 
 
-  componentDidMount() {
+  componentDidMount() { 
     this.fetchData()
     const { currentUser } = firebase.auth()
     this.setState({ username: currentUser.displayName })
