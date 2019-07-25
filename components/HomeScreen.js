@@ -5,6 +5,7 @@ import "firebase/database";
 import LesesalProgram from './lesesalprogram'
 import React from 'react';
 import {colorObject} from './ColorConfig'
+import FtueScreen from '../WelcomeScreen';
 
 
 
@@ -84,6 +85,10 @@ export default class Homescreen extends React.Component {
     const isDataSourceLoaded = this.state.dataSource.length > 0
     return (
       <View style={styles.HomescreenStyle }>
+        <View>
+          <FtueScreen pagekey={this.props.navigation.state.key} title={"ReadMe"} description={
+            `Smartphones are turning back into dumbphones. To squeeze a little extra battery out of your phone, phone manufacturers automatically turn off many important background services. This effectively kills our app, whose aim it is to track whether or not you are at school in the background. To disable this automatic feature, go into your phone settings -> battery -> App-Launch and then enable manual control over this app. This may vary from phone to phone.`}/>
+      </View>
         <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
         <View style={{ backgroundColor: colorObject.TopBarColor, paddingTop: '3%', paddingBottom: '2%' }}><Text style={styles.textStyleHomescreen}>Calendar</Text></View>
         <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : ((<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>

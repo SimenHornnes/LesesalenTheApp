@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, Dimensions, StyleSheet, TouchableHighlight, Image, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
-import { onSignOut } from '../Auth';
 import firebase from 'firebase/app';
-import { withNavigation } from 'react-navigation';
 import { Input } from 'react-native-elements';
 import { Header } from 'react-navigation';
 import {colorObject} from './ColorConfig'
@@ -31,7 +29,6 @@ export default class Profile extends React.Component {
   //Får noken millisekund rendering time pga må hente fra firebase databasen, 
   //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
   componentWillMount() {
-
     const { currentUser } = firebase.auth()
     if (currentUser != null) {
       const recentPost = firebase.database().ref(`users/${currentUser.uid}`);
