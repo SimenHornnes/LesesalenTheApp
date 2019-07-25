@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions, Keyboard } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Keyboard, Alert } from 'react-native'
 import { Input, Button } from 'react-native-elements';
 import firebase from 'firebase/app';
 import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
@@ -16,13 +16,21 @@ export default class ChangeUsername extends React.Component {
     }
 
 
-    handleNameChange = () => {
+    handleNameChange = async () => {
         if (this.state.newUsername.length > 4 && this.state.newUsername.length < 16) {
             Keyboard.dismiss()
-            this.setState({
-                visible: true,
-                nameError: undefined
+            const { currentUser } = firebase.auth()
+            await currentUser.updateProfile({
+                displayName: this.state.newUsername
             })
+            firebase.database().ref(`users/${currentUser.uid}`).update({
+                name: this.state.newUsername
+            })
+            firebase.database().ref(`achievements/${currentUser.uid}`).update({
+                name: this.state.newUsername
+            })
+            this.setState({ visible: false })
+            Alert.alert('Username has been changed')
         }
         else {
             this.setState({
@@ -44,6 +52,7 @@ export default class ChangeUsername extends React.Component {
             name: this.state.newUsername
         })
         this.setState({ visible: false })
+        Alert.alert('Username has been changed')
     }
 
     render() {
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
         paddingLeft: '3%'
     },
     inputWrapper: {
-        flex: .35,
+        paddingTop: '20%',
         backgroundColor: '#2D3245',
         justifyContent: 'center',
         elevation: 4,
