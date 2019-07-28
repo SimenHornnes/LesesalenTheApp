@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     FlatList,
-    StyleSheet, Text, View, Alert,
+    StyleSheet, Text, View, Alert, TouchableWithoutFeedback
 } from 'react-native';
 import {colorObject} from './ColorConfig'
 
@@ -15,7 +15,9 @@ export default class LesesalProgram extends Component {
     }
 
     getListViewItem = (item) => {
-        Alert.alert(item.description);
+        const link = item.description
+       this.props.navigation.navigate("WebViewHome", { link })
+       console.log(item)
     }
 
     coolDate = (date, day) => {
@@ -34,13 +36,14 @@ export default class LesesalProgram extends Component {
                 <FlatList
                     data={this.props.data}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) =>
-                        <View style={styles.wrapper} onPress={this.getListViewItem.bind(this, item)}>
+                    renderItem={({ item }) => (
+                        <TouchableWithoutFeedback onPress={ () => this.getListViewItem(item)}>
+                        <View style={styles.wrapper}>
                             {this.coolDate(item.start.date ? item.start.date.substring(5, 7) : item.start.dateTime.substring(5, 7), item.start.date ? item.start.date.substring(8, 10) : item.start.dateTime.substring(8, 10))}
                             <Text style={styles.item}>
                                 {item.summary}
                             </Text>
-                        </View>}
+                    </View></TouchableWithoutFeedback>)}
 
                 />
             </View>

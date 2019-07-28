@@ -16,7 +16,8 @@ import SettingsScreen from './components/SettingsScreen'
 import ChangeUsername from './components/ChangeUsername'
 import ChangePassword from './components/ChangePassword'
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
-import {colorObject} from './components/ColorConfig'
+import { colorObject } from './components/ColorConfig'
+import WebViewHome from './components/WebViewHome'
 
 const sizeOfIcons = 32;
 
@@ -42,9 +43,9 @@ const LeaderBoardWrapperView = createStackNavigator(
         Alltime: ({ navigation }) =>
           <AllTimeLeaderBoard navigation={navigation} path="hoursAllTime" />,
         Semester: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="hoursSemester"/>,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursSemester" />,
         Weekly: ({ navigation }) =>
-          <AllTimeLeaderBoard navigation={navigation} path="hoursWeekly"/>,
+          <AllTimeLeaderBoard navigation={navigation} path="hoursWeekly" />,
       }, {
           tabBarOptions: {
             pressColor: 'white',
@@ -61,15 +62,19 @@ const LeaderBoardWrapperView = createStackNavigator(
             }
           },
           navigationOptions: ({ navigation }) => {
-            
           }
 
         }
       ),
 
       navigationOptions: ({ navigation }) => {
+        if(navigation.getParam('mark', 'NO-ID') === 'NO-ID'){
+          navigation.setParams({ mark: 'Hours' })
+        }
         return {
-          headerTitle: <View ><Text style={{ fontSize: 20, color: colorObject.TopBarIconsAndTextColor, paddingLeft: '4%', paddingTop: '3%' }}>Leaderboard</Text></View>,
+          headerTitle: <View ><Text style={{ fontSize: 18, color: colorObject.TopBarIconsAndTextColor, marginLeft: '8%', paddingTop: '3%' }}>Leaderboard</Text>
+          <Text style={{fontSize:12, color: colorObject.TopBarIconsAndTextColor, marginLeft: '8%'}}>{navigation.getParam('mark', 'NO-ID')}</Text>
+          </View>,
           headerStyle: {
             elevation: 0, // remove shadow on Android,
             backgroundColor: colorObject.TopBarColor,
@@ -86,11 +91,12 @@ const LeaderBoardWrapperView = createStackNavigator(
               ref={this.setMenuRef}
               button={<Text onPress={this.showMenu}><Icon name='md-menu' size={sizeOfIcons - 3} style={{ color: colorObject.TopBarIconsAndTextColor }} /></Text>}
             >
-              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'hoursSemester', section: 'users/'}); navigation.navigate('Weekly', {sortpath: 'hoursWeekly', section: 'users/'}); navigation.navigate('Alltime', {sortpath: 'hoursAllTime', section: 'users/'});  }}>Hours</MenuItem>
-              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'before8Semester', section: 'achievements/'}); navigation.navigate('Weekly', {sortpath: 'before8Weekly', section: 'achievements/'}); navigation.navigate('Alltime', {sortpath: 'before8AllTime', section: 'achievements/'}); }}>Before8</MenuItem>
-              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'streakSemester', section: 'users/'}); navigation.navigate('Weekly', {sortpath: 'streakWeekly', section: 'users/'}); navigation.navigate('Alltime', {sortpath: 'streakAllTime', section: 'users/'});  }}>Streak</MenuItem>
-              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'weeklywinnerSemester', section: 'achievements/'}); navigation.navigate('Weekly', {sortpath: 'weeklywinner', section: 'achievements/'}); navigation.navigate('Alltime', {sortpath: 'weeklywinnerAllTime', section: 'achievements/'}); }}>WeeklyWinner</MenuItem>
-              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', {sortpath: 'semesterwinner'}); navigation.navigate('Weekly', {sortpath: 'semesterwinner'}); navigation.navigate('Alltime', {sortpath: 'semesterwinner'});  }}>SemesterWinner</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'hoursSemester', section: 'users/' }); navigation.navigate('Weekly', { sortpath: 'hoursWeekly', section: 'users/' }); navigation.navigate('Alltime', { sortpath: 'hoursAllTime', section: 'users/' }); navigation.setParams({ mark: 'Hours' }) }}>Hours</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'before8Semester', section: 'achievements/' }); navigation.navigate('Weekly', { sortpath: 'before8Weekly', section: 'achievements/' }); navigation.navigate('Alltime', { sortpath: 'before8AllTime', section: 'achievements/' }); navigation.setParams({ mark: 'Early Birds' }) }}>Early Birds</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'before8Semester', section: 'achievements/' }); navigation.navigate('Weekly', { sortpath: 'before8Weekly', section: 'achievements/' }); navigation.navigate('Alltime', { sortpath: 'before8AllTime', section: 'achievements/' }); navigation.setParams({ mark: 'Night Owls' }) }}>Night Owls</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'streakSemester', section: 'users/' }); navigation.navigate('Weekly', { sortpath: 'streakWeekly', section: 'users/' }); navigation.navigate('Alltime', { sortpath: 'streakAllTime', section: 'users/' }); navigation.setParams({ mark: 'Longest Streak' }) }}>Longest Streak</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'weeklywinnerSemester', section: 'achievements/' }); navigation.navigate('Weekly', { sortpath: 'weeklywinner', section: 'achievements/' }); navigation.navigate('Alltime', { sortpath: 'weeklywinnerAllTime', section: 'achievements/' }); navigation.setParams({ mark: 'Weekly Winners' }) }}>Weekly Winners</MenuItem>
+              <MenuItem onPress={() => { this.hideMenu(); navigation.navigate('Semester', { sortpath: 'semesterwinner' }); navigation.navigate('Weekly', { sortpath: 'semesterwinner' }); navigation.navigate('Alltime', { sortpath: 'semesterwinner' }); navigation.setParams({ mark: 'Semester Winners' }) }}>Semester Winners</MenuItem>
             </Menu>
           </View>)
         }
@@ -222,15 +228,33 @@ export const SignedOut = createStackNavigator(
 export const SignedIn = createBottomTabNavigator(
   {
     Homescreen: {
-      screen: (props) => <Homescreen {...props} />,
+      screen: createStackNavigator({
+        Homescreen: {
+          screen: (props) => <Homescreen {...props} />,
+          navigationOptions: {
+            header: null
+          }
+        },
+        WebViewHome: {
+          screen: (props) => <WebViewHome {...props} />,
+          navigationOptions: {
+            gesturesEnabled: true,
+            headerTintColor: '#fff',
+            headerStyle: {
+              backgroundColor: colorObject.TopBarColor,
+            }
+          }
+        }
+      }),
+
       navigationOptions: {
-        tabBarIcon: () => { return (<Icon name="md-home" size={sizeOfIcons} color={colorObject.BottomBarIconsColor} />) },
+        tabBarIcon: () => { return (<Icon name="md-calendar" size={sizeOfIcons} color={colorObject.BottomBarIconsColor} />) },
       }
     },
     Leaderboard: {
       screen: LeaderBoardWrapperView,
       navigationOptions: {
-        tabBarIcon: () => { return (<Icon name="md-list" size={sizeOfIcons} color={colorObject.BottomBarIconsColor} />) },
+        tabBarIcon: () => { return (<Icon name="md-list-box" size={sizeOfIcons} color={colorObject.BottomBarIconsColor} />) },
       }
     },
     Profile: {

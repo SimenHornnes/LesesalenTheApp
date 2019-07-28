@@ -8,5 +8,4 @@ export const colorObject = {
     BottomBarIconsColor: '#2D3245',
     TopBarColor: 'orange',
     TopBarIconsAndTextColor: 'white'
-
 }

@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet, TouchableHighlight, Image, KeyboardAvoidingView } from 'react-native';
+import { View, Dimensions, StyleSheet, TouchableHighlight, Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Card, Button, Text } from 'react-native-elements';
 import firebase from 'firebase/app';
 import { Input } from 'react-native-elements';
 import { Header } from 'react-navigation';
 import {colorObject} from './ColorConfig'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -92,10 +93,8 @@ export default class Profile extends React.Component {
 
     if (this.state.userId && this.state.profilepiccheck && this.state.username) {
       return (
-
-        <View style={{
-          backgroundColor: colorObject.PrimaryColor, flex: 1
-        }}>
+<ScrollView style={{backgroundColor: colorObject.PrimaryColor, flex: 1}}>
+        <View >
           <Text style={{ textAlign: 'right', textAlignVertical: 'top', marginTop: 10, marginRight: 10, color: colorObject.TertiaryColor }}>{`Last updated: ${this.state.time.date}.${this.state.time.month} ${this.state.time.hours}:${this.state.time.min}`}</Text>
 
           <View>
@@ -155,7 +154,7 @@ export default class Profile extends React.Component {
               inputContainerStyle={{ backgroundColor: colorObject.TertiaryColor, borderRadius: 40 }}
 
             />) : null}
-            {this.state.buttonPressed ? (<Button title="Accept change" onPress={() => { this.setProfilePic() }} />) : null}
+            {this.state.buttonPressed ? (<TouchableOpacity style={{width:'80%', alignSelf: 'center', height: 40, backgroundColor: colorObject.SecondaryColor}} onPress={() => { this.setProfilePic() }}><Text style={{textAlign: 'center', textAlignVertical: 'center', fontSize: 25, fontWeight:'bold'}}>Accept change</Text></TouchableOpacity>) : null}
 
 
 
@@ -163,6 +162,7 @@ export default class Profile extends React.Component {
 
           </View>
         </View>
+        </ScrollView>
       )
     }
     else {

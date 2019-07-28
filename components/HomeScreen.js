@@ -1,6 +1,6 @@
 
 import firebase from 'firebase/app';
-import { StyleSheet, Text, View, StatusBar, PermissionsAndroid } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, PermissionsAndroid, WebView } from 'react-native';
 import "firebase/database";
 import LesesalProgram from './lesesalprogram'
 import React from 'react';
@@ -23,6 +23,7 @@ async function requestLocationPermission() {
 }
 
 export default class Homescreen extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -82,20 +83,27 @@ export default class Homescreen extends React.Component {
 
 
   render() {
+
     const isDataSourceLoaded = this.state.dataSource.length > 0
     return (
       <View style={styles.HomescreenStyle }>
         <View>
           <FtueScreen pagekey={this.props.navigation.state.key} title={"ReadMe"} description={
-            `Smartphones are turning back into dumbphones. To squeeze a little extra battery out of your phone, phone manufacturers automatically turn off many important background services. This effectively kills our app, whose aim it is to track whether or not you are at school in the background. To disable this automatic feature, go into your phone settings -> battery -> App-Launch and then enable manual control over this app. This may vary from phone to phone.`}/>
+            `Smartphones are turning back into dumbphones. To squeeze a little extra battery out of your phone, phone manufacturers automatically turn off many important background services. This effectively kills our app, whose aim it is to track whether or not you are at school in the background (when the app is closed). To enable our app to work as intended, go into your phone settings -> battery -> App-Launch and then enable manual control over this app. This may vary from phone to phone.`}/>
       </View>
         <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
         <View style={{ backgroundColor: colorObject.TopBarColor, paddingTop: '3%', paddingBottom: '2%' }}><Text style={styles.textStyleHomescreen}>Calendar</Text></View>
-        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} />) : ((<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
+        <View style={{ height: '100%', marginBottom: 30, }}>{isDataSourceLoaded ? (<LesesalProgram data={this.state.dataSource} navigation={this.props.navigation} />) : ((<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colorObject.PrimaryColor }}>
           <Text style={{ color: colorObject.TertiaryColor }}> Waiting for data...</Text>
         </View>))}</View>
       </View>
     );
+    /*return (
+      <WebView
+        source={{uri: 'https://www.kongsberg.com/'}}
+        style={{marginTop: 20}}
+      />
+    );*/
   }
 }
 

@@ -188,6 +188,7 @@ export default class Leaderboard extends React.Component {
 
 
   render() {
+    console.log(this.props.navigation.state.params)
     if (this.state.highScoreList.length && (this.state.sortpath.startsWith('before8') || this.state.sortpath.startsWith('streak'))) {
       return (
         <View style={styles.container}>
