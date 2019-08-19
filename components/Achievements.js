@@ -54,6 +54,9 @@ export default class Achievements extends React.Component {
 
     fetchAchievements() {
         if (this.state.userId != null && this.state.achievementsurl.length !== 0) {
+            console.log(this.state.achievementsurl)
+            console.log(this.state.achievementsObject)
+
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
                 let urllist = []
@@ -66,6 +69,7 @@ export default class Achievements extends React.Component {
                     })}
                     //  urllist[this.state.achievementsurl[userSnapshot.key]]= userSnapshot.val()
                 })
+                console.log(urllist)
 
                 this.setState({ achievementsObject: urllist })
             })
@@ -103,6 +107,7 @@ export default class Achievements extends React.Component {
 
 
         if (isDataloaded && isAchievementObjectLoaded) {
+            console.log(this.state.achievementsObject)
             return (
                 <View style={{ backgroundColor: colorObject.PrimaryColor, height: '100%', }}>
                     <ScrollView style={styles.dataWrapper}>
