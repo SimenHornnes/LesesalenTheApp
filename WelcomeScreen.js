@@ -1,5 +1,5 @@
 import App from './App';
-import {colorObject} from './components/ColorConfig'
+import { colorObject } from './components/ColorConfig'
 import React, { Component, PropTypes } from "react";
 import {
     StyleSheet,
@@ -21,23 +21,24 @@ export default class FtueScreen extends Component {
 
     componentDidMount() {
         AsyncStorage.getItem(this.props.pagekey, (err, result) => {
-          if (err) {
-          } else {
-            if (result == null) {
-              console.log("null value recieved", result);
-              this.setModalVisible(true);
-            } else {
-              console.log("result", result);
+            if (err) {
+            } 
+            else {
+                if (result == null) {
+                    console.log("null value recieved", result);
+                    this.setModalVisible(true);
+                } else {
+                    console.log("result", result);
+                }
             }
-          }
         });
-        AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value":"true"}), (err,result) => {
-                console.log("error",err,"result",result);
-                });
-      }
-      setModalVisible(visible) {
+        AsyncStorage.setItem(this.props.pagekey, JSON.stringify({ "value": "true" }), (err, result) => {
+            console.log("error", err, "result", result);
+        });
+    }
+    setModalVisible(visible) {
         this.setState({ modalVisible: visible });
-      }
+    }
     render() {
         return (
             <View>

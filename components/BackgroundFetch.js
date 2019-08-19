@@ -6,18 +6,16 @@ export default fetchData = async () => {
     const { currentUser } = await firebase.auth()
 
     navigator.geolocation.getCurrentPosition(position => {
-        isInside = (radius = 9999999999) => {
+        isInside = (radius = 100) => {
             const R = 6371000;
             if (!position) {
                 return false;
             }
             const lat = position.coords.latitude
             const lng = position.coords.longitude
-            const lesesalenLat = 60.4595623;
-            const lesesalenLng = 5.3279822;
+            const lesesalenLat = 60.381165;
+            const lesesalenLng = 5.331617;
             const radians = Math.PI / 180.0;
-            const rlesesalenLat = lesesalenLat * radians;
-            const rlat = lat * radians;
             const triLat = Math.abs(lat - lesesalenLat) * radians;
             const triLong = Math.abs(lesesalenLng - lng) * radians;
 

@@ -18,6 +18,20 @@ export default class Achievements extends React.Component {
         }
     }
 
+    componentWillMount(){
+        firebase.database().ref('/achievementsurl').once('value', snapshot => {
+            let temparr = {}
+
+            snapshot.forEach(userSnapshot => {
+                var key = userSnapshot.key;
+                temparr[key] = userSnapshot.val()
+
+
+            })
+            this.setState({ achievementsurl: temparr })
+
+        })
+    }
 
     //Får noken millisekund rendering time pga må hente fra firebase databasen, 
     //mulig vi kunne prerendera en anna plass, og passa hours/username som props isteden
@@ -39,20 +53,7 @@ export default class Achievements extends React.Component {
 
 
     fetchAchievements() {
-        firebase.database().ref('/achievementsurl').once('value', snapshot => {
-            let temparr = {}
-
-            snapshot.forEach(userSnapshot => {
-                var key = userSnapshot.key;
-                temparr[key] = userSnapshot.val()
-
-
-            })
-            this.setState({ achievementsurl: temparr })
-
-        })
-
-        if (this.state.userId != null && this.state.achievementsurl) {
+        if (this.state.userId != null && this.state.achievementsurl.length !== 0) {
             const recentPost = firebase.database().ref(`achievements/${this.state.userId}`);
             recentPost.once('value').then(snapshot => {
                 let urllist = []
@@ -90,8 +91,7 @@ export default class Achievements extends React.Component {
 
 
     render() {
-        // console.log(this.state.achievementsurl)
-        if (this.state.userId && !this.state.achievementsObject) {
+        if (this.state.userId && !this.state.achievementsObject && this.state.achievementsurl.length !== 0) {
             this.fetchAchievements()
         }
         isDataloaded = this.state.userId != null

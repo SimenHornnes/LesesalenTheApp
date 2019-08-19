@@ -88,7 +88,7 @@ export default class Homescreen extends React.Component {
     return (
       <View style={styles.HomescreenStyle }>
         <View>
-          <FtueScreen pagekey={this.props.navigation.state.key} title={"ReadMe"} description={
+          <FtueScreen pagekey={'homescreen'} title={"ReadMe"} description={
             `Smartphones are turning back into dumbphones. To squeeze a little extra battery out of your phone, phone manufacturers automatically turn off many important background services. This effectively kills our app, whose aim it is to track whether or not you are at school in the background (when the app is closed). To enable our app to work as intended, go into your phone settings -> battery -> App-Launch and then enable manual control over this app. This may vary from phone to phone.`}/>
       </View>
         <StatusBar backgroundColor="#D2922D" barStyle="light-content" />
