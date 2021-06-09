@@ -15,7 +15,7 @@ export default class Main extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      signedIn: true,
+      signedIn: false,
       checkedSignIn: false,
       isOnLesesalen: false,
       time: undefined,
